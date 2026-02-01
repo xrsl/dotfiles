@@ -78,9 +78,17 @@ brew bundle --file=~/.config/homebrew/Brewfile
 
 # Specific tools
 ~/.local/bin/install-tools cue just starship
+
+# AI coding assistants (requires fnm first)
+~/.local/bin/install-tools fnm
+~/.local/bin/install-tools kiro npm_tools
 ```
 
-Available: `cue just starship yq gh watchexec typos typst jq tombi`
+**Binary tools:** `cue just starship yq gh watchexec typos typst jq tombi`
+
+**Node-based:** `fnm` (installs Node), then `npm_tools` (cspell gemini kilocode copilot)
+
+**AI assistants:** `kiro` (kiro-cli)
 
 ## Never Track
 

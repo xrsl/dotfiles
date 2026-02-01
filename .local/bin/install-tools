@@ -75,7 +75,35 @@ install_typst() {
     rm -rf /tmp/typst.tar.xz /tmp/typst-x86_64-unknown-linux-musl
 }
 
-ALL_TOOLS="cue just starship yq gh watchexec typos typst jq tombi"
+install_fnm() {
+    echo "Installing fnm (Node version manager)..."
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell --install-dir "$HOME/.local/share/fnm"
+    export PATH="$HOME/.local/share/fnm:$PATH"
+    eval "$($HOME/.local/share/fnm/fnm env)"
+    fnm install --lts
+    fnm default lts-latest
+    echo "Add to .zshrc: eval \"\$(fnm env)\""
+}
+
+install_kiro() {
+    echo "Installing kiro-cli..."
+    curl -fsSL https://cli.kiro.dev/install | bash
+}
+
+install_npm_tools() {
+    echo "Installing npm tools (cspell, gemini, kilocode, copilot)..."
+    export PATH="$HOME/.local/share/fnm:$PATH"
+    eval "$($HOME/.local/share/fnm/fnm env)" 2>/dev/null || { echo "fnm not found. Run: install-tools fnm"; return 1; }
+    npm install -g cspell @google/gemini-cli @kilocode/cli @github/copilot
+}
+
+# Aliases for convenience
+install_gemini() { install_npm_tools; }
+install_kilocode() { install_npm_tools; }
+install_copilot() { install_npm_tools; }
+install_cspell() { install_npm_tools; }
+
+ALL_TOOLS="cue just starship yq gh watchexec typos typst jq tombi fnm kiro npm_tools"
 
 if [[ $# -eq 0 ]]; then
     tools="$ALL_TOOLS"
