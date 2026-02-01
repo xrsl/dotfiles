@@ -11,10 +11,6 @@ DISABLE_AUTO_UPDATE="true"
 DISABLE_MAGIC_FUNCTIONS="true"
 DISABLE_COMPFIX="true"
 
-# Fix delete/backspace key for remote terminals
-bindkey "^[[3~" delete-char
-bindkey "^?" backward-delete-char
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -215,3 +211,7 @@ fi
 
 # opencode
 [[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
+
+# Fix delete/backspace key for remote terminals (must be after oh-my-zsh)
+bindkey "^[[3~" delete-char
+bindkey "^?" backward-delete-char
