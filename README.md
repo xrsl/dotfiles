@@ -5,22 +5,21 @@ Bare git repo approach - no symlinks, no tools.
 ## New Machine Setup
 
 ```bash
-# Clone the bare repo
+# One-liner (fresh machine)
+git clone --bare https://github.com/xrsl/dotfiles.git ~/.dotfiles && git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f && git --git-dir=$HOME/.dotfiles --work-tree=$HOME config status.showUntrackedFiles no && source ~/.zshrc
+
+# Or step by step:
 git clone --bare https://github.com/xrsl/dotfiles.git ~/.dotfiles
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME config status.showUntrackedFiles no
+source ~/.zshrc
+```
 
-# Define the alias temporarily
-alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
-
-# Checkout files to home directory
-dotfiles checkout
-
-# If checkout fails due to existing files, back them up first:
-# mkdir -p ~/.dotfiles-backup
-# dotfiles checkout 2>&1 | grep -E "^\s+" | awk '{print $1}' | xargs -I{} mv {} ~/.dotfiles-backup/{}
-# dotfiles checkout
-
-# Hide untracked files in status
-dotfiles config status.showUntrackedFiles no
+If checkout fails due to existing files:
+```bash
+mkdir -p ~/.dotfiles-backup
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout 2>&1 | grep -E "^\s+" | awk '{print $1}' | xargs -I{} mv {} ~/.dotfiles-backup/{}
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
 ```
 
 ## Daily Usage
@@ -32,6 +31,19 @@ dotfiles add ~/.someconfig       # track a new file
 dotfiles add -u                  # stage all tracked changes
 dotfiles commit -m "message"     # commit
 dotfiles push                    # sync to GitHub
+```
+
+## Quick Commands (before alias is loaded)
+
+```bash
+# Pull latest and reload
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME pull && source ~/.zshrc
+
+# Force checkout (overwrites local files)
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
+
+# Check status
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME status
 ```
 
 ## Tracked Files
