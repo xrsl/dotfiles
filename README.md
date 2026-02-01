@@ -22,6 +22,26 @@ git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout 2>&1 | grep -E "^\s+" |
 git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
 ```
 
+## SSH Dev Machine Setup
+
+Complete setup for a remote Linux dev machine:
+
+```bash
+# 1. Clone dotfiles
+git clone --bare https://github.com/xrsl/dotfiles.git ~/.dotfiles
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME checkout -f
+git --git-dir=$HOME/.dotfiles --work-tree=$HOME config status.showUntrackedFiles no
+
+# 2. Install oh-my-zsh (if not present)
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# 3. Install CLI tools and zsh plugins
+~/.local/bin/install-tools
+
+# 4. Reload shell
+source ~/.zshrc
+```
+
 ## Daily Usage
 
 ```bash
@@ -77,7 +97,10 @@ brew bundle --file=~/.config/homebrew/Brewfile
 ~/.local/bin/install-tools
 
 # Specific tools
-~/.local/bin/install-tools cue just starship
+~/.local/bin/install-tools cue just starship yq
+
+# Zsh plugins only (syntax-highlighting, autosuggestions)
+~/.local/bin/install-tools zsh_plugins
 
 # AI coding assistants (requires fnm first)
 ~/.local/bin/install-tools fnm
@@ -85,6 +108,8 @@ brew bundle --file=~/.config/homebrew/Brewfile
 ```
 
 **Binary tools:** `cue just starship yq gh watchexec typos typst jq tombi`
+
+**Zsh plugins:** `zsh_plugins` (syntax-highlighting, autosuggestions)
 
 **Node-based:** `fnm` (installs Node), then `npm_tools` (cspell gemini kilocode copilot)
 

@@ -10,7 +10,7 @@ mkdir -p "$INSTALL_DIR"
 
 ensure_path() {
     local path_line='export PATH="$HOME/.local/bin:$HOME/.local/share/fnm:$PATH"'
-    local fnm_line='eval "$(fnm env)"'
+    local fnm_line='command -v fnm &>/dev/null && eval "$(fnm env)"'
 
     for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do
         [[ -f "$rc" ]] || continue
@@ -18,7 +18,7 @@ ensure_path() {
             echo "$path_line" >> "$rc"
             echo "Added PATH to $rc"
         fi
-        # Add fnm env if fnm is installed
+        # Add fnm env if fnm is installed and not already in rc
         if [[ -d "$HOME/.local/share/fnm" ]] && ! grep -qF 'fnm env' "$rc"; then
             echo "$fnm_line" >> "$rc"
             echo "Added fnm env to $rc"
@@ -123,13 +123,34 @@ install_npm_tools() {
     npm install -g cspell @google/gemini-cli @kilocode/cli @github/copilot
 }
 
+install_zsh_plugins() {
+    echo "Installing zsh plugins (syntax-highlighting, autosuggestions)..."
+    local ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+    mkdir -p "$ZSH_CUSTOM/plugins"
+
+    if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
+        git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+    else
+        echo "zsh-syntax-highlighting already installed"
+    fi
+
+    if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then
+        git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions.git "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+    else
+        echo "zsh-autosuggestions already installed"
+    fi
+
+    echo "Ensure plugins are enabled in .zshrc: plugins=(... zsh-syntax-highlighting zsh-autosuggestions)"
+}
+
 # Aliases for convenience
 install_gemini() { install_npm_tools; }
 install_kilocode() { install_npm_tools; }
 install_copilot() { install_npm_tools; }
 install_cspell() { install_npm_tools; }
+install_zsh() { install_zsh_plugins; }
 
-ALL_TOOLS="cue just starship yq gh watchexec typos typst jq tombi fnm kiro npm_tools"
+ALL_TOOLS="cue just starship yq gh watchexec typos typst jq tombi fnm kiro npm_tools zsh_plugins"
 
 if [[ $# -eq 0 ]]; then
     tools="$ALL_TOOLS"
