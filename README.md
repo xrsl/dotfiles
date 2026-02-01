@@ -80,7 +80,7 @@ brew bundle --file=~/.config/homebrew/Brewfile
 ~/.local/bin/install-tools cue just starship
 ```
 
-Available: `cue just starship yq gh watchexec typos`
+Available: `cue just starship yq gh watchexec typos typst`
 
 ## Never Track
 
