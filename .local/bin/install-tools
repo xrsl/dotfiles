@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Linux CLI tools installer
+# Usage: install-tools [tool...]
+# If no args, installs all tools
+
+INSTALL_DIR="${HOME}/.local/bin"
+mkdir -p "$INSTALL_DIR"
+
+install_cue() {
+    echo "Installing cue..."
+    local version=$(curl -sL "https://api.github.com/repos/cue-lang/cue/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    curl -sL "https://github.com/cue-lang/cue/releases/download/${version}/cue_${version}_linux_amd64.tar.gz" | tar -xz -C "$INSTALL_DIR" cue
+}
+
+install_just() {
+    echo "Installing just..."
+    curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to "$INSTALL_DIR"
+}
+
+install_starship() {
+    echo "Installing starship..."
+    curl -sS https://starship.rs/install.sh | sh -s -- -b "$INSTALL_DIR" -y
+}
+
+install_yq() {
+    echo "Installing yq..."
+    local version=$(curl -sL "https://api.github.com/repos/mikefarah/yq/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    curl -sL "https://github.com/mikefarah/yq/releases/download/${version}/yq_linux_amd64" -o "$INSTALL_DIR/yq"
+    chmod +x "$INSTALL_DIR/yq"
+}
+
+install_gh() {
+    echo "Installing gh..."
+    local version=$(curl -sL "https://api.github.com/repos/cli/cli/releases/latest" | grep '"tag_name"' | cut -d'"' -f4 | sed 's/v//')
+    curl -sL "https://github.com/cli/cli/releases/download/v${version}/gh_${version}_linux_amd64.tar.gz" | tar -xz --strip-components=2 -C "$INSTALL_DIR" "gh_${version}_linux_amd64/bin/gh"
+}
+
+install_watchexec() {
+    echo "Installing watchexec..."
+    local version=$(curl -sL "https://api.github.com/repos/watchexec/watchexec/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-gnu.tar.xz" | tar -xJ --strip-components=1 -C "$INSTALL_DIR" "watchexec-${version}-x86_64-unknown-linux-gnu/watchexec"
+}
+
+install_typos() {
+    echo "Installing typos..."
+    local version=$(curl -sL "https://api.github.com/repos/crate-ci/typos/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    curl -sL "https://github.com/crate-ci/typos/releases/download/${version}/typos-${version}-x86_64-unknown-linux-musl.tar.gz" | tar -xz -C "$INSTALL_DIR" ./typos
+}
+
+ALL_TOOLS="cue just starship yq gh watchexec typos"
+
+if [[ $# -eq 0 ]]; then
+    tools="$ALL_TOOLS"
+else
+    tools="$*"
+fi
+
+for tool in $tools; do
+    if declare -f "install_$tool" > /dev/null; then
+        install_$tool
+    else
+        echo "Unknown tool: $tool"
+    fi
+done
+
+echo "Done. Ensure $INSTALL_DIR is in your PATH."

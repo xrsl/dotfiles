@@ -1,0 +1,29 @@
+# Taps
+tap "cue-lang/tap"
+
+# CLI tools
+brew "gh"
+brew "git-lfs"
+brew "go"
+brew "graphviz"
+brew "imagemagick"
+brew "just"
+brew "node"
+brew "pipx"
+brew "pyenv"
+brew "starship"
+brew "tmux"
+brew "tree"
+brew "typos-cli"
+brew "typst"
+brew "watchexec"
+brew "yq"
+brew "zsh-autosuggestions"
+brew "cue-lang/tap/cue"
+
+# Casks (macOS only)
+cask "basictex"
+cask "docker-desktop"
+cask "font-hack-nerd-font"
+cask "ghostty"
+cask "wezterm"
