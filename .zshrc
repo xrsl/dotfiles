@@ -26,7 +26,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # https://scottspence.com/posts/my-updated-zsh-config-2025#adding-plugins-and-themes
 # Use spaceship if installed, otherwise fallback to default
-if [[ -d "$ZSH/custom/themes/spaceship-prompt" ]] || [[ -d "$ZSH/themes/spaceship-prompt" ]]; then
+if [[ -f "$ZSH/custom/themes/spaceship-prompt/spaceship.zsh-theme" ]] || [[ -f "$ZSH/themes/spaceship.zsh-theme" ]]; then
   ZSH_THEME="spaceship"
 else
   ZSH_THEME="robbyrussell"
