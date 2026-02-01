@@ -2,7 +2,7 @@ export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
 
 # Source profile for Go path
-source ~/.profile
+[[ -f ~/.profile ]] && source ~/.profile
 
 
 # Performance optimizations
@@ -21,9 +21,14 @@ export ZSH="$HOME/.oh-my-zsh"
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # https://scottspence.com/posts/my-updated-zsh-config-2025#adding-plugins-and-themes
-ZSH_THEME="spaceship"
+# Use spaceship if installed, otherwise fallback to default
+if [[ -d "$ZSH/custom/themes/spaceship-prompt" ]] || [[ -d "$ZSH/themes/spaceship-prompt" ]]; then
+  ZSH_THEME="spaceship"
+else
+  ZSH_THEME="robbyrussell"
+fi
 
-# Spaceship settings
+# Spaceship settings (only applied if spaceship is loaded)
 SPACESHIP_PROMPT_ASYNC=true
 SPACESHIP_PROMPT_ADD_NEWLINE=true
 
@@ -47,11 +52,10 @@ SPACESHIP_VENV_SYMBOL=""
 SPACESHIP_VENV_COLOR="cyan"
 SPACESHIP_VENV_DETECT_COMMAND="basename"
 
-plugins=(
-  git
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-)
+# Build plugins list dynamically based on what's installed
+plugins=(git)
+[[ -d "$ZSH/custom/plugins/zsh-autosuggestions" ]] && plugins+=(zsh-autosuggestions)
+[[ -d "$ZSH/custom/plugins/zsh-syntax-highlighting" ]] && plugins+=(zsh-syntax-highlighting)
 
 # Source Oh My Zsh
 source $ZSH/oh-my-zsh.sh
@@ -160,9 +164,10 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 alias cls='clear'
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
+# pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
+command -v pyenv &>/dev/null && eval "$(pyenv init - zsh)"
 
 
 
@@ -172,26 +177,36 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 
-# override PS2 after theme loads
-# Ensure spaceship::ps2 prints the symbol followed by a space
-spaceship::ps2() { printf "%s " "${SPACESHIP_CHAR_SYMBOL:-⚡}"; }
-# Also set PS2 explicitly
-PS2="${SPACESHIP_CHAR_SYMBOL:-⚡} "
+# override PS2 after theme loads (only if spaceship is loaded)
+if [[ "$ZSH_THEME" == "spaceship" ]]; then
+  spaceship::ps2() { printf "%s " "${SPACESHIP_CHAR_SYMBOL:-⚡}"; }
+  PS2="${SPACESHIP_CHAR_SYMBOL:-⚡} "
+fi
 
-export GOBIN=$(go env GOPATH)/bin
-export PATH="$PATH:$GOBIN"
-source <(cvx completion zsh)
+# Go
+if command -v go &>/dev/null; then
+  export GOBIN=$(go env GOPATH)/bin
+  export PATH="$PATH:$GOBIN"
+fi
 
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-# Added by Antigravity
-export PATH="/Users/resulal/.antigravity/antigravity/bin:$PATH"
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/resulal/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
+# cvx completion
+command -v cvx &>/dev/null && source <(cvx completion zsh)
+
+# Brew zsh-autosuggestions (macOS)
+if command -v brew &>/dev/null; then
+  [[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && \
+    source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+# Antigravity
+[[ -d "$HOME/.antigravity/antigravity/bin" ]] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+# Docker CLI completions
+if [[ -d "$HOME/.docker/completions" ]]; then
+  fpath=("$HOME/.docker/completions" $fpath)
+  autoload -Uz compinit
+  compinit
+fi
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
 # opencode
-export PATH=/Users/resulal/.opencode/bin:$PATH
+[[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
