@@ -60,10 +60,13 @@ install_watchexec() {
     echo "Installing watchexec..."
     local version=$(curl -sL "https://api.github.com/repos/watchexec/watchexec/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
     local tmp_dir=$(mktemp -d)
-    curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-musl.deb" -o "$tmp_dir/watchexec.deb"
-    ar x "$tmp_dir/watchexec.deb" --output="$tmp_dir"
-    tar -xzf "$tmp_dir/data.tar.gz" -C "$tmp_dir"
-    mv "$tmp_dir/usr/bin/watchexec" "$INSTALL_DIR/"
+    curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-musl.tar.xz" -o "$tmp_dir/watchexec.tar.xz"
+    if command -v xz &>/dev/null; then
+        tar -xJf "$tmp_dir/watchexec.tar.xz" -C "$tmp_dir"
+    else
+        python3 -c "import lzma,sys;sys.stdout.buffer.write(lzma.open('$tmp_dir/watchexec.tar.xz').read())" | tar -xf - -C "$tmp_dir"
+    fi
+    mv "$tmp_dir/watchexec-${version}-x86_64-unknown-linux-musl/watchexec" "$INSTALL_DIR/"
     rm -rf "$tmp_dir"
 }
 
