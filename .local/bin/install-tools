@@ -34,6 +34,7 @@ install_cue() {
 
 install_just() {
     echo "Installing just..."
+    rm -f "$INSTALL_DIR/just"
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to "$INSTALL_DIR"
 }
 
