@@ -49,7 +49,16 @@ install_typos() {
     curl -sL "https://github.com/crate-ci/typos/releases/download/${version}/typos-${version}-x86_64-unknown-linux-musl.tar.gz" | tar -xz -C "$INSTALL_DIR" ./typos
 }
 
-ALL_TOOLS="cue just starship yq gh watchexec typos"
+install_typst() {
+    echo "Installing typst..."
+    local version=$(curl -sL "https://api.github.com/repos/typst/typst/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    curl -sL "https://github.com/typst/typst/releases/download/${version}/typst-x86_64-unknown-linux-musl.tar.xz" -o /tmp/typst.tar.xz
+    tar -xJf /tmp/typst.tar.xz -C /tmp
+    mv /tmp/typst-x86_64-unknown-linux-musl/typst "$INSTALL_DIR/"
+    rm -rf /tmp/typst.tar.xz /tmp/typst-x86_64-unknown-linux-musl
+}
+
+ALL_TOOLS="cue just starship yq gh watchexec typos typst"
 
 if [[ $# -eq 0 ]]; then
     tools="$ALL_TOOLS"
