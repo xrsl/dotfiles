@@ -59,10 +59,12 @@ install_gh() {
 install_watchexec() {
     echo "Installing watchexec..."
     local version=$(curl -sL "https://api.github.com/repos/watchexec/watchexec/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
-    curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-musl.tar.xz" -o /tmp/watchexec.tar.xz
-    tar -xJf /tmp/watchexec.tar.xz -C /tmp
-    mv "/tmp/watchexec-${version}-x86_64-unknown-linux-musl/watchexec" "$INSTALL_DIR/"
-    rm -rf /tmp/watchexec.tar.xz /tmp/watchexec-*
+    local tmp_dir=$(mktemp -d)
+    curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-musl.deb" -o "$tmp_dir/watchexec.deb"
+    ar x "$tmp_dir/watchexec.deb" --output="$tmp_dir"
+    tar -xzf "$tmp_dir/data.tar.gz" -C "$tmp_dir"
+    mv "$tmp_dir/usr/bin/watchexec" "$INSTALL_DIR/"
+    rm -rf "$tmp_dir"
 }
 
 install_jq() {
@@ -88,10 +90,16 @@ install_typos() {
 install_typst() {
     echo "Installing typst..."
     local version=$(curl -sL "https://api.github.com/repos/typst/typst/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
-    curl -sL "https://github.com/typst/typst/releases/download/${version}/typst-x86_64-unknown-linux-musl.tar.xz" -o /tmp/typst.tar.xz
-    tar -xJf /tmp/typst.tar.xz -C /tmp
-    mv /tmp/typst-x86_64-unknown-linux-musl/typst "$INSTALL_DIR/"
-    rm -rf /tmp/typst.tar.xz /tmp/typst-x86_64-unknown-linux-musl
+    local tmp_dir=$(mktemp -d)
+    curl -sL "https://github.com/typst/typst/releases/download/${version}/typst-x86_64-unknown-linux-musl.tar.xz" -o "$tmp_dir/typst.tar.xz"
+    # Use python lzma if xz not available
+    if command -v xz &>/dev/null; then
+        tar -xJf "$tmp_dir/typst.tar.xz" -C "$tmp_dir"
+    else
+        python3 -c "import lzma,sys;sys.stdout.buffer.write(lzma.open('$tmp_dir/typst.tar.xz').read())" | tar -xf - -C "$tmp_dir"
+    fi
+    mv "$tmp_dir/typst-x86_64-unknown-linux-musl/typst" "$INSTALL_DIR/"
+    rm -rf "$tmp_dir"
 }
 
 install_fnm() {
