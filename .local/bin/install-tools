@@ -139,7 +139,7 @@ fi
 
 for tool in $tools; do
     if declare -f "install_$tool" > /dev/null; then
-        install_$tool
+        install_$tool || echo "Warning: failed to install $tool, continuing..."
     else
         echo "Unknown tool: $tool"
     fi
