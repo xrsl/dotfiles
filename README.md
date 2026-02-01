@@ -62,6 +62,26 @@ dotfiles commit -m "Add newconfig"
 dotfiles push
 ```
 
+## CLI Tools
+
+### macOS (Homebrew)
+
+```bash
+brew bundle --file=~/.config/homebrew/Brewfile
+```
+
+### Linux
+
+```bash
+# All tools
+~/.local/bin/install-tools
+
+# Specific tools
+~/.local/bin/install-tools cue just starship
+```
+
+Available: `cue just starship yq gh watchexec typos`
+
 ## Never Track
 
 - `~/.ssh/*` - Generate fresh keys per machine
