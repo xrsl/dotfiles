@@ -61,11 +61,7 @@ install_watchexec() {
     local version=$(curl -sL "https://api.github.com/repos/watchexec/watchexec/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
     local tmp_dir=$(mktemp -d)
     curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-musl.tar.xz" -o "$tmp_dir/watchexec.tar.xz"
-    if command -v xz &>/dev/null; then
-        tar -xJf "$tmp_dir/watchexec.tar.xz" -C "$tmp_dir"
-    else
-        python3 -c "import lzma,sys;sys.stdout.buffer.write(lzma.open('$tmp_dir/watchexec.tar.xz').read())" | tar -xf - -C "$tmp_dir"
-    fi
+    python3 -c "import lzma,sys;sys.stdout.buffer.write(lzma.open('$tmp_dir/watchexec.tar.xz').read())" | tar -xf - -C "$tmp_dir"
     mv "$tmp_dir/watchexec-${version}-x86_64-unknown-linux-musl/watchexec" "$INSTALL_DIR/"
     rm -rf "$tmp_dir"
 }
@@ -95,12 +91,7 @@ install_typst() {
     local version=$(curl -sL "https://api.github.com/repos/typst/typst/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
     local tmp_dir=$(mktemp -d)
     curl -sL "https://github.com/typst/typst/releases/download/${version}/typst-x86_64-unknown-linux-musl.tar.xz" -o "$tmp_dir/typst.tar.xz"
-    # Use python lzma if xz not available
-    if command -v xz &>/dev/null; then
-        tar -xJf "$tmp_dir/typst.tar.xz" -C "$tmp_dir"
-    else
-        python3 -c "import lzma,sys;sys.stdout.buffer.write(lzma.open('$tmp_dir/typst.tar.xz').read())" | tar -xf - -C "$tmp_dir"
-    fi
+    python3 -c "import lzma,sys;sys.stdout.buffer.write(lzma.open('$tmp_dir/typst.tar.xz').read())" | tar -xf - -C "$tmp_dir"
     mv "$tmp_dir/typst-x86_64-unknown-linux-musl/typst" "$INSTALL_DIR/"
     rm -rf "$tmp_dir"
 }
