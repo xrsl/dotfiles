@@ -40,7 +40,24 @@ install_gh() {
 install_watchexec() {
     echo "Installing watchexec..."
     local version=$(curl -sL "https://api.github.com/repos/watchexec/watchexec/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
-    curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-gnu.tar.xz" | tar -xJ --strip-components=1 -C "$INSTALL_DIR" "watchexec-${version}-x86_64-unknown-linux-gnu/watchexec"
+    curl -sL "https://github.com/watchexec/watchexec/releases/download/${version}/watchexec-${version}-x86_64-unknown-linux-musl.tar.xz" -o /tmp/watchexec.tar.xz
+    tar -xJf /tmp/watchexec.tar.xz -C /tmp
+    mv "/tmp/watchexec-${version}-x86_64-unknown-linux-musl/watchexec" "$INSTALL_DIR/"
+    rm -rf /tmp/watchexec.tar.xz /tmp/watchexec-*
+}
+
+install_jq() {
+    echo "Installing jq..."
+    local version=$(curl -sL "https://api.github.com/repos/jqlang/jq/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    curl -sL "https://github.com/jqlang/jq/releases/download/${version}/jq-linux-amd64" -o "$INSTALL_DIR/jq"
+    chmod +x "$INSTALL_DIR/jq"
+}
+
+install_tombi() {
+    echo "Installing tombi..."
+    local version=$(curl -sL "https://api.github.com/repos/tombi-toml/tombi/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
+    curl -sL "https://github.com/tombi-toml/tombi/releases/download/${version}/tombi-cli-${version#v}-x86_64-unknown-linux-musl.gz" | gunzip > "$INSTALL_DIR/tombi"
+    chmod +x "$INSTALL_DIR/tombi"
 }
 
 install_typos() {
@@ -58,7 +75,7 @@ install_typst() {
     rm -rf /tmp/typst.tar.xz /tmp/typst-x86_64-unknown-linux-musl
 }
 
-ALL_TOOLS="cue just starship yq gh watchexec typos typst"
+ALL_TOOLS="cue just starship yq gh watchexec typos typst jq tombi"
 
 if [[ $# -eq 0 ]]; then
     tools="$ALL_TOOLS"
