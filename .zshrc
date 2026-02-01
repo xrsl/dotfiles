@@ -1,5 +1,6 @@
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.bun/bin:$PATH"
+export CDPATH=".:$HOME/ghub"
 
 # Source profile for Go path
 [[ -f ~/.profile ]] && source ~/.profile
