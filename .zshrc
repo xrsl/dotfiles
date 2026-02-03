@@ -216,3 +216,8 @@ fi
 bindkey "^[[3~" delete-char
 bindkey "^?" backward-delete-char
 eval "$(atuin init zsh)"
+command -v fnm &>/dev/null && eval "$(fnm env)"
+
+# Reset cursor to steady bar (|) before every prompt — counteracts block cursor left by vim/nvim
+precmd_cursor() { printf '\e[6 q'; }
+precmd_functions+=(precmd_cursor)
