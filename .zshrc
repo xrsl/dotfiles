@@ -215,3 +215,4 @@ fi
 # Fix delete/backspace key for remote terminals (must be after oh-my-zsh)
 bindkey "^[[3~" delete-char
 bindkey "^?" backward-delete-char
+eval "$(atuin init zsh)"
