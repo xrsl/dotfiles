@@ -9,7 +9,7 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 [core]
-	excludesfile = /Users/resulal/.gitignore_global
+	excludesfile = ~/.gitignore_global
     pager = delta
 
 [interactive]
