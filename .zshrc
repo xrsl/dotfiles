@@ -224,6 +224,6 @@ command -v fnm &>/dev/null && eval "$(fnm env)"
 precmd_cursor() { printf '\e[6 q'; }
 precmd_functions+=(precmd_cursor)
 
-. "$HOME/.local/bin/env"
+[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
 
-. "$HOME/.atuin/bin/env"
+[[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
