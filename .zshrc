@@ -223,3 +223,7 @@ command -v fnm &>/dev/null && eval "$(fnm env)"
 # Reset cursor to steady bar (|) before every prompt — counteracts block cursor left by vim/nvim
 precmd_cursor() { printf '\e[6 q'; }
 precmd_functions+=(precmd_cursor)
+
+. "$HOME/.local/bin/env"
+
+. "$HOME/.atuin/bin/env"
