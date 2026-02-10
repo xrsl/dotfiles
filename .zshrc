@@ -14,6 +14,9 @@ DISABLE_COMPFIX="true"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
+# opencode (before oh-my-zsh so direnv plugin can find the binary)
+[[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -30,7 +33,8 @@ else
 fi
 
 # Spaceship settings (only applied if spaceship is loaded)
-SPACESHIP_PROMPT_ASYNC=true
+SPACESHIP_PROMPT_ASYNC=${DEVBOX_SHELL_ENABLED:+false}
+SPACESHIP_PROMPT_ASYNC=${SPACESHIP_PROMPT_ASYNC:-true}
 SPACESHIP_PROMPT_ADD_NEWLINE=true
 
 
@@ -54,7 +58,7 @@ SPACESHIP_VENV_COLOR="cyan"
 SPACESHIP_VENV_DETECT_COMMAND="basename"
 
 # Build plugins list dynamically based on what's installed
-plugins=(git)
+plugins=(git direnv)
 [[ -d "$ZSH/custom/plugins/zsh-autosuggestions" ]] && plugins+=(zsh-autosuggestions)
 [[ -d "$ZSH/custom/plugins/zsh-syntax-highlighting" ]] && plugins+=(zsh-syntax-highlighting)
 
@@ -209,8 +213,6 @@ fi
 
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
 
-# opencode
-[[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
 
 # Fix delete/backspace key for remote terminals (must be after oh-my-zsh)
 bindkey "^[[3~" delete-char
