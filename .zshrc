@@ -167,7 +167,14 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # Custom aliases
 alias cls='clear'
-alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+unalias dotfiles 2>/dev/null
+dotfiles() {
+  if [[ "$1" == "ls" ]]; then
+    git --git-dir=$HOME/.dotfiles ls-tree -r --name-only HEAD
+  else
+    git --git-dir=$HOME/.dotfiles --work-tree=$HOME "$@"
+  fi
+}
 jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
 
 # pyenv
