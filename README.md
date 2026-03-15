@@ -12,6 +12,7 @@ curl -fsSL https://raw.githubusercontent.com/xrsl/dotfiles/main/bootstrap.sh | b
 
 ```bash
 dotfiles status              # see changes
+dotfiles ls                  # list tracked files
 dotfiles add ~/.config       # track file
 dotfiles commit -m "update"  # commit
 dotfiles push                # sync
