@@ -168,6 +168,7 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 # Custom aliases
 alias cls='clear'
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -227,3 +228,9 @@ precmd_functions+=(precmd_cursor)
 [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
 
 [[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
+
+# Added by dbt installer
+export PATH="$PATH:/Users/resulal/.local/bin"
+
+# dbt aliases
+alias dbtf=/Users/resulal/.local/bin/dbt
