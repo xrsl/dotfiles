@@ -38,11 +38,6 @@ install_just() {
     curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to "$INSTALL_DIR"
 }
 
-install_starship() {
-    echo "Installing starship..."
-    curl -sS https://starship.rs/install.sh | sh -s -- -b "$INSTALL_DIR" -y
-}
-
 install_yq() {
     echo "Installing yq..."
     local version=$(curl -sL "https://api.github.com/repos/mikefarah/yq/releases/latest" | grep '"tag_name"' | cut -d'"' -f4)
@@ -150,7 +145,7 @@ install_copilot() { install_npm_tools; }
 install_cspell() { install_npm_tools; }
 install_zsh() { install_zsh_plugins; }
 
-ALL_TOOLS="cue just starship yq gh watchexec typos typst jq tombi fnm kiro npm_tools zsh_plugins"
+ALL_TOOLS="cue just yq gh watchexec typos typst jq tombi fnm kiro npm_tools zsh_plugins"
 
 if [[ $# -eq 0 ]]; then
     tools="$ALL_TOOLS"

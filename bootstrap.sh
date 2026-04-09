@@ -1,20 +1,37 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DOTFILES="$HOME/.dotfiles"
-REPO="https://github.com/xrsl/dotfiles.git"
+echo "Bootstrapping new machine..."
 
-echo "🔧 Bootstrapping dotfiles..."
-
-if [[ ! -d "$DOTFILES" ]]; then
-    echo "📦 Cloning dotfiles repo..."
-    git clone --bare "$REPO" "$DOTFILES"
+# Install Homebrew (macOS)
+if [[ "$(uname)" == "Darwin" ]] && ! command -v brew &>/dev/null; then
+    echo "Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-echo "📥 Applying dotfiles..."
-git --git-dir="$DOTFILES" --work-tree="$HOME" fetch
-git --git-dir="$DOTFILES" --work-tree="$HOME" reset --hard origin/main
-git --git-dir="$DOTFILES" --work-tree="$HOME" config status.showUntrackedFiles no
+# Install chezmoi and apply dotfiles
+if ! command -v chezmoi &>/dev/null; then
+    echo "Installing chezmoi..."
+    if command -v brew &>/dev/null; then
+        brew install chezmoi
+    else
+        sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+    fi
+fi
 
-echo "✅ Dotfiles applied"
-echo "➡️  Try: dotfiles status"
+echo "Applying dotfiles..."
+chezmoi init --apply xrsl/dotfiles
+
+# Install oh-my-zsh
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    echo "Installing oh-my-zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+# Install Brewfile packages (macOS)
+if [[ "$(uname)" == "Darwin" ]] && command -v brew &>/dev/null; then
+    echo "Installing Brewfile packages..."
+    brew bundle --file="$HOME/.config/homebrew/Brewfile"
+fi
+
+echo "Done. Restart your shell."
