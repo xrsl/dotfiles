@@ -18,8 +18,10 @@ echo "Installing zsh plugins and theme..."
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 if [[ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]]; then
+    echo "Installing spaceship-prompt..."
     git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
     ln -sf "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
+    echo "spaceship-prompt installed"
 else
     echo "spaceship-prompt already installed, skipping"
 fi

@@ -2,12 +2,14 @@
 
 Managed with [chezmoi](https://chezmoi.io).
 
-## Setup on a new machine
+## New machine
 
-**1. Install terminal environment** (chezmoi, oh-my-zsh, zsh plugins, dotfiles)
+Run once — installs chezmoi, oh-my-zsh, spaceship, zsh plugins, and applies dotfiles:
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/xrsl/dotfiles/main/install-terminal.sh)"
 ```
+
+Restart terminal after.
 
 **Optional: install Homebrew packages**
 ```bash
@@ -18,6 +20,12 @@ brew bundle --file="~/.config/homebrew/Brewfile"
 ```bash
 ~/.local/bin/install-tools              # all
 ~/.local/bin/install-tools just typst   # specific
+```
+
+## Existing machine (pull latest dotfiles)
+
+```bash
+chezmoi update
 ```
 
 ## Daily usage
