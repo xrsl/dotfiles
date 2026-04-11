@@ -4,12 +4,21 @@ Managed with [chezmoi](https://chezmoi.io).
 
 ## Setup on a new machine
 
-**1. Run bootstrap** (installs Homebrew, chezmoi, dotfiles, oh-my-zsh, Brewfile packages)
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/xrsl/dotfiles/main/bootstrap.sh)"
+chezmoi init --apply xrsl/dotfiles
 ```
 
-**2. Install additional tools**
+**Optional: install Homebrew packages**
+```bash
+brew bundle --file="~/.config/homebrew/Brewfile"
+```
+
+**Optional: install oh-my-zsh**
+```bash
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
+
+**Optional: install CLI tools (Linux)**
 ```bash
 ~/.local/bin/install-tools              # all
 ~/.local/bin/install-tools just typst   # specific
