@@ -14,7 +14,7 @@ DISABLE_COMPFIX="true"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# opencode (before oh-my-zsh so direnv plugin can find the binary)
+# opencode
 [[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
 
 # Path to your Oh My Zsh installation.
@@ -58,7 +58,7 @@ SPACESHIP_VENV_COLOR="cyan"
 SPACESHIP_VENV_DETECT_COMMAND="basename"
 
 # Build plugins list dynamically based on what's installed
-plugins=(git direnv)
+plugins=(git)
 [[ -d "$ZSH/custom/plugins/zsh-autosuggestions" ]] && plugins+=(zsh-autosuggestions)
 [[ -d "$ZSH/custom/plugins/zsh-syntax-highlighting" ]] && plugins+=(zsh-syntax-highlighting)
 
