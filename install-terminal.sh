@@ -4,8 +4,9 @@ set -euo pipefail
 # Install terminal environment: chezmoi, oh-my-zsh, zsh plugins
 # Run this first on a new Mac before anything else.
 
-echo "Installing chezmoi..."
+echo "Installing chezmoi and fonts..."
 brew install chezmoi
+brew install --cask font-jetbrains-mono-nerd-font
 
 echo "Installing oh-my-zsh..."
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
