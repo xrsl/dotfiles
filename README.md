@@ -31,6 +31,9 @@ chezmoi apply                            # apply changes
 chezmoi status                           # see pending changes
 chezmoi managed --include=files          # list all tracked files
 chezmoi init                             # regenerate config from template (run after template changes)
+
+# for repo-only files (README, install scripts) not managed by chezmoi:
+cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
 ```
 
 ## Tracked files
