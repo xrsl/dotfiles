@@ -4,18 +4,14 @@ Managed with [chezmoi](https://chezmoi.io).
 
 ## Setup on a new machine
 
+**1. Install terminal environment** (chezmoi, oh-my-zsh, zsh plugins, dotfiles)
 ```bash
-chezmoi init --apply xrsl/dotfiles
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/xrsl/dotfiles/main/install-terminal.sh)"
 ```
 
 **Optional: install Homebrew packages**
 ```bash
 brew bundle --file="~/.config/homebrew/Brewfile"
-```
-
-**Optional: install oh-my-zsh**
-```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 ```
 
 **Optional: install CLI tools (Linux)**
