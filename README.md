@@ -44,6 +44,8 @@ chezmoi init                             # regenerate config from template (run 
 cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
 ```
 
+> **Warning:** auto-commit only works for chezmoi-managed dotfiles (`chezmoi add`/`chezmoi edit`). Changes to `README.md`, `install-terminal.sh`, `bootstrap.sh` are NOT auto-committed — use the git command above.
+
 ## Tracked files
 
 ```
