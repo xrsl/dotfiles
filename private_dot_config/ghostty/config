@@ -3,4 +3,4 @@ theme = Catppuccin Mocha
 background-opacity = 0.95
 font-size = 15
 window-save-state = always
-font-family = JetBrainsMono Nerd Font
+font-family = JetBrainsMono Nerd Font Mono
