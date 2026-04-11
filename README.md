@@ -27,11 +27,14 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 ## Daily usage
 
 ```bash
-chezmoi edit ~/.zshrc          # edit a dotfile (auto-commits and pushes on save)
-chezmoi add ~/.some-new-file   # track a new file
-chezmoi update                 # pull latest and apply
-chezmoi diff                   # preview changes without applying
-chezmoi apply                  # apply changes
+chezmoi edit ~/.zshrc                    # edit a dotfile (auto-commits and pushes on save)
+chezmoi add ~/.some-new-file             # track a new file
+chezmoi update                           # pull latest and apply
+chezmoi diff                             # preview changes without applying
+chezmoi apply                            # apply changes
+chezmoi status                           # see pending changes
+chezmoi managed --include=files          # list all tracked files
+chezmoi init                             # regenerate config from template (run after template changes)
 ```
 
 ## Tracked files
