@@ -36,9 +36,19 @@ chezmoi apply                  # apply changes
 
 ## Tracked files
 
-`.zshrc` `.zprofile` `.gitconfig` `.gitignore_global` `.tmux.conf` `.profile` `.hushlogin`
-`.config/ghostty/config` `.config/homebrew/Brewfile` `.config/nix/nix.conf`
-`.local/bin/install-tools`
+```
+.config/ghostty/config
+.config/homebrew/Brewfile
+.config/nix/nix.conf
+.gitconfig
+.gitignore_global
+.hushlogin
+.local/bin/install-tools
+.profile
+.tmux.conf
+.zprofile
+.zshrc
+```
 
 ## Never track
 
