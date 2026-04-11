@@ -56,6 +56,7 @@ SPACESHIP_VENV_SUFFIX=" "
 SPACESHIP_VENV_SYMBOL=""
 SPACESHIP_VENV_COLOR="cyan"
 SPACESHIP_VENV_DETECT_COMMAND="basename"
+SPACESHIP_GIT_STATUS_UNTRACKED="✗"
 
 # Build plugins list dynamically based on what's installed
 plugins=(git)
