@@ -228,8 +228,6 @@ precmd_functions+=(precmd_cursor)
 
 [[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
 
-# Added by dbt installer
-export PATH="$PATH:/Users/resulal/.local/bin"
 
 # dbt aliases
 alias dbtf=/Users/resulal/.local/bin/dbt
