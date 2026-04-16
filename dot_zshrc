@@ -232,3 +232,6 @@ precmd_functions+=(precmd_cursor)
 
 # dbt aliases
 alias dbtf=/Users/resulal/.local/bin/dbt
+
+eval "$(oh-my-posh init zsh)"
+
