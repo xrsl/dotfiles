@@ -4,7 +4,7 @@ PROMPT_THEME="oh-my-posh"
 
 # oh-my-posh config file or URL (used when PROMPT_THEME="oh-my-posh")
 # OMP_CONFIG="$HOME/.config/oh-my-posh/theme.toml"
-OMP_CONFIG="https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/amro.omp.json"
+OMP_CONFIG="https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/catppuccin.omp.json"
 
 # ── PATH ──────────────────────────────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$HOME/.bun/bin:$PATH"
