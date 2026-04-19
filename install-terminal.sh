@@ -12,6 +12,13 @@ else
     brew install --cask ghostty
 fi
 
+echo "Installing eza..."
+if brew list eza &>/dev/null; then
+    echo "eza already installed, skipping"
+else
+    brew install eza
+fi
+
 echo "Installing JetBrainsMono Nerd Font..."
 if brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
     echo "font-jetbrains-mono-nerd-font already installed, skipping"
