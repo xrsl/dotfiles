@@ -237,3 +237,7 @@ alias dbtf=/Users/resulal/.local/bin/dbt
 # eza alias
 alias ls='eza --icons --hyperlink'
 alias lz='eza -TL 1 --icons --hyperlink'
+
+# using oh-my-posh
+eval "$(oh-my-posh init zsh)"
+
