@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Install terminal environment: chezmoi, oh-my-zsh, zsh plugins
+# Install terminal environment: chezmoi, oh-my-zsh, zsh plugins, starship
 # Run this first on a new Mac before anything else.
 
 echo "Installing chezmoi..."
@@ -11,8 +11,11 @@ echo "Installing tools from Brewfile..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 brew bundle install --file="$SCRIPT_DIR/Brewfile"
 
-echo "Installing oh-my-posh..."
-brew install jandedobbeleer/oh-my-posh/oh-my-posh
+echo "Installing starship..."
+brew install starship
+
+echo "Installing fonts..."
+brew install --cask font-iosevka-term-nerd-font
 
 echo "Installing oh-my-zsh..."
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
@@ -21,17 +24,8 @@ else
     echo "oh-my-zsh already installed, skipping"
 fi
 
-echo "Installing zsh plugins and theme..."
+echo "Installing zsh plugins..."
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-
-if [[ ! -d "$ZSH_CUSTOM/themes/spaceship-prompt" ]]; then
-    echo "Installing spaceship-prompt..."
-    git clone https://github.com/spaceship-prompt/spaceship-prompt.git "$ZSH_CUSTOM/themes/spaceship-prompt" --depth=1
-    ln -sf "$ZSH_CUSTOM/themes/spaceship-prompt/spaceship.zsh-theme" "$ZSH_CUSTOM/themes/spaceship.zsh-theme"
-    echo "spaceship-prompt installed"
-else
-    echo "spaceship-prompt already installed, skipping"
-fi
 
 if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]]; then
     git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
