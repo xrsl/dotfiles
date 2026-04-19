@@ -11,6 +11,9 @@ echo "Installing tools from Brewfile..."
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 brew bundle install --file="$SCRIPT_DIR/Brewfile"
 
+echo "Installing oh-my-posh..."
+brew install jandedobbeleer/oh-my-posh/oh-my-posh
+
 echo "Installing oh-my-zsh..."
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
     sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
