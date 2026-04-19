@@ -236,4 +236,4 @@ alias dbtf=/Users/resulal/.local/bin/dbt
 
 # eza alias
 alias ls='eza --icons --hyperlink'
-# alias eza='eza -TL 1 --icons --hyperlink'
+alias lz='eza -TL 1 --icons --hyperlink'
