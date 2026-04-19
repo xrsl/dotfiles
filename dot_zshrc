@@ -33,7 +33,7 @@ fi
 # ── ALIASES ───────────────────────────────────────────────────────────────────
 alias cls='clear'
 alias ls='eza --icons '
-alias lz='eza -TL 1 --icons '
+alias lz='eza -TL 1 --icons -a'
 alias zshconfig='chezmoi edit ~/.zshrc'
 
 jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
