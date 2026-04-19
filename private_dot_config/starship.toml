@@ -2,19 +2,19 @@ format = """
 $directory\
 $git_branch\
 $git_status\
-$python\
-$nodejs\
-$golang\
-$cmd_duration\
 $line_break\
 $character"""
+
+right_format = "$cmd_duration"
 
 [directory]
 truncation_length = 3
 truncate_to_repo = true
 
 [git_branch]
-symbol = " "
+format = "on [$symbol$branch]($style) "
+symbol = "\uE0A0 "
+style = "bold purple"
 
 [git_status]
 ahead = "⇡${count}"
@@ -27,9 +27,10 @@ renamed = "»"
 deleted = "✘"
 
 [cmd_duration]
-min_time = 2_000
-format = "took [$duration]($style) "
-style = "yellow"
+min_time = 10
+format = "[$duration]($style)"
+style = "dimmed white"
+show_milliseconds = true
 
 [python]
 symbol = " "
@@ -42,5 +43,5 @@ symbol = " "
 symbol = " "
 
 [character]
-success_symbol = "[❯](green)"
-error_symbol = "[❯](red)"
+success_symbol = "[→](green)"
+error_symbol = "[→](red)"
