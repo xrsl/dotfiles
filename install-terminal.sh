@@ -15,7 +15,7 @@ echo "Installing starship..."
 brew install starship
 
 echo "Installing fonts..."
-brew install --cask font-iosevka-term-nerd-font
+brew install --cask font-iosevka-nerd-font font-iosevka-term-nerd-font font-iosevka-term-slab-nerd-font
 
 echo "Installing oh-my-zsh..."
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
