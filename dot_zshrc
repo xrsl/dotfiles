@@ -202,8 +202,6 @@ if command -v go &>/dev/null; then
   export PATH="$PATH:$GOBIN"
 fi
 
-# cvx completion
-command -v cvx &>/dev/null && source <(cvx completion zsh)
 
 # Brew zsh-autosuggestions (macOS)
 if command -v brew &>/dev/null; then
@@ -235,10 +233,6 @@ precmd_functions+=(precmd_cursor)
 [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
 
 [[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
-
-
-# dbt aliases
-alias dbtf=/Users/resulal/.local/bin/dbt
 
 
 # eza alias
