@@ -3,7 +3,7 @@
 PROMPT_THEME="oh-my-posh"
 
 # oh-my-posh theme name (local) or full URL
-OMP_THEME="catppuccin"
+OMP_THEME="atomic"
 OMP_THEMES_DIR="/opt/homebrew/Cellar/oh-my-posh/$(oh-my-posh version)/themes"
 OMP_CONFIG="$OMP_THEMES_DIR/$OMP_THEME.omp.json"
 # OMP_CONFIG="$HOME/.config/oh-my-posh/theme.toml"
