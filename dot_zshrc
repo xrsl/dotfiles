@@ -1,6 +1,6 @@
 # ── PROMPT THEME ──────────────────────────────────────────────────────────────
 # Switch between "oh-my-posh" and "starship"
-PROMPT_THEME="starship"
+PROMPT_THEME="oh-my-posh"
 
 # oh-my-posh config file or URL (used when PROMPT_THEME="oh-my-posh")
 OMP_CONFIG="$HOME/.config/oh-my-posh/theme.toml"
