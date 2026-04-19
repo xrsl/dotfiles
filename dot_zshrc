@@ -2,9 +2,11 @@
 # Switch between "oh-my-posh" and "starship"
 PROMPT_THEME="oh-my-posh"
 
-# oh-my-posh config file or URL (used when PROMPT_THEME="oh-my-posh")
+# oh-my-posh theme name (local) or full URL
+OMP_THEME="catppuccin"
+OMP_THEMES_DIR="/opt/homebrew/Cellar/oh-my-posh/$(oh-my-posh version)/themes"
+OMP_CONFIG="$OMP_THEMES_DIR/$OMP_THEME.omp.json"
 # OMP_CONFIG="$HOME/.config/oh-my-posh/theme.toml"
-OMP_CONFIG="https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/catppuccin.omp.json"
 
 # ── PATH ──────────────────────────────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$HOME/.bun/bin:$PATH"
