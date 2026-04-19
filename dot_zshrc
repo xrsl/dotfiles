@@ -20,6 +20,11 @@ DISABLE_COMPFIX="true"
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
+
+
+# using oh-my-posh
+eval "$(oh-my-posh init zsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/amro.omp.json')"
+
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -166,6 +171,8 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+zshconfig="chezmoi edit ~/.zshrc"
+
 # Custom aliases
 alias cls='clear'
 jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
@@ -238,6 +245,5 @@ alias dbtf=/Users/resulal/.local/bin/dbt
 alias ls='eza --icons --hyperlink'
 alias lz='eza -TL 1 --icons --hyperlink'
 
-# using oh-my-posh
-eval "$(oh-my-posh init zsh --config 'https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/amro.omp.json')"
+
 
