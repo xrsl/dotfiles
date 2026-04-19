@@ -4,27 +4,12 @@ set -euo pipefail
 # Install terminal environment: chezmoi, oh-my-zsh, zsh plugins
 # Run this first on a new Mac before anything else.
 
-echo "Installing chezmoi and Ghostty..."
+echo "Installing chezmoi..."
 brew install chezmoi
-if brew list --cask ghostty &>/dev/null; then
-    echo "ghostty already installed, skipping"
-else
-    brew install --cask ghostty
-fi
 
-echo "Installing eza..."
-if brew list eza &>/dev/null; then
-    echo "eza already installed, skipping"
-else
-    brew install eza
-fi
-
-echo "Installing JetBrainsMono Nerd Font..."
-if brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
-    echo "font-jetbrains-mono-nerd-font already installed, skipping"
-else
-    brew install --cask font-jetbrains-mono-nerd-font
-fi
+echo "Installing tools from Brewfile..."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+brew bundle install --file="$SCRIPT_DIR/Brewfile"
 
 echo "Installing oh-my-zsh..."
 if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
