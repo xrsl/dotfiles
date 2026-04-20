@@ -3,6 +3,7 @@ tap "cue-lang/tap"
 
 # CLI tools
 brew "gh"
+brew "git-delta"
 brew "git-lfs"
 brew "go"
 brew "graphviz"
