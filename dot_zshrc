@@ -68,4 +68,6 @@ bindkey "^?" backward-delete-char
 [[ -f "$HOME/.atuin/bin/env" ]] && source "$HOME/.atuin/bin/env"
 
  
-
+# worktrunk
+autoload -Uz compinit && compinit
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
