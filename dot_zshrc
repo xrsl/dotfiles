@@ -75,3 +75,9 @@ if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 zstyle ':completion:*' menu select
+
+# Just
+alias j=just
+fpath=(~/.zsh/completions $fpath)
+autoload -U compinit
+compinit
