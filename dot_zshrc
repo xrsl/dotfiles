@@ -78,6 +78,7 @@ zstyle ':completion:*' menu select
 
 # Just
 alias j=just
+alias .j='just --justfile ~/.justfile --working-directory .'
 fpath=(~/.zsh/completions $fpath)
 autoload -U compinit
 compinit
