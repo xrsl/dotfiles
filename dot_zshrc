@@ -82,3 +82,6 @@ alias .j='just --justfile ~/.justfile --working-directory .'
 fpath=(~/.zsh/completions $fpath)
 autoload -U compinit
 compinit
+
+# lean-ctx
+eval "$(lean-ctx init zsh)"
