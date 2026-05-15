@@ -84,6 +84,7 @@ autoload -U compinit
 compinit
 
 # lean-ctx
+export LEAN_CTX_SHELL_ACTIVATION=agents-only
 eval "$(lean-ctx init zsh)"
 
 # >>> lean-ctx agent aliases >>>
