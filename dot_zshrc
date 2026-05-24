@@ -96,3 +96,10 @@ alias gemini='LEAN_CTX_AGENT=1 BASH_ENV="$HOME/.bashenv" gemini'
 # >>> lean-ctx proxy env >>>
 export GEMINI_API_BASE_URL="http://127.0.0.1:4444"
 # <<< lean-ctx proxy env <<<
+
+# opencode
+export PATH=/Users/resulal/.opencode/bin:$PATH
+
+
+# Added by Antigravity CLI installer
+export PATH="/Users/resulal/.local/bin:$PATH"
