@@ -103,3 +103,6 @@ export PATH=/Users/resulal/.opencode/bin:$PATH
 
 # Added by Antigravity CLI installer
 export PATH="/Users/resulal/.local/bin:$PATH"
+
+# Agents
+alias cc='claude --dangerously-skip-permissions'
