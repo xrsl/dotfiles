@@ -106,3 +106,9 @@ export PATH="/Users/resulal/.local/bin:$PATH"
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
+alias cx='codex --yolo'
+
+
+# Worktrunk
+wts() { wt switch -x 'code .' "$@"; }
+wtl() { wt list; }
