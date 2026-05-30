@@ -106,7 +106,12 @@ export PATH="/Users/resulal/.local/bin:$PATH"
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
+alias ccc='claude -c --dangerously-skip-permissions'
 alias cx='codex --yolo'
+alias cxc='codex --yolo resume'
+alias co='copilot --autopilot'
+alias coc='copilot --autopilot --resume'
+
 
 
 # Worktrunk
