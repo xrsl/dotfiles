@@ -113,6 +113,7 @@ alias cx='codex --yolo'
 # wts() { wt switch -x 'code .' "$@"; }
 wts() { local _cwd="$PWD"; wt switch -x 'code .' "$@"; cd "$_cwd"; }
 wtl() { wt list; }
+wtr() { wt remove -D "$@"; }
 
 # VSCode
-vsc() { code . }
+vsc() { code "${@:-.}" }
