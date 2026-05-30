@@ -110,5 +110,6 @@ alias cx='codex --yolo'
 
 
 # Worktrunk
-wts() { wt switch -x 'code .' "$@"; }
+# wts() { wt switch -x 'code .' "$@"; }
+wts() { local _cwd="$PWD"; wt switch -x 'code .' "$@"; cd "$_cwd"; }
 wtl() { wt list; }
