@@ -46,6 +46,50 @@ export NVM_DIR="$HOME/.nvm"
 command -v fnm &>/dev/null && eval "$(fnm env)"
 eval "$(atuin init zsh)"
 
+_atuin_up_search_marked() {
+  zle atuin-up-search
+  [[ -n "$BUFFER" ]] && _ATUIN_SELECTED_BUFFER=1
+}
+
+_atuin_up_search_viins_marked() {
+  zle atuin-up-search-viins
+  [[ -n "$BUFFER" ]] && _ATUIN_SELECTED_BUFFER=1
+}
+
+_atuin_up_search_vicmd_marked() {
+  zle atuin-up-search-vicmd
+  [[ -n "$BUFFER" ]] && _ATUIN_SELECTED_BUFFER=1
+}
+
+_atuin_down_clear_selected() {
+  if [[ -n "${_ATUIN_SELECTED_BUFFER:-}" && -n "$BUFFER" ]]; then
+    BUFFER=""
+    CURSOR=0
+    unset _ATUIN_SELECTED_BUFFER
+    zle reset-prompt
+  else
+    zle down-line-or-history
+  fi
+}
+
+zle -N atuin-up-search-marked _atuin_up_search_marked
+zle -N atuin-up-search-viins-marked _atuin_up_search_viins_marked
+zle -N atuin-up-search-vicmd-marked _atuin_up_search_vicmd_marked
+zle -N atuin-down-clear-selected _atuin_down_clear_selected
+
+bindkey -M emacs '^[[A' atuin-up-search-marked
+bindkey -M emacs '^[OA' atuin-up-search-marked
+bindkey -M viins '^[[A' atuin-up-search-viins-marked
+bindkey -M viins '^[OA' atuin-up-search-viins-marked
+bindkey -M vicmd '^[[A' atuin-up-search-vicmd-marked
+bindkey -M vicmd '^[OA' atuin-up-search-vicmd-marked
+bindkey -M emacs '^[[B' atuin-down-clear-selected
+bindkey -M emacs '^[OB' atuin-down-clear-selected
+bindkey -M viins '^[[B' atuin-down-clear-selected
+bindkey -M viins '^[OB' atuin-down-clear-selected
+bindkey -M vicmd '^[[B' atuin-down-clear-selected
+bindkey -M vicmd '^[OB' atuin-down-clear-selected
+
 if [[ -d "$HOME/.docker/completions" ]]; then
   fpath=("$HOME/.docker/completions" $fpath)
   autoload -Uz compinit && compinit
@@ -94,6 +138,7 @@ alias gemini='LEAN_CTX_AGENT=1 BASH_ENV="$HOME/.bashenv" gemini'
 # <<< lean-ctx agent aliases <<<
 
 # >>> lean-ctx proxy env >>>
+
 export GEMINI_API_BASE_URL="http://127.0.0.1:4444"
 # <<< lean-ctx proxy env <<<
 
@@ -111,7 +156,8 @@ alias cx='codex --yolo'
 alias cxc='codex --yolo resume'
 alias co='copilot --autopilot'
 alias coc='copilot --autopilot --resume'
-
+alias pi='pi --provider ollama --model gemma4:31b'
+alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
 
 
 # Worktrunk
@@ -122,3 +168,5 @@ wtr() { wt remove -D "$@"; }
 
 # VSCode
 vsc() { code "${@:-.}" }
+
+
