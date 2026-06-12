@@ -154,19 +154,41 @@ alias cc='claude --dangerously-skip-permissions'
 alias ccc='claude -c --dangerously-skip-permissions'
 alias cx='codex --yolo'
 alias cxc='codex --yolo resume'
-alias co='copilot --autopilot'
-alias coc='copilot --autopilot --resume'
-alias pi='pi --provider ollama --model gemma4:31b'
-alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
-
+alias co='copilot --autopilot --allow-all-tools'
+alias coc='copilot --autopilot --allow-all-tools --resume'
+alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
+alias pq='pi --model qwen3.5:35b-a3b-coding-nvfp4'
+#alias pi='pi --provider ollama --model gemma4:31b'
+#alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
 
 # Worktrunk
 # wts() { wt switch -x 'code .' "$@"; }
-wts() { local _cwd="$PWD"; wt switch -x 'code .' "$@"; cd "$_cwd"; }
+wts() { wt switch "$@";}
+wtcode() { local _cwd="$PWD"; wt switch -x 'code .' "$@"; cd "$_cwd"; }
 wtl() { wt list; }
 wtr() { wt remove -D "$@"; }
 
 # VSCode
 vsc() { code "${@:-.}" }
 
+
+
+# freshdiff — open the fresh editor straight into a git diff view
+#   freshdiff [file...]        repo-wide review diff (magit-style)
+#   freshdiff -s <file>        side-by-side diff of <file>
+#   freshdiff -H <file>        live diff vs HEAD     (-D vs disk, -b vs default branch)
+freshdiff() {
+  local mode=1
+  case "$1" in
+    -s) mode=side;   shift ;;
+    -H) mode=head;   shift ;;
+    -D) mode=disk;   shift ;;
+    -b) mode=branch; shift ;;
+  esac
+  FRESH_DIFF="${FRESH_DIFF:-$mode}" fresh "$@"
+}
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/resulal/.lmstudio/bin"
+# End of LM Studio CLI section
 
