@@ -95,6 +95,7 @@ search_mode = "prefix"
 ## what to do when the escape key is pressed when searching
 ## possible values: return-original, return-query
 # exit_mode = "return-original"
+exit_mode = "return-original"
 
 ## possible values: emacs, subl
 # word_jump_mode = "emacs"
@@ -246,6 +247,24 @@ enter_accept = true
 
 # Defaults to false. The backspace key performs the same functionality as Tab and copies the selected line to the command line to be modified when at the start of the line.
 # accept_with_backspace = false
+
+[keymap.emacs]
+"down" = [
+  { when = "list-at-start", action = "return-original" },
+  { action = "select-next" },
+]
+
+[keymap.vim-insert]
+"down" = [
+  { when = "list-at-start", action = "return-original" },
+  { action = "select-next" },
+]
+
+[keymap.vim-normal]
+"down" = [
+  { when = "list-at-start", action = "return-original" },
+  { action = "select-next" },
+]
 
 [sync]
 # Enable sync v2 by default
