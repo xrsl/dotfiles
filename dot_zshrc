@@ -116,6 +116,7 @@ bindkey "^?" backward-delete-char
 autoload -Uz compinit && compinit
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
 
+
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
 
 zstyle ':completion:*' menu select
@@ -161,12 +162,14 @@ alias pq='pi --model qwen3.5:35b-a3b-coding-nvfp4'
 #alias pi='pi --provider ollama --model gemma4:31b'
 #alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
 
-# Worktrunk
-# wts() { wt switch -x 'code .' "$@"; }
-wts() { wt switch "$@";}
-wtcode() { local _cwd="$PWD"; wt switch -x 'code .' "$@"; cd "$_cwd"; }
-wtl() { wt list; }
-wtr() { wt remove -D "$@"; }
+# Worktrunk: s/l/r/c/pr live in ~/.config/worktrunk/config.toml [aliases]
+# (switch/remove cd propagates from aliases via shell integration).
+# wtcode stays a function: its `cd` back to the original dir can't persist from an alias.
+alias wtl='wt l'
+alias wts='wt s'
+alias wtn='wt new'
+alias wtc='wt sc'
+alias wth='wt home'
 
 # VSCode
 vsc() { code "${@:-.}" }
