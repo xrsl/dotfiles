@@ -8,6 +8,7 @@
 [core]
 	excludesfile = ~/.gitignore_global
 	pager = delta
+	editor = fresh --cmd session open-file . --wait
 
 [interactive]
     diffFilter = delta --color-only
