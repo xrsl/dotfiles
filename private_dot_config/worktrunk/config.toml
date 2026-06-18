@@ -2,7 +2,7 @@ skip-commit-generation-prompt = true
 
 [aliases]
 # switch/list/remove — cd from switch & remove propagates via shell integration.
-c = "wt switch --create {{ args }}"
+new = "git fetch -q origin {{ args[0] }} 2>/dev/null; git fetch -q origin {{ default_branch }} || true; if git show-ref --verify --quiet refs/remotes/origin/{{ args[0] }}; then wt switch {{ args[0] }}; else wt switch --create {{ args[0] }} --base {{ args[1] | default('origin/' ~ default_branch) }}; fi"
 s = "wt switch {{ args }}"
 l = "wt list {{ args }}"
 rm = "wt remove -D {{ args }}"
@@ -28,11 +28,28 @@ pr-oc = "git add -A && wt step commit --show-prompt | opencode run -m anthropic/
 pr-co = "git add -A && copilot --output-format text -p \"$(wt step commit --show-prompt)\" | git commit -F - && git push -u origin HEAD && gh pr create --fill {{ args }}"
 pr-pi = "git add -A && pi --print --no-prompt-templates --model qwen3.5:35b-a3b-coding-nvfp4 \"$(wt step commit --show-prompt)\" | git commit -F - && git push -u origin HEAD && gh pr create --fill {{ args }}"
 
-# SHIP — full lifecycle from a worktree: commit (claude) → push → open PR →
-# wait for CI → squash-merge → remove this worktree (cd back to main).
+# LAND — full lifecycle from a worktree: commit (claude) → sync main → push →
+# open PR (if absent) → wait for CI → squash-merge → remove this worktree.
 # Blocks until CI passes; if CI fails it stops before merging and keeps the
 # worktree so you can fix. Run from inside the feature worktree.
-ship = "{ git diff --quiet && git diff --cached --quiet || wt step commit || git commit; } && git push -u origin HEAD && gh pr create --fill {{ args }} && sleep 8 && gh pr checks --watch --interval 10 && gh merge && wt remove -D"
+# Idempotent: every step is a no-op when already done, so a half-finished land
+# (e.g. merge blocked by an out-of-date branch) recovers cleanly on re-run.
+#   - merges origin/main in first, so branch protection's "up to date" passes
+#   - skips PR creation if one already exists (gh pr create would error)
+#   - treats an already-MERGED PR as merge success, so cleanup still runs
+land = "{ git diff --quiet && git diff --cached --quiet || wt step commit || git commit; } && git fetch -q origin {{ default_branch }} && git merge --no-edit origin/{{ default_branch }} && git push -u origin HEAD && { gh pr view --json number >/dev/null 2>&1 || gh pr create --fill {{ args }}; } && sleep 8 && gh pr checks --watch --interval 10 && { gh merge || gh pr view --json state -q .state | grep -qx MERGED; } && { git fetch -q origin {{ default_branch }} || true; } && wt remove -D"
+
+# DEV LOOP — small, fast helpers for day-to-day work in a feature worktree.
+# UP — rebase the current branch onto a freshly fetched origin/main; keeps a long-lived feature branch current without leaving the worktree (pairs with new/ship tracking origin/main).
+up = "git fetch -q origin {{ default_branch }} && git rebase origin/{{ default_branch }}"
+# HOME — jump to the main worktree and fast-forward local main; this is the `git pull` ship leaves out (ship merges via gh merge on the remote, so local main drifts until pulled here).
+home = "wt switch ^ && git -C {{ repo_path }} pull --ff-only -q"
+# WIP — instant checkpoint commit: stage everything, skip LLM/hooks, no wait; unwind before a real commit with `git reset --soft HEAD~1`.
+wip = "git add -A && git commit -m wip --no-verify"
+# REV — spin up a throwaway worktree to review a PR (`wt rev 123`); tear it down afterwards with `wt rm <branch>`.
+rev = "wt switch pr:{{ args }}"
+# DRAFT — same flow as pr but opens a draft PR: commit (if dirty) → push → open draft; good for early CI signal without pinging reviewers.
+draft = "{ git diff --quiet && git diff --cached --quiet || wt step commit || git commit; } && git push -u origin HEAD && gh pr create --fill --draft {{ args }}"
 
 # LLM one-line branch summaries in `wt list --full` and the switch picker.
 # Uses the [commit.generation] command below; cached, regenerated on diff change.

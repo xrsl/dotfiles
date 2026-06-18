@@ -92,7 +92,6 @@ bindkey -M vicmd '^[OB' atuin-down-clear-selected
 
 if [[ -d "$HOME/.docker/completions" ]]; then
   fpath=("$HOME/.docker/completions" $fpath)
-  autoload -Uz compinit && compinit
 fi
 
 # ── TERMINAL ──────────────────────────────────────────────────────────────────
@@ -112,21 +111,27 @@ bindkey "^?" backward-delete-char
 [[ -f "$HOME/.atuin/bin/env" ]] && source "$HOME/.atuin/bin/env"
 
  
-# worktrunk
-autoload -Uz compinit && compinit
-if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+# ── COMPLETIONS ─────────────────────────────────────────────────────────────
+# All fpath additions must happen before the single compinit below.
+fpath+=~/.zfunc
+fpath=(~/.zsh/completions $fpath)
 
-
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
+# One compinit; skip the security audit (compaudit) when the dump is < 24h old.
+autoload -Uz compinit
+if [[ -n ~/.zcompdump(#qNmh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 zstyle ':completion:*' menu select
+
+# worktrunk (uses compdef, so must run after compinit)
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
 
 # Just
 alias j=just
 alias .j='just --justfile ~/.justfile --working-directory .'
-fpath=(~/.zsh/completions $fpath)
-autoload -U compinit
-compinit
 
 # lean-ctx
 export LEAN_CTX_SHELL_ACTIVATION=agents-only
@@ -167,7 +172,23 @@ alias pq='pi --model qwen3.5:35b-a3b-coding-nvfp4'
 # wtcode stays a function: its `cd` back to the original dir can't persist from an alias.
 alias wtl='wt l'
 alias wts='wt s'
-alias wtn='wt new'
+# wtn <branch> [<base>]: 'wt new'. Optional 2nd positional is the base ref
+# (main, origin/main, @; '.' is rewritten to @). Defaults to origin/main.
+wtn() {
+  local branch base
+  local -a rest
+  (( $# )) && { branch="$1"; shift; }
+  (( $# )) && [[ "$1" != -* ]] && { base="$1"; shift; }
+  rest=("$@")
+  [[ "$base" == "." ]] && base="@"
+  if [[ -n "$base" ]]; then
+    wt new "$branch" --base "$base" "${rest[@]}"
+  elif [[ -n "$branch" ]]; then
+    wt new "$branch" "${rest[@]}"
+  else
+    wt new
+  fi
+}
 alias wtc='wt sc'
 alias wth='wt home'
 
@@ -195,3 +216,17 @@ freshdiff() {
 export PATH="$PATH:/Users/resulal/.lmstudio/bin"
 # End of LM Studio CLI section
 
+
+# pnpm
+export PNPM_HOME="/Users/resulal/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end
+
+# Open current repo in browser
+alias ghr="gh repo view --web"
+
+# zoxide (smarter cd) — must load after atuin so keybindings stay intact
+eval "$(zoxide init zsh)"

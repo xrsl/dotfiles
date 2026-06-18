@@ -1,6 +1,11 @@
 {
-  "theme": "dracula",
+  "theme": "builtin://dark",
   "file_browser": {
     "show_hidden": true
-  }
+  },
+  "file_explorer": {
+    "show_hidden": true,
+    "show_gitignored": true
+  },
+  "active_keybinding_map": "vscode"
 }
