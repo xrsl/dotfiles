@@ -200,10 +200,11 @@ vsc() { code "${@:-.}" }
 
 
 # freshdiff — open the fresh editor straight into a git diff view
-#   freshdiff [file...]        repo-wide review diff (magit-style, working tree)
+#   freshdiff [file...]        working-tree review (uncommitted changes, magit-style)
+#   freshdiff -p               PR review: changed files vs base/main (base..HEAD),
+#                              changed-files list + Enter = side-by-side
 #   freshdiff -s <file>        side-by-side diff of <file>
 #   freshdiff -H <file>        live diff vs HEAD     (-D vs disk, -b vs default branch)
-#   freshdiff -p               PR-branch review: all commits vs base/main (base..HEAD)
 freshdiff() {
   local mode=1
   case "$1" in
@@ -211,9 +212,22 @@ freshdiff() {
     -H) mode=head;   shift ;;
     -D) mode=disk;   shift ;;
     -b) mode=branch; shift ;;
-    -p) mode=pr;     shift ;;
+    -p) mode=range;  shift ;;
   esac
-  FRESH_DIFF="${FRESH_DIFF:-$mode}" fresh "$@"
+  if [[ "$mode" == range ]]; then
+    # Detect the repo's default branch: origin/HEAD, else local main/master.
+    local base
+    base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+    if [[ -z "$base" ]]; then
+      for c in main master; do
+        git show-ref --quiet --verify "refs/heads/$c" 2>/dev/null && { base=$c; break; }
+      done
+    fi
+    [[ -z "$base" ]] && base=main
+    FRESH_DIFF="${FRESH_DIFF:-$mode}" FRESH_REVIEW_RANGE="${base}..HEAD" fresh "$@"
+  else
+    FRESH_DIFF="${FRESH_DIFF:-$mode}" fresh "$@"
+  fi
 }
 
 # fresh editor shortcuts
