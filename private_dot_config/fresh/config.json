@@ -25,6 +25,22 @@
       ],
       "action": "vscode_toggle_terminal",
       "when": "normal"
+    },
+    {
+      "key": "j",
+      "modifiers": [
+        "ctrl"
+      ],
+      "action": "vscode_toggle_terminal",
+      "when": "terminal"
+    },
+    {
+      "key": "j",
+      "modifiers": [
+        "ctrl"
+      ],
+      "action": "vscode_toggle_terminal",
+      "when": "dock"
     }
   ]
 }
