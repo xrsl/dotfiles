@@ -33,6 +33,21 @@ editor.on("plugins_loaded", () => {
       ["q", QUIT],
       ["Escape", QUIT],
     ], true, false, true);
+
+    // start_review_branch opens a *blocking* prompt for the base ref, already
+    // pre-filled with the repo's default branch (origin/HEAD -> main/master).
+    // We don't want to confirm it by hand, so auto-accept the prefilled value:
+    // confirm the first prompt that appears in this throwaway PR-review launch.
+    // The prompt opens after an async git detection, so we can't confirm
+    // synchronously — we react to it instead. If the event doesn't fire, this
+    // degrades to the old behaviour (you press Enter), so it can't make things
+    // worse.
+    let basePromptAccepted = false;
+    editor.on("prompt_changed", () => {
+      if (basePromptAccepted) return;
+      basePromptAccepted = true;
+      editor.executeAction("prompt_confirm");
+    });
   } else if (mode === "side" || mode === "head" || mode === "disk" || mode === "branch") {
     // diff-view: side-by-side + live diffs (only Enter / Alt+O were bound).
     editor.defineMode("diff-view", [
