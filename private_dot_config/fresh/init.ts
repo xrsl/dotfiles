@@ -29,6 +29,15 @@ editor.on("plugins_loaded", () => {
     const range = editor.getEnv("FRESH_REVIEW_RANGE") || "HEAD";
     editor.startPromptWithInitial("Review range:", "review-range", range);
     editor.executeAction("prompt_confirm");
+    // Once the review has rendered: switch to split (side-by-side) layout and
+    // hide the comments panel. These are runtime actions (NOT a mode override),
+    // delayed so the review buffer exists. review_layout_split is idempotent;
+    // review_toggle_agent_notes flips showComments (default true -> hidden), so
+    // it's fired exactly once. Manual equivalents in-review: `1` split, `a` comments.
+    editor.delay(600).then(() => {
+      try { editor.executeAction("review_layout_split"); } catch (e) {}
+      try { editor.executeAction("review_toggle_agent_notes"); } catch (e) {}
+    });
     return;
   }
 
