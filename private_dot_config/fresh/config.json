@@ -23,7 +23,7 @@
       "modifiers": [
         "ctrl"
       ],
-      "action": "toggle_utility_dock",
+      "action": "vscode_toggle_terminal",
       "when": "normal"
     }
   ]

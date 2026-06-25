@@ -12,6 +12,25 @@
 // bindings means they drift out of date and silently break the advertised keys
 // (n/p next/prev hunk, Tab focus, ,/. next/prev file). So we only LAUNCH the
 // right view and let fresh own all the in-review keybindings.
+// VSCode-style one-key terminal toggle (bound to Ctrl+J in config.json):
+// behaves like workbench.action.terminal.toggleTerminal — create the bottom
+// dock terminal on first use, then show/hide that same terminal. fresh has no
+// single "create-or-toggle" action, so we compose the two it does have.
+let dockTerminalOpened = false;
+registerHandler("vscode_toggle_terminal", () => {
+  if (!dockTerminalOpened) {
+    dockTerminalOpened = true;
+    editor.executeAction("open_terminal_in_dock"); // create + show in bottom dock
+  } else {
+    editor.executeAction("toggle_utility_dock");   // show/hide the same dock
+  }
+});
+editor.registerCommand(
+  "Toggle bottom terminal",
+  "Show/hide the dock terminal (creates it on first use)",
+  "vscode_toggle_terminal",
+);
+
 editor.on("plugins_loaded", () => {
   const mode = editor.getEnv("FRESH_DIFF");
 
