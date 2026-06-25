@@ -23,7 +23,7 @@
       "modifiers": [
         "ctrl"
       ],
-      "action": "open_terminal_in_dock",
+      "action": "toggle_utility_dock",
       "when": "normal"
     }
   ]
