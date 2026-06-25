@@ -11,6 +11,7 @@
   "keybindings": [
     { "key": "escape", "action": "force_quit", "when": "normal" },
     { "key": "w", "modifiers": ["ctrl"], "action": "close_buffer", "when": "normal" },
-    { "key": "j", "modifiers": ["ctrl"], "action": "open_terminal", "when": "normal" }
+    { "key": "j", "modifiers": ["ctrl"], "action": "open_terminal", "when": "normal" },
+    { "key": "j", "modifiers": ["ctrl"], "action": "terminal_escape", "when": "terminal" }
   ]
 }
