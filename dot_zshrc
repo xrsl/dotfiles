@@ -218,7 +218,7 @@ freshdiff() {
 
 # short aliases for the fresh editor
 alias e='fresh'
-alias frd='freshdiff'
+alias ed='freshdiff'   # shadows /bin/ed (POSIX line editor); use `command ed` for that
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/resulal/.lmstudio/bin"
