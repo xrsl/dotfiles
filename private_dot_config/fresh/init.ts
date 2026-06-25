@@ -25,7 +25,9 @@ editor.on("plugins_loaded", () => {
   // repoint Esc/q to force_quit. Enter stays review_enter_dispatch, which
   // drills a changed line into the side-by-side view.
   const defineReviewMode = () => editor.defineMode("review-mode", [
-    ["Up", "review_nav_up"], ["Down", "review_nav_down"],
+    // Arrows move between FILES (focus-only review shows one file at a time);
+    // j/k scroll lines within the focused file, n/p jump hunks.
+    ["Up", "review_goto_prev_file"], ["Down", "review_goto_next_file"],
     ["k", "review_nav_up"], ["j", "review_nav_down"],
     ["PageUp", "review_page_up"], ["PageDown", "review_page_down"],
     ["Home", "move_line_start"], ["End", "move_line_end"],
