@@ -192,15 +192,18 @@ wtn() {
 alias wtc='wt sc'
 alias wth='wt home'
 
+export EDITOR="fresh"
+
 # VSCode
 vsc() { code "${@:-.}" }
 
 
 
 # freshdiff — open the fresh editor straight into a git diff view
-#   freshdiff [file...]        repo-wide review diff (magit-style)
+#   freshdiff [file...]        repo-wide review diff (magit-style, working tree)
 #   freshdiff -s <file>        side-by-side diff of <file>
 #   freshdiff -H <file>        live diff vs HEAD     (-D vs disk, -b vs default branch)
+#   freshdiff -p               PR-branch review: all commits vs base/main (base..HEAD)
 freshdiff() {
   local mode=1
   case "$1" in
@@ -208,9 +211,14 @@ freshdiff() {
     -H) mode=head;   shift ;;
     -D) mode=disk;   shift ;;
     -b) mode=branch; shift ;;
+    -p) mode=pr;     shift ;;
   esac
   FRESH_DIFF="${FRESH_DIFF:-$mode}" fresh "$@"
 }
+
+# short aliases for the fresh editor
+alias fr='fresh'
+alias frd='freshdiff'
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/resulal/.lmstudio/bin"
