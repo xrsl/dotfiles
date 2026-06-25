@@ -216,7 +216,7 @@ freshdiff() {
   esac
   if [[ "$mode" == range ]]; then
     # Detect the repo's default branch: origin/HEAD, else local main/master.
-    local base
+    local base mb
     base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
     if [[ -z "$base" ]]; then
       for c in main master; do
@@ -224,7 +224,11 @@ freshdiff() {
       done
     fi
     [[ -z "$base" ]] && base=main
-    FRESH_DIFF="${FRESH_DIFF:-$mode}" FRESH_REVIEW_RANGE="${base}..HEAD" fresh "$@"
+    # Use the merge-base so the diff is "what this branch added" (PR semantics),
+    # not affected by commits main gained after we branched. fresh runs the range
+    # as a two-dot `from..to` diff, so merge-base..HEAD is the correct revspec.
+    mb=$(git merge-base "$base" HEAD 2>/dev/null)
+    FRESH_DIFF="${FRESH_DIFF:-$mode}" FRESH_REVIEW_RANGE="${mb:-$base}..HEAD" fresh "$@"
   else
     FRESH_DIFF="${FRESH_DIFF:-$mode}" fresh "$@"
   fi
