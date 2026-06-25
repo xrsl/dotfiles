@@ -1,5 +1,5 @@
 {
-  "theme": "builtin://dark",
+  "theme": "catppuccin-mocha.json",
   "file_browser": {
     "show_hidden": true
   },
@@ -9,8 +9,26 @@
   },
   "active_keybinding_map": "vscode",
   "keybindings": [
-    { "key": "escape", "action": "force_quit", "when": "normal" },
-    { "key": "w", "modifiers": ["ctrl"], "action": "close_tab", "when": "normal" },
-    { "key": "j", "modifiers": ["ctrl"], "action": "open_terminal", "when": "normal" }
+    {
+      "key": "escape",
+      "action": "force_quit",
+      "when": "normal"
+    },
+    {
+      "key": "w",
+      "modifiers": [
+        "ctrl"
+      ],
+      "action": "close_tab",
+      "when": "normal"
+    },
+    {
+      "key": "j",
+      "modifiers": [
+        "ctrl"
+      ],
+      "action": "open_terminal",
+      "when": "normal"
+    }
   ]
 }
