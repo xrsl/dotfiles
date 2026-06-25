@@ -217,7 +217,7 @@ freshdiff() {
 }
 
 # short aliases for the fresh editor
-alias fr='fresh'
+alias e='fresh'
 alias frd='freshdiff'
 
 # Added by LM Studio CLI (lms)
