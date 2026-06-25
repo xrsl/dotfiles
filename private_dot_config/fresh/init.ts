@@ -11,6 +11,10 @@ editor.on("plugins_loaded", () => {
   const mode = editor.getEnv("FRESH_DIFF");
   if (!mode) return;
 
+  // TEMP load-marker: confirms THIS init.ts is running (vs a stale daemon).
+  // If you don't see this in the status bar on `epr`, the daemon didn't reload.
+  editor.setStatus("freshdiff init.ts LOADED — mode=" + mode);
+
   // These diff views are plugin-defined *modes* whose bindings replace the
   // global/normal context, so config.json `keybindings` can't reach them. In
   // the throwaway freshdiff flow we want Esc (and q) to fully exit fresh, so we
