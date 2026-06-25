@@ -1,12 +1,22 @@
 onboarding = false
 
+[keys]
+new_tab = "ctrl+t"      # NOTE: shadows shell transpose-char / Fresh "Show All Symbols" in panes
+close_tab = "prefix+q"  # prefix-isolated so ctrl+q passes through to Fresh / pane apps
+previous_workspace = "ctrl+shift+up"     # jump to previous workspace
+next_workspace = "ctrl+shift+down"       # jump to next workspace
+previous_tab = "ctrl+shift+left"         # jump to previous tab
+next_tab = "ctrl+shift+right"            # jump to next tab
+
 [keys.indexed]
-tabs = "ctrl"        # ctrl+1..9 jumps straight to a tab, no prefix
+tabs = "ctrl"            # ctrl+1..9 jumps straight to a tab, no prefix
+workspaces = "ctrl+shift"   # ctrl+shift+1..9 jumps straight to a workspace
 
 [theme]
 name = "catppuccin"
 
 [ui]
+prompt_new_tab_name = false   # create tabs immediately with the generated name, no prompt
 agent_panel_scope = "all"
 show_agent_labels_on_pane_borders = true
 
