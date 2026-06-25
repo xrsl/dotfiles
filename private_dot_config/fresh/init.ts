@@ -22,9 +22,14 @@ registerHandler("vscode_toggle_terminal", () => {
     dockTerminalOpened = true;
     editor.executeAction("open_terminal_in_dock"); // create + show in bottom dock
   } else {
-    editor.executeAction("toggle_utility_dock");   // show/hide the same dock
+    editor.executeAction("toggle_utility_dock");   // focus to/from the bottom dock
   }
 });
+// If the dock terminal is closed (its `x` / typing `exit` kills the shell), the
+// terminal_exit event fires — reset the flag so the next Ctrl+J RECREATES it
+// instead of toggling a dock that no longer has a terminal (which did nothing
+// and let Ctrl+J fall through to the editor as a newline).
+editor.on("terminal_exit", () => { dockTerminalOpened = false; });
 // Command name == handler name == keybinding action, so the Ctrl+J binding
 // (action: "vscode_toggle_terminal") resolves to this command as a PluginAction.
 editor.registerCommand(
