@@ -25,9 +25,11 @@ registerHandler("vscode_toggle_terminal", () => {
     editor.executeAction("toggle_utility_dock");   // show/hide the same dock
   }
 });
+// Command name == handler name == keybinding action, so the Ctrl+J binding
+// (action: "vscode_toggle_terminal") resolves to this command as a PluginAction.
 editor.registerCommand(
-  "Toggle bottom terminal",
-  "Show/hide the dock terminal (creates it on first use)",
+  "vscode_toggle_terminal",
+  "Toggle bottom dock terminal (show/hide; creates on first use)",
   "vscode_toggle_terminal",
 );
 
