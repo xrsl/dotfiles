@@ -10,7 +10,7 @@
   "active_keybinding_map": "vscode",
   "keybindings": [
     { "key": "escape", "action": "force_quit", "when": "normal" },
-    { "key": "w", "modifiers": ["ctrl"], "action": "close_buffer", "when": "normal" },
+    { "key": "w", "modifiers": ["ctrl"], "action": "close_tab", "when": "normal" },
     { "key": "j", "modifiers": ["ctrl"], "action": "toggle_utility_dock", "when": "normal" },
     { "key": "j", "modifiers": ["ctrl"], "action": "toggle_utility_dock", "when": "terminal" },
     { "key": "j", "modifiers": ["ctrl"], "action": "toggle_utility_dock", "when": "dock" }
