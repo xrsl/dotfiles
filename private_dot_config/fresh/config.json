@@ -5,7 +5,8 @@
   },
   "file_explorer": {
     "show_hidden": true,
-    "show_gitignored": true
+    "show_gitignored": true,
+    "width": "20%"
   },
   "active_keybinding_map": "vscode",
   "keybindings": [
