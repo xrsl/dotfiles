@@ -41,6 +41,22 @@
       ],
       "action": "vscode_toggle_terminal",
       "when": "dock"
+    },
+    {
+      "key": "j",
+      "modifiers": [
+        "ctrl"
+      ],
+      "action": "vscode_toggle_terminal",
+      "when": "file_explorer"
+    },
+    {
+      "key": "j",
+      "modifiers": [
+        "ctrl"
+      ],
+      "action": "vscode_toggle_terminal",
+      "when": "fileExplorer"
     }
   ]
 }
