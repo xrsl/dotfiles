@@ -11,11 +11,6 @@
   "active_keybinding_map": "vscode",
   "keybindings": [
     {
-      "key": "escape",
-      "action": "force_quit",
-      "when": "normal"
-    },
-    {
       "key": "w",
       "modifiers": [
         "ctrl"
