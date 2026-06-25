@@ -9,7 +9,11 @@
 //   FRESH_DIFF=branch    -> live diff vs the default branch
 editor.on("plugins_loaded", () => {
   const mode = editor.getEnv("FRESH_DIFF");
-  if (!mode) return;
+  if (!mode) {
+    // Plain `e` (editor, no diff): show the file-explorer sidebar (IDE-style).
+    editor.executeAction("focus_file_explorer");
+    return;
+  }
 
   // TEMP load-marker: confirms THIS init.ts is running (vs a stale daemon).
   // If you don't see this in the status bar on `epr`, the daemon didn't reload.
