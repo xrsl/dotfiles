@@ -6,10 +6,18 @@
   "file_explorer": {
     "show_hidden": true,
     "show_gitignored": true,
-    "width": "20%"
+    "width": "15%"
   },
   "active_keybinding_map": "vscode",
   "keybindings": [
+    {
+      "key": "'",
+      "modifiers": [
+        "ctrl"
+      ],
+      "action": "toggle_comment",
+      "when": "normal"
+    },
     {
       "key": "w",
       "modifiers": [
