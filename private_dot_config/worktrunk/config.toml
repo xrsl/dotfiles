@@ -18,6 +18,8 @@ sc-oc = "git add -A && wt step commit --show-prompt | opencode run -m anthropic/
 # review the message before pushing. pi model matches your `pq` alias.
 sc-co = "git add -A && copilot --output-format text -p \"$(wt step commit --show-prompt)\" | git commit -F -"
 sc-pi = "git add -A && pi --print --no-prompt-templates --model qwen3.5:35b-a3b-coding-nvfp4 \"$(wt step commit --show-prompt)\" | git commit -F -"
+# COMMIT+PUSH — `wt scp` = `wt sc` then push, only if the commit succeeds.
+scp = "{ wt step commit {{ args }} || git commit; } && git push -u origin HEAD"
 
 # SHIP — commit (chosen backend) → push → open PR. `wt pr` = claude default,
 # and only commits if the tree is dirty; the pr-<x> variants assume you have

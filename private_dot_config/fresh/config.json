@@ -1,5 +1,8 @@
 {
   "theme": "catppuccin-mocha.json",
+  "editor": {
+    "keyboard_report_all_keys_as_escape_codes": true
+  },
   "file_browser": {
     "show_hidden": true
   },
@@ -11,7 +14,7 @@
   "active_keybinding_map": "vscode",
   "keybindings": [
     {
-      "key": "'",
+      "key": ".",
       "modifiers": [
         "ctrl"
       ],
