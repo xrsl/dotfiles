@@ -158,6 +158,7 @@ export PATH="/Users/resulal/.local/bin:$PATH"
 # Agents
 alias cc='claude --dangerously-skip-permissions'
 alias ccc='claude -c --dangerously-skip-permissions'
+alias ccr='claude -r --dangerously-skip-permissions'
 alias cx='codex --yolo'
 alias cxc='codex --yolo resume'
 alias co='copilot --autopilot --allow-all-tools'
@@ -190,6 +191,7 @@ wtn() {
   fi
 }
 alias wtc='wt sc'
+alias wtcp='wt scp'
 alias wth='wt home'
 
 export EDITOR="fresh"
@@ -240,6 +242,12 @@ alias ec='freshdiff'         # review changes (working tree); Enter on a file = 
 alias epr='freshdiff -p'     # PR review: branch vs base/main (base..HEAD)
 # niche single-file diffs still available unaliased: freshdiff -s|-H|-D|-b <file>
 
+alias gui="gitui"
+alias lg="lazygit"
+alias gs="git status -sb"
+alias gu="git pull --ff-only"
+
+
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/resulal/.lmstudio/bin"
 # End of LM Studio CLI section
@@ -258,3 +266,11 @@ alias ghr="gh repo view --web"
 
 # zoxide (smarter cd) — must load after atuin so keybindings stay intact
 eval "$(zoxide init zsh)"
+
+# mmv (mermaid view) — render a .mmd to a temp PNG and show it inline in the terminal.
+# Dark theme + transparent bg so it reads on a dark terminal; needs `mmdc` and `chafa`.
+mmv() {
+  if [ -z "$1" ]; then echo "usage: mmv <file.mmd>" >&2; return 1; fi
+  local out="${TMPDIR:-/tmp}/_mmv.png"
+  mmdc -i "$1" -o "$out" -t dark -b '#1e1e2e' -s 3 && viu "$out"
+}
