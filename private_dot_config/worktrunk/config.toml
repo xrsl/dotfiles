@@ -44,8 +44,8 @@ land = "{ git diff --quiet && git diff --cached --quiet || wt step commit || git
 # DEV LOOP — small, fast helpers for day-to-day work in a feature worktree.
 # UP — rebase the current branch onto a freshly fetched origin/main; keeps a long-lived feature branch current without leaving the worktree (pairs with new/ship tracking origin/main).
 up = "git fetch -q origin {{ default_branch }} && git rebase origin/{{ default_branch }}"
-# HOME — jump to the main worktree and fast-forward local main; this is the `git pull` ship leaves out (ship merges via gh merge on the remote, so local main drifts until pulled here).
-home = "wt switch ^ && git -C {{ repo_path }} pull --ff-only -q"
+# HOME — jump to the main worktree; fast-forwards local main in the background (the `git pull` ship leaves out, since ship merges via gh merge on the remote and local main drifts until pulled here). Backgrounded so the switch is instant — master catches up ~1s later.
+home = "wt switch ^ && (git -C {{ repo_path }} pull --ff-only -q &)"
 # WIP — instant checkpoint commit: stage everything, skip LLM/hooks, no wait; unwind before a real commit with `git reset --soft HEAD~1`.
 wip = "git add -A && git commit -m wip --no-verify"
 # REV — spin up a throwaway worktree to review a PR (`wt rev 123`); tear it down afterwards with `wt rm <branch>`.

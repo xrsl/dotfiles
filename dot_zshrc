@@ -99,6 +99,38 @@ fi
 precmd_cursor() { printf '\e[6 q'; }
 precmd_functions+=(precmd_cursor)
 
+# herdr: rename the current tab to the current git branch (repo name if on the default branch)
+_herdr_last_tab_label=""
+precmd_herdr_tab_branch() {
+  [[ -n "$HERDR_TAB_ID" ]] || return
+  local branch
+  branch=$(git branch --show-current 2>/dev/null) || return
+  [[ -n "$branch" ]] || return
+
+  local default_branch
+  default_branch=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+  default_branch=${default_branch#origin/}
+  if [[ -z "$default_branch" ]]; then
+    for c in main master; do
+      git show-ref --quiet --verify "refs/heads/$c" 2>/dev/null && { default_branch=$c; break; }
+    done
+  fi
+
+  local label
+  if [[ -n "$default_branch" && "$branch" == "$default_branch" ]]; then
+    local common_dir
+    common_dir=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
+    label=$(basename "$(dirname "$common_dir")")
+  else
+    label="$branch"
+  fi
+
+  [[ "$label" != "$_herdr_last_tab_label" ]] || return
+  herdr tab rename "$HERDR_TAB_ID" "$label" &>/dev/null
+  _herdr_last_tab_label="$label"
+}
+precmd_functions+=(precmd_herdr_tab_branch)
+
 # Fix delete/backspace for remote terminals
 bindkey "^[[3~" delete-char
 bindkey "^?" backward-delete-char
@@ -171,7 +203,8 @@ alias pq='pi --model qwen3.5:35b-a3b-coding-nvfp4'
 # Worktrunk: s/l/r/c/pr live in ~/.config/worktrunk/config.toml [aliases]
 # (switch/remove cd propagates from aliases via shell integration).
 # wtcode stays a function: its `cd` back to the original dir can't persist from an alias.
-alias wtl='wt l'
+alias wtl='wt l'         # fast (~0.6s): local status only
+alias wtlf='wt l --full' # full (~11s cold): + CI status & LLM summaries (network/LLM, cached 30-60s)
 alias wts='wt s'
 # wtn <branch> [<base>]: 'wt new'. Optional 2nd positional is the base ref
 # (main, origin/main, @; '.' is rewritten to @). Defaults to origin/main.
