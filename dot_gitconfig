@@ -13,11 +13,11 @@
 [interactive]
     diffFilter = delta --color-only
 
-[delta]
-    navigate = true  # use n and N to move between diff sections
-    dark = true      # or light = true, or omit for auto-detection
-	line-numbers = true
-	side-by-side = true
+# [delta]
+#     navigate = true  # use n and N to move between diff sections
+#     dark = true      # or light = true, or omit for auto-detection
+# 	line-numbers = true
+# 	side-by-side = true
     # side-by-side = true
 
 [merge]
@@ -25,3 +25,22 @@
 
 [include]
     path = ~/.gitconfig.local
+    path = ~/.config/delta/catppuccin/catppuccin.gitconfig
+[pager]
+	diff = diffnav
+
+[delta]
+  features = catppuccin-mocha
+  tabs = 2
+
+  plus-style = syntax "#214d2b"
+  plus-emph-style = bold syntax "#2f6f3d"
+  minus-style = syntax "#5a242c"
+  minus-emph-style = bold syntax "#7a303b"
+
+  line-numbers-left-format = "{nm:>4} "
+  line-numbers-right-format = "│ {np:>4} "
+
+  wrap-left-symbol = " "
+  wrap-right-symbol = " "
+  wrap-right-prefix-symbol = " "

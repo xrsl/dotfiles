@@ -134,6 +134,14 @@ precmd_functions+=(precmd_herdr_tab_branch)
 # Fix delete/backspace for remote terminals
 bindkey "^[[3~" delete-char
 bindkey "^?" backward-delete-char
+bindkey "^U" backward-kill-line
+
+copy-current-line() {
+  print -rn -- "$BUFFER" | pbcopy
+}
+zle -N copy-current-line
+bindkey "^G" copy-current-line
+bindkey "^X^C" copy-current-line
 
 # Kiro IDE shell integration
 [[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
@@ -205,6 +213,8 @@ alias pq='pi --model qwen3.5:35b-a3b-coding-nvfp4'
 # wtcode stays a function: its `cd` back to the original dir can't persist from an alias.
 alias wtl='wt l'         # fast (~0.6s): local status only
 alias wtlf='wt l --full' # full (~11s cold): + CI status & LLM summaries (network/LLM, cached 30-60s)
+alias wtlr='wt l --remotes'
+alias wtd='wt d'         # 'wt step diff': all changes since branching (committed+staged+unstaged+untracked)
 alias wts='wt s'
 # wtn <branch> [<base>]: 'wt new'. Optional 2nd positional is the base ref
 # (main, origin/main, @; '.' is rewritten to @). Defaults to origin/main.
@@ -216,15 +226,35 @@ wtn() {
   rest=("$@")
   [[ "$base" == "." ]] && base="@"
   if [[ -n "$base" ]]; then
-    wt new "$branch" --base "$base" "${rest[@]}"
+    # 'new' alias takes base as a positional (args[1]) and adds --base itself;
+    # passing --base here would double up into `--base --base`.
+    wt new "$branch" "$base" "${rest[@]}"
   elif [[ -n "$branch" ]]; then
     wt new "$branch" "${rest[@]}"
   else
     wt new
   fi
 }
-alias wtc='wt sc'
-alias wtcp='wt scp'
+# wtc [cx|co|oc|pi] — commit with LLM-generated message.
+#   wtc          → claude (default backend, 'wt sc'); forwards extra args to step commit
+#   wtc cx       → codex     (wt sc-cx)
+#   wtc pi       → local qwen (wt sc-pi) — never rate-limited; use when claude is exhausted
+#   wtc oc / co  → opencode / copilot (wt sc-oc / sc-co)
+wtc() {
+  case "$1" in
+    cx|co|oc|pi) wt "sc-$1" ;;
+    *)           wt sc "$@" ;;
+  esac
+}
+# wtcp [cx|pi] — commit+push. Default = claude (wt scp); cx = codex, pi = local qwen.
+# Only cx/pi have push variants (scp-cx/scp-pi); oc/co are commit-only via wtc.
+wtcp() {
+  case "$1" in
+    cx|pi) wt "scp-$1" ;;
+    *)     wt scp "$@" ;;
+  esac
+}
+alias wtrm='wt rm'       # 'wt remove -D': removes worktree AND force-deletes the branch (even unmerged)
 alias wth='wt home'
 
 export EDITOR="fresh"
@@ -279,7 +309,7 @@ alias gui="gitui"
 alias lg="lazygit"
 alias gs="git status -sb"
 alias gu="git pull --ff-only"
-
+alias gd="git diff | diffnav -u"
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/Users/resulal/.lmstudio/bin"
@@ -297,6 +327,13 @@ esac
 # Open current repo in browser
 alias ghr="gh repo view --web"
 
+# Open PR by number in browser
+pr() { gh pr view "$1" --web }
+
+ci() { ENHANCE_THEME=catppuccin_mocha gh enhance "$1" }
+
+alias d="gh dash"
+alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
 # zoxide (smarter cd) — must load after atuin so keybindings stay intact
 eval "$(zoxide init zsh)"
 
@@ -307,3 +344,6 @@ mmv() {
   local out="${TMPDIR:-/tmp}/_mmv.png"
   mmdc -i "$1" -o "$out" -t dark -b '#1e1e2e' -s 3 && viu "$out"
 }
+
+# bun completions
+[ -s "/Users/resulal/.bun/_bun" ] && source "/Users/resulal/.bun/_bun"
