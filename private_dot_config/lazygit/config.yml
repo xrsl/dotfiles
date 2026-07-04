@@ -1,0 +1,5 @@
+git:
+  pagers:
+    - pager: delta --dark --paging=never
+    - {} # built-in diff; cycle to it with `|`
+
