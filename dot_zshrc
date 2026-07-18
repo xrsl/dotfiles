@@ -9,7 +9,6 @@ fi
 typeset -U path PATH
 path=(
   "$HOME/.local/bin"
-  "$HOME/.opencode/bin"
   "$HOME/.antigravity/antigravity/bin"
   "$HOME/go/bin"
   $path
@@ -21,6 +20,7 @@ command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
 
 # Nested shells may inherit paths from installers that mise replaced.
 for stale_path in \
+  "$HOME/.opencode/bin" \
   "$HOME/.bun/bin" \
   "$HOME/.atuin/bin" \
   /Library/Frameworks/Python.framework/Versions/3.12/bin; do
