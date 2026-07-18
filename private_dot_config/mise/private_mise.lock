@@ -88,10 +88,6 @@ url_api = "https://api.github.com/repos/argoproj/argo-cd/releases/assets/4715465
 [tools.argocd."platforms.macos-x64".provenance.slsa]
 url = "https://github.com/argoproj/argo-cd/releases/download/v3.4.5/argocd-cli.intoto.jsonl"
 
-[[tools."asdf:mise-plugins/mise-eza"]]
-version = "0.23.4"
-backend = "asdf:mise-plugins/mise-eza"
-
 [[tools.atuin]]
 version = "18.17.1"
 backend = "aqua:atuinsh/atuin"
@@ -255,6 +251,10 @@ backend = "aqua:dandavison/delta"
 checksum = "sha256:9be36612a5a13e9e386dc498fb8e50dc87c72ee42b63db0ea05b32f99a72a69a"
 url = "https://github.com/dandavison/delta/releases/download/0.19.2/delta-0.19.2-aarch64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/dandavison/delta/releases/assets/383662310"
+
+[[tools.eza]]
+version = "0.23.4"
+backend = "asdf:eza"
 
 [[tools.fd]]
 version = "10.4.2"
@@ -629,10 +629,6 @@ backend = "npm:9router"
 version = "1.4.1"
 backend = "npm:@colbymchenry/codegraph"
 
-[[tools."npm:@google/gemini-cli"]]
-version = "0.51.0"
-backend = "npm:@google/gemini-cli"
-
 [[tools."npm:@kilocode/cli"]]
 version = "7.4.11"
 backend = "npm:@kilocode/cli"
@@ -664,10 +660,6 @@ backend = "npm:cline"
 [[tools."npm:cspell"]]
 version = "10.0.1"
 backend = "npm:cspell"
-
-[[tools."npm:firecrawl-mcp"]]
-version = "3.22.3"
-backend = "npm:firecrawl-mcp"
 
 [[tools."npm:openskills"]]
 version = "1.5.0"
@@ -728,7 +720,7 @@ version = "3.14.6"
 backend = "core:python"
 
 [tools.python."platforms.macos-arm64"]
-checksum = "blake3:4d4071b155629f4b8ab336b493e08d5e2ae10369706400f01833aafaa4a8838e"
+checksum = "sha256:35d774f61d63c1fd4f1bc9495a7ada92e500dc4382a0df8a9910eb87ea48e8cf"
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-aarch64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 
@@ -736,6 +728,20 @@ provenance = "github-attestations"
 checksum = "sha256:12fb3ea3d6a855fe6ca1c2241702b06cb7e5939fbef09a5f54bf326e480f66af"
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260623/cpython-3.14.6+20260623-x86_64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
+
+[[tools.rclone]]
+version = "1.74.4"
+backend = "aqua:rclone/rclone"
+
+[tools.rclone."platforms.macos-arm64"]
+checksum = "sha256:c2100e2d4a4b3be04c55cd45380cafe7647e1ad772bb055f52f00876ed701167"
+url = "https://github.com/rclone/rclone/releases/download/v1.74.4/rclone-v1.74.4-osx-arm64.zip"
+url_api = "https://api.github.com/repos/rclone/rclone/releases/assets/470554897"
+
+[tools.rclone."platforms.macos-x64"]
+checksum = "sha256:4188aa84043d7a6240912923f47639a9d2da21f3b40a521c065c8d92e66563f6"
+url = "https://github.com/rclone/rclone/releases/download/v1.74.4/rclone-v1.74.4-osx-amd64.zip"
+url_api = "https://api.github.com/repos/rclone/rclone/releases/assets/470554605"
 
 [[tools.rg]]
 version = "15.2.0"
@@ -798,19 +804,19 @@ url = "https://github.com/yorukot/superfile/releases/download/v1.6.0/superfile-d
 url_api = "https://api.github.com/repos/yorukot/superfile/releases/assets/441063718"
 
 [[tools.tombi]]
-version = "1.2.0"
+version = "1.2.1"
 backend = "aqua:tombi-toml/tombi"
 
 [tools.tombi."platforms.macos-arm64"]
-checksum = "sha256:846aedc9ae344673a4deafbff76f5955bf437ec13e24f1b5eeffdf4f58603400"
-url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.0/tombi-cli-1.2.0-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/467173945"
+checksum = "sha256:912a25882f5698fe92e6e3149fa19725108f1ffd086c4bd40b2cc8eea1a4bc33"
+url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.1/tombi-cli-1.2.1-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/480573782"
 provenance = "github-attestations"
 
 [tools.tombi."platforms.macos-x64"]
-checksum = "sha256:453b201e77b1ff9c1a0e0a861dc061809b2111da557073d220ee61ad2af76045"
-url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.0/tombi-cli-1.2.0-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/467173942"
+checksum = "sha256:8478f77faf33dd9c7cda342f747acab7107ea69a9d7cc39623e083b759540cce"
+url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.1/tombi-cli-1.2.1-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/480573783"
 provenance = "github-attestations"
 
 [[tools.trivy]]
@@ -944,6 +950,22 @@ url_api = "https://api.github.com/repos/zellij-org/zellij/releases/assets/419107
 checksum = "sha256:59f803faa32cd4e5f316f0dc2d3b7a5530a72553e38ad939286471848a418eeb"
 url = "https://github.com/zellij-org/zellij/releases/download/v0.44.3/zellij-x86_64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/zellij-org/zellij/releases/assets/419104498"
+
+[[tools.zizmor]]
+version = "1.27.0"
+backend = "aqua:zizmorcore/zizmor"
+
+[tools.zizmor."platforms.macos-arm64"]
+checksum = "sha256:81336423d1b280c5dd0cdd8644a1e5f3238ab3ceb8d6e4334dfd05dab95a8a86"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.27.0/zizmor-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/zizmorcore/zizmor/releases/assets/476453095"
+provenance = "github-attestations"
+
+[tools.zizmor."platforms.macos-x64"]
+checksum = "sha256:51cd82d1f6914cbb7f4402dbdc19bd989a7599078e5ddeaf837d1ab901c97328"
+url = "https://github.com/zizmorcore/zizmor/releases/download/v1.27.0/zizmor-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/zizmorcore/zizmor/releases/assets/476453098"
+provenance = "github-attestations"
 
 [[tools.zoxide]]
 version = "0.10.0"
