@@ -111,6 +111,7 @@ buf = "latest"
 protobuf = "latest"
 "github:dlvhdr/diffnav" = "latest"
 skate = "latest"
+prek = "latest"
 
 [settings]
 # In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.

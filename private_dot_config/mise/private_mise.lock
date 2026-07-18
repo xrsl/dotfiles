@@ -846,6 +846,22 @@ url = "https://github.com/pnpm/pnpm/releases/download/v11.15.0/pnpm-darwin-arm64
 url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/481462336"
 provenance = "github-attestations"
 
+[[tools.prek]]
+version = "0.4.10"
+backend = "aqua:j178/prek"
+
+[tools.prek."platforms.macos-arm64"]
+checksum = "sha256:b2be74cd80bc86f679d92ae368d154ce391e4ef9891dc54447976b92df7951f1"
+url = "https://github.com/j178/prek/releases/download/v0.4.10/prek-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/j178/prek/releases/assets/479037973"
+provenance = "github-attestations"
+
+[tools.prek."platforms.macos-x64"]
+checksum = "sha256:ae0e42f5aec02898531d6b3b7dca97967a5d128cba8df34bc2a586742e2d847d"
+url = "https://github.com/j178/prek/releases/download/v0.4.10/prek-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/j178/prek/releases/assets/479038023"
+provenance = "github-attestations"
+
 [[tools.protobuf]]
 version = "35.1"
 backend = "aqua:protocolbuffers/protobuf/protoc"
