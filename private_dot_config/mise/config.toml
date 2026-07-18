@@ -9,6 +9,7 @@
 "aqua:casey/just" = "latest"
 "aqua:cli/cli" = "latest"
 "aqua:crate-ci/typos" = "latest"
+"aqua:extrawurst/gitui" = "latest"
 "aqua:jesseduffield/lazygit" = "latest"
 "aqua:ogulcancelik/herdr" = "latest"
 "aqua:sharkdp/bat" = "latest"
