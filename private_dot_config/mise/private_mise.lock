@@ -137,6 +137,22 @@ checksum = "sha256:830d63b0bba1fa040542ec569e3cf77f60d3356b9de75116a344b061e0894
 url = "https://github.com/sharkdp/bat/releases/download/v0.26.1/bat-v0.26.1-x86_64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/sharkdp/bat/releases/assets/323549786"
 
+[[tools.buf]]
+version = "1.72.0"
+backend = "aqua:bufbuild/buf"
+
+[tools.buf."platforms.macos-arm64"]
+checksum = "sha256:be040ae0ca381103dfda68a36738695c4db3e48de8e91412acdc3d991f39b91e"
+url = "https://github.com/bufbuild/buf/releases/download/v1.72.0/buf-Darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/bufbuild/buf/releases/assets/480772487"
+provenance = "minisign"
+
+[tools.buf."platforms.macos-x64"]
+checksum = "sha256:8b87e66786b46b20e7f7e328c9e15f64f636041acfdbf93374873d9014a62d30"
+url = "https://github.com/bufbuild/buf/releases/download/v1.72.0/buf-Darwin-x86_64.tar.gz"
+url_api = "https://api.github.com/repos/bufbuild/buf/releases/assets/480772489"
+provenance = "minisign"
+
 [[tools.bun]]
 version = "1.3.14"
 backend = "core:bun"
@@ -184,18 +200,18 @@ url = "https://github.com/CircleCI-Public/circleci-cli/releases/download/v0.1.38
 url_api = "https://api.github.com/repos/CircleCI-Public/circleci-cli/releases/assets/437360594"
 
 [[tools.codex]]
-version = "0.144.4"
+version = "0.144.5"
 backend = "aqua:openai/codex"
 
 [tools.codex."platforms.macos-arm64"]
-checksum = "sha256:312e6fa2826596fb23cc1193c30d51902b6522c36ccc43b36417590e0ebd533d"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.4/codex-package-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/476297059"
+checksum = "sha256:8d1cd2d53b2070919d12c054b57485b6e08347e2666cb20932e9e95eb2aa2901"
+url = "https://github.com/openai/codex/releases/download/rust-v0.144.5/codex-package-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/478682088"
 
 [tools.codex."platforms.macos-x64"]
-checksum = "sha256:666671fbe761fe1fd57d74e725c5a306729f81f4fbefc16a01a0595e69864d41"
-url = "https://github.com/openai/codex/releases/download/rust-v0.144.4/codex-package-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/openai/codex/releases/assets/476296983"
+checksum = "sha256:8322b8cf3747014b435318d2f34ee6d8f566b61360e5a770e30311cc0d90205b"
+url = "https://github.com/openai/codex/releases/download/rust-v0.144.5/codex-package-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/openai/codex/releases/assets/478682002"
 
 [[tools.colima]]
 version = "0.10.3"
@@ -321,18 +337,18 @@ url = "https://github.com/antonmedv/fx/releases/download/39.2.0/fx_darwin_amd64"
 url_api = "https://api.github.com/repos/antonmedv/fx/releases/assets/315468986"
 
 [[tools.fzf]]
-version = "0.74.0"
+version = "0.74.1"
 backend = "aqua:junegunn/fzf"
 
 [tools.fzf."platforms.macos-arm64"]
-checksum = "sha256:da60e8980e4239a0fc5f1fcfe873f243dfda93a6a13b696b00e1dc8584a77a87"
-url = "https://github.com/junegunn/fzf/releases/download/v0.74.0/fzf-0.74.0-darwin_arm64.tar.gz"
-url_api = "https://api.github.com/repos/junegunn/fzf/releases/assets/468106617"
+checksum = "sha256:849d1d33b050f04dd6b765665e417da151b0e4654dbed8f55c60fd8e23f3ba20"
+url = "https://github.com/junegunn/fzf/releases/download/v0.74.1/fzf-0.74.1-darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/junegunn/fzf/releases/assets/481468061"
 
 [tools.fzf."platforms.macos-x64"]
-checksum = "sha256:e2c470f058ac18615f54c0bebe0fd2956f2aa8e306a11621783a00aaa386eedd"
-url = "https://github.com/junegunn/fzf/releases/download/v0.74.0/fzf-0.74.0-darwin_amd64.tar.gz"
-url_api = "https://api.github.com/repos/junegunn/fzf/releases/assets/468106579"
+checksum = "sha256:642f29fb2800690385efb176a209b14d9f593795f0f70ee12c919ee15472e439"
+url = "https://github.com/junegunn/fzf/releases/download/v0.74.1/fzf-0.74.1-darwin_amd64.tar.gz"
+url_api = "https://api.github.com/repos/junegunn/fzf/releases/assets/481468093"
 
 [[tools.gh]]
 version = "2.96.0"
@@ -365,6 +381,20 @@ checksum = "sha256:5531d3e1fac8b684e149ec297243324c00cc235ce471db7c09016346739e9
 url = "https://github.com/backnotprop/plannotator/releases/download/v0.23.1/plannotator-darwin-x64"
 url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/474754068"
 provenance = "github-attestations"
+
+[[tools."github:dlvhdr/diffnav"]]
+version = "0.11.0"
+backend = "github:dlvhdr/diffnav"
+
+[tools."github:dlvhdr/diffnav"."platforms.macos-arm64"]
+checksum = "sha256:a4cbb3222708fc5662877d3b0a01f5b7625363f6e83c498cb746bf6b3058588e"
+url = "https://github.com/dlvhdr/diffnav/releases/download/v0.11.0/diffnav_Darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/dlvhdr/diffnav/releases/assets/378589428"
+
+[tools."github:dlvhdr/diffnav"."platforms.macos-x64"]
+checksum = "sha256:33a3911292dcf013953e3678aaa85fbc4aab50af5946002c8ff25e84c1b75cc2"
+url = "https://github.com/dlvhdr/diffnav/releases/download/v0.11.0/diffnav_Darwin_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/dlvhdr/diffnav/releases/assets/378589427"
 
 [[tools."github:jnsahaj/lumen"]]
 version = "2.32.0"
@@ -429,18 +459,18 @@ url = "https://github.com/terror/just-lsp/releases/download/0.4.8/just-lsp-0.4.8
 url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/471906945"
 
 [[tools."github:yvgude/lean-ctx"]]
-version = "3.9.11"
+version = "3.9.12"
 backend = "github:yvgude/lean-ctx"
 
 [tools."github:yvgude/lean-ctx"."platforms.macos-arm64"]
-checksum = "sha256:8f7735e2df93b99056d89d0d4d406f5d1d795968f49372018ac46b511e4c228c"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.11/lean-ctx-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/479383978"
+checksum = "sha256:ba441a98e59490a3a41826041c9f12bc18d7b4b660113031be72693f280c5861"
+url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753389"
 
 [tools."github:yvgude/lean-ctx"."platforms.macos-x64"]
-checksum = "sha256:1bfa42f5ec4c45398ba6687ec3e860678fd704d837110f926b48bbaa9bb773e0"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.11/lean-ctx-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/479383982"
+checksum = "sha256:77e240b7498cc51d594f1287497d2d431a6aeaf11b87e22e88c47418329338db"
+url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753386"
 
 [[tools.gitui]]
 version = "0.28.1"
@@ -727,7 +757,7 @@ version = "7.4.11"
 backend = "npm:@kilocode/cli"
 
 [[tools."npm:@marp-team/marp-cli"]]
-version = "4.4.1"
+version = "4.5.0"
 backend = "npm:@marp-team/marp-cli"
 
 [[tools."npm:@mermaid-js/mermaid-cli"]]
@@ -807,14 +837,28 @@ url = "https://github.com/earendil-works/pi/releases/download/v0.80.10/pi-darwin
 url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/479689740"
 
 [[tools.pnpm]]
-version = "11.13.1"
+version = "11.15.0"
 backend = "aqua:pnpm/pnpm"
 
 [tools.pnpm."platforms.macos-arm64"]
-checksum = "sha256:765c2bf04e8129cb58c0f946e324262e418370b35a203b50b1f06a0567ef8bc1"
-url = "https://github.com/pnpm/pnpm/releases/download/v11.13.1/pnpm-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/478563984"
+checksum = "sha256:662da4d7515b268c20fae097147a0ddcb91f9eba23b79c1c8d403e0d6fea1900"
+url = "https://github.com/pnpm/pnpm/releases/download/v11.15.0/pnpm-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/pnpm/pnpm/releases/assets/481462336"
 provenance = "github-attestations"
+
+[[tools.protobuf]]
+version = "35.1"
+backend = "aqua:protocolbuffers/protobuf/protoc"
+
+[tools.protobuf."platforms.macos-arm64"]
+checksum = "sha256:193289af0470c6a1aada357d4fba0bbf8d78bfaac8b5e42ca30af2ef75583de2"
+url = "https://github.com/protocolbuffers/protobuf/releases/download/v35.1/protoc-35.1-osx-aarch_64.zip"
+url_api = "https://api.github.com/repos/protocolbuffers/protobuf/releases/assets/445060249"
+
+[tools.protobuf."platforms.macos-x64"]
+checksum = "sha256:537d73604a344ded6fc94e98e07e529d4fe3e4a0b09e59905353950fafc2a1f7"
+url = "https://github.com/protocolbuffers/protobuf/releases/download/v35.1/protoc-35.1-osx-x86_64.zip"
+url_api = "https://api.github.com/repos/protocolbuffers/protobuf/releases/assets/445060254"
 
 [[tools.python]]
 version = "3.14.6"
@@ -909,19 +953,19 @@ version = "14.0.0"
 backend = "cargo:tokei"
 
 [[tools.tombi]]
-version = "1.2.1"
+version = "1.2.2"
 backend = "aqua:tombi-toml/tombi"
 
 [tools.tombi."platforms.macos-arm64"]
-checksum = "sha256:912a25882f5698fe92e6e3149fa19725108f1ffd086c4bd40b2cc8eea1a4bc33"
-url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.1/tombi-cli-1.2.1-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/480573782"
+checksum = "sha256:890fc24cb7da3b3eadc57b5960e593a3329b4d50663d374497b4f217a2eb0858"
+url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.2/tombi-cli-1.2.2-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/481242535"
 provenance = "github-attestations"
 
 [tools.tombi."platforms.macos-x64"]
-checksum = "sha256:8478f77faf33dd9c7cda342f747acab7107ea69a9d7cc39623e083b759540cce"
-url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.1/tombi-cli-1.2.1-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/480573783"
+checksum = "sha256:5a86377a76517c62de9462705594113afa5e33d7464beaae20397cc23f86394b"
+url = "https://github.com/tombi-toml/tombi/releases/download/v1.2.2/tombi-cli-1.2.2-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/tombi-toml/tombi/releases/assets/481242537"
 provenance = "github-attestations"
 
 [[tools.trivy]]

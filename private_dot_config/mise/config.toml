@@ -107,9 +107,13 @@ docker-cli = "latest"
 neovim = "latest"
 crush = "latest"
 "github:backnotprop/plannotator" = "latest"
+buf = "latest"
+protobuf = "latest"
+"github:dlvhdr/diffnav" = "latest"
 
 [settings]
 # In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
 idiomatic_version_file_enable_tools = ["node"]
 lockfile = true
 lockfile_platforms = ["macos-arm64", "macos-x64"]
+minimum_release_age = "0d"

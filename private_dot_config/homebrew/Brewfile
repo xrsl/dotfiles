@@ -31,8 +31,6 @@ brew "nlopt"
 brew "pkgconf"
 # Cross-platform library for audio I/O
 brew "portaudio"
-# Protocol buffers (Google's data interchange format)
-brew "protobuf"
 # Display directories as trees (with optional color/HTML output)
 brew "tree"
 # Simple terminal image viewer written in Rust
