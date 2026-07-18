@@ -199,6 +199,17 @@ checksum = "sha256:babf077177a83264ec27eae40182895e63e6de0da257f595c390d33ede68f
 url = "https://github.com/CircleCI-Public/circleci-cli/releases/download/v0.1.38646/circleci-cli_0.1.38646_darwin_amd64.tar.gz"
 url_api = "https://api.github.com/repos/CircleCI-Public/circleci-cli/releases/assets/437360594"
 
+[[tools.claude]]
+version = "2.1.214"
+backend = "aqua:anthropics/claude-code"
+
+[tools.claude."platforms.macos-arm64"]
+checksum = "blake3:daa53bd4445db4bca611c526173b6fba8b8cb5743a383b5ab694f503c8b93cf4"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.214/darwin-arm64/claude"
+
+[tools.claude."platforms.macos-x64"]
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.214/darwin-x64/claude"
+
 [[tools.codex]]
 version = "0.144.5"
 backend = "aqua:openai/codex"
