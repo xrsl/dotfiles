@@ -34,7 +34,7 @@ minikube = "latest"
 # Colima needs limactl; Homebrew previously supplied this dependency implicitly.
 lima = "latest"
 yq = "latest"
-herdr = "latest"
+"github:ogulcancelik/herdr" = "latest"
 actionlint = "latest"
 bat = "latest"
 fd = "latest"
@@ -117,3 +117,6 @@ idiomatic_version_file_enable_tools = ["node"]
 lockfile = true
 lockfile_platforms = ["macos-arm64", "macos-x64"]
 minimum_release_age = "0d"
+
+[settings.github]
+use_git_credentials = true
