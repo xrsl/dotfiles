@@ -79,6 +79,14 @@ vmd() {
   tart stop "$(_tart_vm_name "$1")"
 }
 
+vmD() {
+  if (( $# != 1 )); then
+    print -u2 "usage: vmD <name>"
+    return 2
+  fi
+  tart delete "$(_tart_vm_name "$1")"
+}
+
 vmn() {
   if (( $# != 2 )); then
     print -u2 "usage: vmn <name> <clone-link>"
