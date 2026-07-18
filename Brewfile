@@ -1,4 +1,3 @@
-brew "atuin"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 brew "git-lfs"
@@ -7,10 +6,8 @@ brew "tokei"
 
 # Rust CLI tools
 tap "yvgude/lean-ctx"
-brew "zoxide"
 brew "fresh-editor"
 brew "gitoxide"
-brew "starship"
 brew "worktrunk"
 brew "yvgude/lean-ctx/lean-ctx"
 

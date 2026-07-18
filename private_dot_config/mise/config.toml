@@ -2,12 +2,16 @@
 # Docs: https://mise.jdx.dev  •  Reproduce on a new machine with: mise install
 
 [tools]
+"aqua:ajeetdsouza/zoxide" = "latest"
+"aqua:astral-sh/uv" = "latest"
+"aqua:atuinsh/atuin" = "latest"
 "aqua:casey/just" = "latest"
 "aqua:cli/cli" = "latest"
 "aqua:crate-ci/typos" = "latest"
 "aqua:jesseduffield/lazygit" = "latest"
-"aqua:ogulcancelik/herdr" = "0.7.4"
+"aqua:ogulcancelik/herdr" = "latest"
 "aqua:sharkdp/fd" = "latest"
+"aqua:starship/starship" = "latest"
 "aqua:tombi-toml/tombi" = "latest"
 "aqua:typst/typst" = "latest"
 "aqua:watchexec/watchexec" = "latest"

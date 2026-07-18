@@ -16,6 +16,8 @@ if command -v go &>/dev/null; then
   export PATH="$PATH:$GOBIN"
 fi
 
+# mise — activate early so the tool inits below (starship/atuin/zoxide) resolve mise binaries
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
 eval "$(starship init zsh)"
 
 # ── AUTOSUGGESTIONS ───────────────────────────────────────────────────────────
@@ -39,8 +41,6 @@ alias zshconfig='chezmoi edit ~/.zshrc'
 jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
 
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
-# mise — runtime & tool version manager (replaces nvm + fnm, neither was installed)
-command -v mise &>/dev/null && eval "$(mise activate zsh)"
 eval "$(atuin init zsh)"
 
 _atuin_up_search_marked() {
