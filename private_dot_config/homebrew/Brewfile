@@ -58,8 +58,6 @@ brew "tokei"
 brew "tree"
 # Simple terminal image viewer written in Rust
 brew "viu"
-# CLI for Git worktree management, designed for parallel AI agent workflows
-brew "worktrunk"
 # Fish-like fast/unobtrusive autosuggestions for zsh
 brew "zsh-autosuggestions"
 # Fish shell like syntax highlighting for zsh

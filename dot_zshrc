@@ -1,5 +1,9 @@
 # ── PATH ──────────────────────────────────────────────────────────────────────
-[[ -f "$HOME/.profile" ]] && source "$HOME/.profile"
+
+# Keep optional Nix environment setup here so Zsh has a single profile entrypoint.
+if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
 
 # Keep PATH unique and finish all manual PATH changes before mise activation.
 typeset -U path PATH

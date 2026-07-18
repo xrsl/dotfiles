@@ -72,8 +72,6 @@ cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
 .gitconfig
 .gitignore_global
 .hushlogin
-.profile
-.tmux.conf
 .zshenv
 .zprofile
 .zshrc
