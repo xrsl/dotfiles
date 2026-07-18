@@ -27,10 +27,15 @@ else
     MISE_BIN="$HOME/.local/bin/mise"
 fi
 
-# Run chezmoi once through mise before the managed global mise config exists.
+# Isolate chezmoi from any stale managed mise config during bootstrap.
 echo "Applying dotfiles..."
-"$MISE_BIN" exec chezmoi@latest -- \
-    chezmoi init --apply https://github.com/xrsl/dotfiles.git
+if [[ -d "$HOME/.local/share/chezmoi/.git" ]]; then
+    MISE_GLOBAL_CONFIG_FILE=/dev/null "$MISE_BIN" exec chezmoi@latest -- \
+        chezmoi update
+else
+    MISE_GLOBAL_CONFIG_FILE=/dev/null "$MISE_BIN" exec chezmoi@latest -- \
+        chezmoi init --apply https://github.com/xrsl/dotfiles.git
+fi
 
 if command -v brew >/dev/null 2>&1; then
     echo "Installing Homebrew packages..."
