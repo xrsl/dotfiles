@@ -2,6 +2,7 @@
 # Docs: https://mise.jdx.dev  •  Reproduce on a new machine with: mise install
 
 [tools]
+"aqua:BurntSushi/ripgrep" = "latest"
 "aqua:ajeetdsouza/zoxide" = "latest"
 "aqua:astral-sh/uv" = "latest"
 "aqua:atuinsh/atuin" = "latest"
@@ -10,6 +11,7 @@
 "aqua:crate-ci/typos" = "latest"
 "aqua:jesseduffield/lazygit" = "latest"
 "aqua:ogulcancelik/herdr" = "latest"
+"aqua:sharkdp/bat" = "latest"
 "aqua:sharkdp/fd" = "latest"
 "aqua:starship/starship" = "latest"
 "aqua:tombi-toml/tombi" = "latest"
