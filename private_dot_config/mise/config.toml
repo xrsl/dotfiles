@@ -26,6 +26,7 @@
 "aqua:goreleaser/goreleaser" = "latest"
 "aqua:helm/helm" = "latest"
 "aqua:jesseduffield/lazygit" = "latest"
+"aqua:junegunn/fzf" = "latest"
 "aqua:kubernetes/minikube" = "latest"
 "aqua:mikefarah/yq" = "latest"
 "aqua:ogulcancelik/herdr" = "latest"
@@ -33,6 +34,8 @@
 "aqua:sharkdp/bat" = "latest"
 "aqua:sharkdp/fd" = "latest"
 "aqua:starship/starship" = "latest"
+"aqua:sxyazi/yazi" = "latest"
+"aqua:tmux/tmux-builds" = "latest"
 "aqua:tombi-toml/tombi" = "latest"
 "aqua:typst/typst" = "latest"
 "aqua:watchexec/watchexec" = "latest"
@@ -40,6 +43,7 @@
 "aqua:zellij-org/zellij" = "latest"
 "asdf:mise-plugins/mise-eza" = "latest"
 aws-cli = { version = "latest", symlink_bins = "true" }
+colima = "latest"
 "github:lusingander/serie" = "latest"
 "github:nushell/nushell" = { version = "latest", exe = "nu" }
 "github:sinelaw/fresh" = "latest"
