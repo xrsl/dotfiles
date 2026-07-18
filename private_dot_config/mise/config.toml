@@ -16,7 +16,7 @@
 "aqua:typst/typst" = "latest"
 "aqua:watchexec/watchexec" = "latest"
 "aqua:yorukot/superfile" = "latest"
-"github:eza-community/eza" = { version = "latest", exe = "eza" }
+"asdf:mise-plugins/mise-eza" = "latest"
 "github:lusingander/serie" = "latest"
 "github:nushell/nushell" = { version = "latest", exe = "nu" }
 
