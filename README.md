@@ -63,22 +63,6 @@ cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
 > (`chezmoi add`/`chezmoi edit`). Commit repo-only files directly from the source
 > directory.
 
-## Tracked files
-
-```
-.config/ghostty/config
-.config/homebrew/Brewfile
-.config/mise/config.toml
-.config/mise/mise.lock
-.config/nix/nix.conf
-.gitconfig
-.gitignore_global
-.hushlogin
-.zshenv
-.zprofile
-.zshrc
-```
-
 ## Never track
 
 `~/.ssh/*` `~/.aws/credentials` plaintext tokens or passwords
