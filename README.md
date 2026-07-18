@@ -4,22 +4,21 @@ Managed with [chezmoi](https://chezmoi.io).
 
 ## New machine
 
-Run once — installs chezmoi, oh-my-zsh, spaceship, zsh plugins, and applies dotfiles:
+Run once — installs chezmoi, oh-my-zsh, zsh plugins, and applies dotfiles:
 ```bash
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/xrsl/dotfiles/main/install-terminal.sh)"
 ```
 
 Restart terminal after.
 
-**Optional: install Homebrew packages**
+**Homebrew packages** (system libs, containers, casks — everything *not* managed by mise)
 ```bash
 brew bundle --file="~/.config/homebrew/Brewfile"
 ```
 
-**Optional: install CLI tools (Linux)**
+**CLI tools & runtimes** — managed by [mise](https://mise.jdx.dev) from `~/.config/mise/config.toml`, cross-platform (macOS + Linux):
 ```bash
-~/.local/bin/install-tools              # all
-~/.local/bin/install-tools just typst   # specific
+mise install
 ```
 
 ## Existing machine (pull latest dotfiles)
@@ -51,6 +50,7 @@ cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
 ```
 .config/ghostty/config
 .config/homebrew/Brewfile
+.config/mise/config.toml
 .config/nix/nix.conf
 .gitconfig
 .gitignore_global
