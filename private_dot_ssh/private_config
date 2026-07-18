@@ -17,3 +17,7 @@ Host tahoe
     HostName tahoe
     HostKeyAlias tart-tahoe
     ProxyCommand /bin/sh -c 'exec /usr/bin/nc "$(/opt/homebrew/bin/tart ip tahoe-base --wait 60)" %p'
+
+Host ubuntu tahoe
+    PermitLocalCommand yes
+    LocalCommand command -v herdr >/dev/null 2>&1 && test -n "$HERDR_TAB_ID" && herdr tab rename "$HERDR_TAB_ID" "vm:%n" || true
