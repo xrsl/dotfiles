@@ -920,6 +920,20 @@ checksum = "sha256:95ea25517e283397009ffb512b0d72b65e11aa7fc18cc0c4558f09d29224c
 url = "https://github.com/Versent/saml2aws/releases/download/v2.36.19/saml2aws_2.36.19_darwin_amd64.tar.gz"
 url_api = "https://api.github.com/repos/Versent/saml2aws/releases/assets/237266593"
 
+[[tools.skate]]
+version = "1.0.1"
+backend = "aqua:charmbracelet/skate"
+
+[tools.skate."platforms.macos-arm64"]
+checksum = "sha256:e340d47557741aa8cc07ca158eca063e810c5038098f040f50b476b2a328f295"
+url = "https://github.com/charmbracelet/skate/releases/download/v1.0.1/skate_1.0.1_Darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/charmbracelet/skate/releases/assets/235147681"
+
+[tools.skate."platforms.macos-x64"]
+checksum = "sha256:59ba6143eb449d343a110ef762b4108e1e25cf591baf4b714a47a74c748c36f4"
+url = "https://github.com/charmbracelet/skate/releases/download/v1.0.1/skate_1.0.1_Darwin_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/charmbracelet/skate/releases/assets/235147734"
+
 [[tools.starship]]
 version = "1.26.0"
 backend = "aqua:starship/starship"
