@@ -1,24 +1,32 @@
-# ── STARSHIP ──────────────────────────────────────────────────────────────────
-# Config: ~/.config/starship.toml — see https://starship.rs/presets/
-
 # ── PATH ──────────────────────────────────────────────────────────────────────
-export PATH="$HOME/.local/bin:$HOME/.bun/bin:$PATH"
+[[ -f "$HOME/.profile" ]] && source "$HOME/.profile"
+
+# Keep PATH unique and finish all manual PATH changes before mise activation.
+typeset -U path PATH
+path=(
+  "$HOME/.local/bin"
+  "$HOME/.opencode/bin"
+  "$HOME/.antigravity/antigravity/bin"
+  "$HOME/go/bin"
+  $path
+)
 export CDPATH=".:$HOME/ghub"
 
-[[ -f ~/.profile ]] && source ~/.profile
+# mise owns developer runtimes and CLI tools.
+command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
 
-[[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
-[[ -d "$HOME/.antigravity/antigravity/bin" ]] && export PATH="$HOME/.antigravity/antigravity/bin:$PATH"
+# Nested shells may inherit paths from installers that mise replaced.
+for stale_path in \
+  "$HOME/.bun/bin" \
+  "$HOME/.atuin/bin" \
+  /Library/Frameworks/Python.framework/Versions/3.12/bin; do
+  path=("${(@)path:#${stale_path}}")
+done
+unset stale_path
 
-
-if command -v go &>/dev/null; then
-  export GOBIN="$(go env GOPATH)/bin"
-  export PATH="$PATH:$GOBIN"
-fi
-
-# mise — activate early so the tool inits below (starship/atuin/zoxide) resolve mise binaries
-command -v mise &>/dev/null && eval "$(mise activate zsh)"
-eval "$(starship init zsh)"
+# ── STARSHIP ──────────────────────────────────────────────────────────────────
+# Config: ~/.config/starship.toml — see https://starship.rs/presets/
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 
 # ── AUTOSUGGESTIONS ───────────────────────────────────────────────────────────
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
@@ -28,8 +36,6 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 if command -v brew &>/dev/null; then
   [[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && \
     source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-  [[ -f "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && \
-    source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 fi
 
 # ── ALIASES ───────────────────────────────────────────────────────────────────
@@ -41,7 +47,7 @@ alias zshconfig='chezmoi edit ~/.zshrc'
 jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
 
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
-eval "$(atuin init zsh)"
+command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
 
 _atuin_up_search_marked() {
   zle atuin-up-search
@@ -141,11 +147,9 @@ bindkey "^G" copy-current-line
 bindkey "^X^C" copy-current-line
 
 # Kiro IDE shell integration
-[[ "$TERM_PROGRAM" == "kiro" ]] && . "$(kiro --locate-shell-integration-path zsh)"
-
-# ── ENV ───────────────────────────────────────────────────────────────────────
-[[ -f "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
-[[ -f "$HOME/.atuin/bin/env" ]] && source "$HOME/.atuin/bin/env"
+if [[ "$TERM_PROGRAM" == "kiro" ]] && command -v kiro >/dev/null 2>&1; then
+  . "$(kiro --locate-shell-integration-path zsh)"
+fi
 
  
 # ── COMPLETIONS ─────────────────────────────────────────────────────────────
@@ -172,13 +176,7 @@ alias .j='just --justfile ~/.justfile --working-directory .'
 
 # lean-ctx
 export LEAN_CTX_SHELL_ACTIVATION=agents-only
-eval "$(lean-ctx init zsh)"
-# opencode
-export PATH=/Users/resulal/.opencode/bin:$PATH
-
-
-# Added by Antigravity CLI installer
-export PATH="/Users/resulal/.local/bin:$PATH"
+command -v lean-ctx >/dev/null 2>&1 && eval "$(lean-ctx init zsh)"
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
@@ -411,24 +409,11 @@ alias ghr="gh repo view --web"
 # files
 alias f="spf"
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/resulal/.lmstudio/bin"
-# End of LM Studio CLI section
-
-
-# pnpm
-export PNPM_HOME="/Users/resulal/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME/bin:"*) ;;
-  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
-esac
-# pnpm end
-
 # tokens today
 alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
 alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --week"
 # zoxide (smarter cd) — must load after atuin so keybindings stay intact
-eval "$(zoxide init zsh)"
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
 
 # mmv (mermaid view) — render a .mmd to a temp PNG and show it inline in the terminal.
 # Dark theme + transparent bg so it reads on a dark terminal; needs `mmdc` and `chafa`.
@@ -438,13 +423,6 @@ mmv() {
   mmdc -i "$1" -o "$out" -t dark -b '#1e1e2e' -s 3 && viu "$out"
 }
 
-# bun completions
-[ -s "/Users/resulal/.bun/_bun" ] && source "/Users/resulal/.bun/_bun"
-# lean-ctx shell hook — begin
-if [ -f "/Users/resulal/.lean-ctx/shell-hook.zsh" ]; then
-. "/Users/resulal/.lean-ctx/shell-hook.zsh"
-fi
-# lean-ctx shell hook — end
 # >>> lean-ctx agent aliases >>>
 alias claude='LEAN_CTX_AGENT=1 BASH_ENV="$HOME/.bashenv" claude'
 alias codex='LEAN_CTX_AGENT=1 BASH_ENV="$HOME/.bashenv" codex'
@@ -462,3 +440,10 @@ function y() {
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	command rm -f -- "$tmp"
 }
+
+# zsh-syntax-highlighting must be sourced after all widgets and bindings.
+if command -v brew >/dev/null 2>&1; then
+  _zsh_highlighting="$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+  [[ -f "$_zsh_highlighting" ]] && source "$_zsh_highlighting"
+  unset _zsh_highlighting
+fi

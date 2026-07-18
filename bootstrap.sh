@@ -1,37 +1,44 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "Bootstrapping new machine..."
+echo "Bootstrapping dotfiles..."
 
-# Install Homebrew (macOS)
-if [[ "$(uname)" == "Darwin" ]] && ! command -v brew &>/dev/null; then
-    echo "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
+# Homebrew owns machine-global libraries, applications, fonts, and Zsh plugins.
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    if ! command -v brew >/dev/null 2>&1; then
+        echo "Installing Homebrew..."
+        /bin/bash -c \
+            "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
 
-# Install chezmoi and apply dotfiles
-if ! command -v chezmoi &>/dev/null; then
-    echo "Installing chezmoi..."
-    if command -v brew &>/dev/null; then
-        brew install chezmoi
-    else
-        sh -c "$(curl -fsLS get.chezmoi.io)" -- -b "$HOME/.local/bin"
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+        eval "$(/usr/local/bin/brew shellenv)"
     fi
 fi
 
-echo "Applying dotfiles..."
-chezmoi init --apply xrsl/dotfiles
-
-# Install oh-my-zsh
-if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
-    echo "Installing oh-my-zsh..."
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+# mise is the bootstrap root and owns developer runtimes and CLI tools.
+if command -v mise >/dev/null 2>&1; then
+    MISE_BIN="$(command -v mise)"
+else
+    echo "Installing mise..."
+    curl -fsSL https://mise.run | sh
+    MISE_BIN="$HOME/.local/bin/mise"
 fi
 
-# Install Brewfile packages (macOS)
-if [[ "$(uname)" == "Darwin" ]] && command -v brew &>/dev/null; then
-    echo "Installing Brewfile packages..."
+# Run chezmoi once through mise before the managed global mise config exists.
+echo "Applying dotfiles..."
+"$MISE_BIN" exec chezmoi@latest -- \
+    chezmoi init --apply https://github.com/xrsl/dotfiles.git
+
+if command -v brew >/dev/null 2>&1; then
+    echo "Installing Homebrew packages..."
     brew bundle --file="$HOME/.config/homebrew/Brewfile"
 fi
 
-echo "Done. Restart your shell."
+echo "Installing mise tools..."
+"$MISE_BIN" install
+
+echo "Bootstrap complete. Starting a fresh login shell."
+exec /bin/zsh -l

@@ -1,13 +1,10 @@
+# Shared login-shell paths. Developer runtimes and tools are added by mise.
+export PATH="$HOME/.local/bin:$PATH"
 
-[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+if [ -d "$HOME/.lmstudio/bin" ]; then
+    export PATH="$PATH:$HOME/.lmstudio/bin"
+fi
 
-[[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
-
-[[ -f "$HOME/.atuin/bin/env" ]] && . "$HOME/.atuin/bin/env"
-
-if [ -e /home/xrsl/.nix-profile/etc/profile.d/nix.sh ]; then . /home/xrsl/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/resulal/.lmstudio/bin"
-# End of LM Studio CLI section
-
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi

@@ -3,6 +3,7 @@
 
 [tools]
 1password = "latest"
+"aqua:asciinema/agg" = "latest"
 "aqua:BurntSushi/ripgrep" = "latest"
 "aqua:CircleCI-Public/circleci-cli" = "latest"
 "aqua:Versent/saml2aws" = "latest"
@@ -20,14 +21,18 @@
 "aqua:charmbracelet/gum" = "latest"
 "aqua:cli/cli" = "latest"
 "aqua:crate-ci/typos" = "latest"
+"aqua:cue-lang/cue" = "latest"
 "aqua:dandavison/delta" = "latest"
 "aqua:extrawurst/gitui" = "latest"
 "aqua:golangci/golangci-lint" = "latest"
 "aqua:goreleaser/goreleaser" = "latest"
 "aqua:helm/helm" = "latest"
 "aqua:jesseduffield/lazygit" = "latest"
+"aqua:jqlang/jq" = "latest"
 "aqua:junegunn/fzf" = "latest"
 "aqua:kubernetes/minikube" = "latest"
+# Colima needs limactl; Homebrew previously supplied this dependency implicitly.
+"aqua:lima-vm/lima" = "latest"
 "aqua:mikefarah/yq" = "latest"
 "aqua:ogulcancelik/herdr" = "latest"
 "aqua:rhysd/actionlint" = "latest"
@@ -42,9 +47,19 @@
 "aqua:yorukot/superfile" = "latest"
 "aqua:zellij-org/zellij" = "latest"
 "asdf:mise-plugins/mise-eza" = "latest"
-aws-cli = { version = "latest", symlink_bins = "true" }
+bun = "latest"
+"cargo:firesym" = "latest"
+"cargo:just-lsp" = "latest"
+"cargo:serpl" = "latest"
 chezmoi = "latest"
 colima = "latest"
+dagger = "latest"
+go = "latest"
+# Nilaway has no release tags; use a reproducible Go pseudo-version.
+"go:go.uber.org/nilaway/cmd/nilaway" = "v0.0.0-20260717202641-aacdd5a364bf"
+# The leading v avoids mise's nested-module fallback to the invalid 0.23.0 tag.
+"go:golang.org/x/tools/gopls" = "v0.23.0"
+"go:golang.org/x/vuln/cmd/govulncheck" = "latest"
 "github:jnsahaj/lumen" = "latest"
 "github:lusingander/serie" = "latest"
 "github:nushell/nushell" = { version = "latest", exe = "nu" }
@@ -64,6 +79,7 @@ node = "lts"
 "npm:@robzolkos/lazypi" = "latest"
 "npm:@z_ai/coding-helper" = "latest"
 "npm:cline" = "latest"
+"npm:cspell" = "latest"
 "npm:firecrawl-mcp" = "latest"
 "npm:hunkdiff" = "latest"
 "npm:kanban" = "latest"
@@ -72,9 +88,11 @@ node = "lts"
 "npm:postman-cli" = "latest"
 "npm:slop-scan" = "latest"
 "npm:tokscale" = "latest"
-trivy = "latest"
-yazi = "latest"
+python = "3.12"
+rust = "latest"
 
 [settings]
 # In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
 idiomatic_version_file_enable_tools = ["node"]
+lockfile = true
+lockfile_platforms = ["macos-arm64", "macos-x64"]

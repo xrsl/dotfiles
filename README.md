@@ -4,27 +4,41 @@ Managed with [chezmoi](https://chezmoi.io).
 
 ## New machine
 
-Run once — installs chezmoi, oh-my-zsh, zsh plugins, and applies dotfiles:
+Run once:
+
 ```bash
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/xrsl/dotfiles/main/install-terminal.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/xrsl/dotfiles/main/bootstrap.sh)"
 ```
 
-Restart terminal after.
+The bootstrap order is:
 
-**Homebrew packages** (system libs, containers, casks — everything *not* managed by mise)
-```bash
-brew bundle --file="~/.config/homebrew/Brewfile"
-```
+1. Homebrew and the macOS command-line prerequisites
+2. mise
+3. chezmoi, run once through mise to apply this repository
+4. Homebrew libraries, applications, Zsh plugins, and fonts
+5. mise-managed developer runtimes and CLI tools
+6. a fresh login Zsh
 
-**CLI tools & runtimes** — managed by [mise](https://mise.jdx.dev) from `~/.config/mise/config.toml`, cross-platform (macOS + Linux):
-```bash
-mise install
-```
+Homebrew state is declared in `~/.config/homebrew/Brewfile`. Developer tools and
+runtimes are declared in `~/.config/mise/config.toml` and pinned across Macs by
+`~/.config/mise/mise.lock`.
 
-## Existing machine (pull latest dotfiles)
+The terminal font is `font-jetbrains-mono-nerd-font`; Ghostty uses
+`JetBrainsMono Nerd Font Mono`.
+
+## Reconcile an existing machine
 
 ```bash
 chezmoi update
+brew bundle --file="$HOME/.config/homebrew/Brewfile"
+mise install
+```
+
+To update the mise tool versions and their lockfile:
+
+```bash
+mise upgrade
+mise lock --global
 ```
 
 ## Daily usage
@@ -39,11 +53,13 @@ chezmoi status                           # see pending changes
 chezmoi managed --include=files          # list all tracked files
 chezmoi init                             # regenerate config from template (run after template changes)
 
-# for repo-only files (README, install scripts) not managed by chezmoi:
+# for repo-only files (README and bootstrap script) not managed by chezmoi:
 cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
 ```
 
-> **Warning:** auto-commit only works for chezmoi-managed dotfiles (`chezmoi add`/`chezmoi edit`). Changes to `README.md`, `install-terminal.sh`, `bootstrap.sh` are NOT auto-committed — use the git command above.
+> **Warning:** auto-commit only works for chezmoi-managed dotfiles
+> (`chezmoi add`/`chezmoi edit`). Commit repo-only files directly from the source
+> directory.
 
 ## Tracked files
 
@@ -51,17 +67,18 @@ cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
 .config/ghostty/config
 .config/homebrew/Brewfile
 .config/mise/config.toml
+.config/mise/mise.lock
 .config/nix/nix.conf
 .gitconfig
 .gitignore_global
 .hushlogin
-.local/bin/install-tools
 .profile
 .tmux.conf
+.zshenv
 .zprofile
 .zshrc
 ```
 
 ## Never track
 
-`~/.ssh/*` `~/.aws/credentials`
+`~/.ssh/*` `~/.aws/credentials` plaintext tokens or passwords

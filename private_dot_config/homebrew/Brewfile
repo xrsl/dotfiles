@@ -1,10 +1,7 @@
 tap "bufbuild/buf"
 tap "charmbracelet/tap"
-tap "circleci-public/circleci"
 tap "coin-or-tools/coinor"
-tap "cue-lang/tap"
 tap "dlvhdr/formulae"
-tap "jandedobbeleer/oh-my-posh"
 tap "tsonglew/dutis"
 tap "yvgude/lean-ctx"
 # NaCl networking and cryptography library
@@ -21,24 +18,18 @@ brew "chafa"
 brew "clipboard"
 # Cross-platform make
 brew "cmake"
-# Container runtimes on MacOS (and Linux) with minimal setup
-brew "colima"
 # Pack, ship and run any application as a lightweight container
 brew "docker"
 # Docker CLI plugin for extended build capabilities with BuildKit
 brew "docker-buildx"
 # Play, record, convert, and stream select audio and video codecs
 brew "ffmpeg"
-# Text editor for your terminal: easy, powerful and fast
-brew "fresh-editor"
 # GNU compiler collection
 brew "gcc"
 # Git extension for versioning large files
 brew "git-lfs"
 # Idiomatic, lean, fast & safe pure Rust implementation of Git
 brew "gitoxide"
-# Open source programming language to build simple/reliable/efficient software
-brew "go"
 # Graph visualization software from AT&T and Bell Labs
 brew "graphviz"
 # Tools and libraries to manipulate images in select formats
@@ -75,23 +66,14 @@ brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 # A powerful terminal-based AI assistant for developers, providing intelligent coding assistance directly in your terminal.
 brew "charmbracelet/tap/crush", trusted: true
-# Command-line interface for 1Password
-cask "1password-cli"
 # Compact TeX distribution as alternative to the full TeX Live / MacTeX
 cask "basictex"
 # Free and open-source web browser
 cask "chromium"
-cask "circleci@next"
 # Universal database tool and SQL client
 cask "dbeaver-community"
 # Offline voice-to-text dictation app with AI enhancement
 cask "fluidvoice"
-cask "font-hack-nerd-font"
-cask "font-iosevka"
-cask "font-iosevka-nerd-font"
-cask "font-iosevka-term-nerd-font"
-cask "font-iosevka-term-slab-nerd-font"
-cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-noto-emoji"
 # Terminal emulator that uses platform-native UI and GPU acceleration
@@ -104,11 +86,3 @@ cask "kap"
 cask "ollama-app"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
 cask "wezterm"
-go "golang.org/x/tools/gopls"
-go "golang.org/x/vuln/cmd/govulncheck"
-go "github.com/blackwoodseven/mptui"
-go "go.uber.org/nilaway/cmd/nilaway"
-cargo "agg"
-cargo "firesym"
-cargo "just-lsp"
-cargo "serpl"
