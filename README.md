@@ -34,11 +34,13 @@ brew bundle --file="$HOME/.config/homebrew/Brewfile"
 mise install
 ```
 
-To update the mise tool versions and their lockfile:
+To add a mise tool and save its lockfile:
 
 ```bash
-mise upgrade
-mise lock --global
+mise use --global <tool>@latest          # updates config + lock
+mise lock --global                      # only needed after editing config.toml by hand
+mise install --locked                   # verify the locked install
+chezmoi add ~/.config/mise/{config.toml,mise.lock}
 ```
 
 ## Daily usage
