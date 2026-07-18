@@ -97,6 +97,16 @@ pnpm = "latest"
 eza = "0.23.4"
 zizmor = "latest"
 rclone = "latest"
+"github:yvgude/lean-ctx" = "latest"
+"npm:@upstash/context7-mcp" = "latest"
+"npm:ctx7" = "latest"
+tokei = "latest"
+azure = { version = "latest", uvx_args = "--prerelease=allow" }
+kubectl = "latest"
+docker-cli = "latest"
+neovim = "latest"
+crush = "latest"
+"github:backnotprop/plannotator" = "latest"
 
 [settings]
 # In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
