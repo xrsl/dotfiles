@@ -1,0 +1,7 @@
+Include /Users/resulal/.colima/ssh_config
+
+Host dev
+    HostName 89.167.20.141
+    User xrsl
+    ForwardAgent yes
+    IdentityFile ~/.ssh/id_ed25519
