@@ -1,0 +1,29 @@
+# mise global config — managed by chezmoi (source: private_dot_config/mise/config.toml)
+# Docs: https://mise.jdx.dev  •  Reproduce on a new machine with: mise install
+
+[tools]
+# Pin Node to the current LTS. This takes Node out of Homebrew's hands (was v26,
+# a bleeding-edge line) so `brew upgrade` can never break your global CLI tools.
+node = "lts"
+"npm:9router" = "latest"
+"npm:@colbymchenry/codegraph" = "latest"
+"npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:@github/copilot" = "latest"
+"npm:@google/gemini-cli" = "latest"
+"npm:@kilocode/cli" = "latest"
+"npm:@mermaid-js/mermaid-cli" = "latest"
+"npm:@robzolkos/lazypi" = "latest"
+"npm:@z_ai/coding-helper" = "latest"
+"npm:cline" = "latest"
+"npm:firecrawl-mcp" = "latest"
+"npm:hunkdiff" = "latest"
+"npm:kanban" = "latest"
+"npm:openskills" = "latest"
+"npm:pnpm" = "latest"
+"npm:postman-cli" = "latest"
+"npm:slop-scan" = "latest"
+"npm:tokscale" = "latest"
+
+[settings]
+# In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
+idiomatic_version_file_enable_tools = ["node"]

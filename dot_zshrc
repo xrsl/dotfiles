@@ -39,11 +39,8 @@ alias zshconfig='chezmoi edit ~/.zshrc'
 jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
 
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
-
-command -v fnm &>/dev/null && eval "$(fnm env)"
+# mise — runtime & tool version manager (replaces nvm + fnm, neither was installed)
+command -v mise &>/dev/null && eval "$(mise activate zsh)"
 eval "$(atuin init zsh)"
 
 _atuin_up_search_marked() {
