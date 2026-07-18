@@ -79,6 +79,14 @@ vmd() {
   tart stop "$(_tart_vm_name "$1")"
 }
 
+vmh() {
+  if (( $# != 1 )) || [[ "$1" != ubuntu && "$1" != tahoe ]]; then
+    print -u2 "usage: vmh <ubuntu|tahoe>"
+    return 2
+  fi
+  herdr --remote "$1"
+}
+
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
 command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
 
