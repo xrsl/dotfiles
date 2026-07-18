@@ -47,6 +47,7 @@
 "aqua:zellij-org/zellij" = "latest"
 "asdf:mise-plugins/mise-eza" = "latest"
 bun = "latest"
+# cargo:* tools compile from source — they need the Rust toolchain (see `rust` below).
 "cargo:firesym" = "latest"
 "cargo:just-lsp" = "latest"
 "cargo:serpl" = "latest"
@@ -90,6 +91,12 @@ node = "lts"
 "npm:slop-scan" = "latest"
 "npm:tokscale" = "latest"
 python = "3.12"
+# Rust toolchain — mise's `core:rust` does NOT install a standalone Rust; it installs
+# rustup if absent and drives toolchains through it (standard ~/.rustup and ~/.cargo;
+# override with MISE_RUSTUP_HOME / MISE_CARGO_HOME to isolate). rustup stays the real
+# manager (components, targets, nightly); this line only declares Rust so `mise install`
+# provisions it reproducibly and can build the cargo:* tools above.
+# Docs: https://mise.jdx.dev/lang/rust.html
 rust = "latest"
 
 [settings]
