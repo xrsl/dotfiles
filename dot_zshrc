@@ -50,6 +50,35 @@ alias zshconfig='chezmoi edit ~/.zshrc'
 
 jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
 
+_tart_vm_name() {
+  case "$1" in
+    tahoe) print -r -- tahoe-base ;;
+    *)     print -r -- "$1" ;;
+  esac
+}
+
+vml() {
+  tart list --source local
+}
+
+vmu() {
+  if (( $# != 1 )); then
+    print -u2 "usage: vmu <ubuntu|tahoe>"
+    return 2
+  fi
+  local vm=$(_tart_vm_name "$1")
+  print "Starting $1..."
+  tart run "$vm" --no-graphics >"${TMPDIR:-/tmp}/tart-${vm}.log" 2>&1 &!
+}
+
+vmd() {
+  if (( $# != 1 )); then
+    print -u2 "usage: vmd <ubuntu|tahoe>"
+    return 2
+  fi
+  tart stop "$(_tart_vm_name "$1")"
+}
+
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
 command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
 
