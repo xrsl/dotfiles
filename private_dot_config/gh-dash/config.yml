@@ -81,11 +81,29 @@ defaults:
                 width: 20
                 hidden: true
     refetchIntervalMinutes: 30
+    
 keybindings:
   prs:
     - key: T
-      command: gh enhance -R {{.RepoName}} {{.PrNumber}}    
-repoPaths: {}
+      command: gh enhance -R {{.RepoName}} {{.PrNumber}}  
+    - key: g
+      name: lazygit
+      command: >
+        cd {{.RepoPath}} && lazygit
+  issues:
+    - key: g
+      name: lazygit
+      command: >
+        cd {{.RepoPath}} && lazygit
+  # universal: g moved to prs/issues so {{.RepoPath}} resolves per-row via repoPaths
+  #   - key: s
+  #     builtin: search
+        
+
+repoPaths:
+  xrsl/*: ~/ghub/*
+  blackwoodseven/*: ~/ghub/*
+
 theme:
     ui:
         sectionsShowCount: true
@@ -93,7 +111,7 @@ theme:
             showSeparator: true
             compact: false
 pager:
-    diff: ""
+    diff: delta
 confirmQuit: false
 showAuthorIcons: true
 smartFilteringAtLaunch: true

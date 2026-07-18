@@ -1,3 +1,6 @@
+gui:
+  sidePanelWidth: 0.2   # narrower left bar → wider diff/main panel
+
 git:
   pagers:
     - pager: delta --dark --paging=never

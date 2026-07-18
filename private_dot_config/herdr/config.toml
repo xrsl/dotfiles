@@ -15,6 +15,7 @@ workspaces = "ctrl+shift"   # ctrl+shift+1..9 jumps straight to a workspace
 [theme]
 name = "catppuccin"
 
+auto_switch = false
 [ui]
 prompt_new_tab_name = false   # create tabs immediately with the generated name, no prompt
 agent_panel_scope = "all"
