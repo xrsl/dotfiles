@@ -8,7 +8,6 @@ brew "git-lfs"
 brew "just"
 brew "lazygit"
 brew "tsonglew/dutis/dutis"
-brew "node"
 brew "tokei"
 
 # Rust CLI tools
