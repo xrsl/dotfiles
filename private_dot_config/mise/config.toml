@@ -43,6 +43,7 @@
 "aqua:zellij-org/zellij" = "latest"
 "asdf:mise-plugins/mise-eza" = "latest"
 aws-cli = { version = "latest", symlink_bins = "true" }
+chezmoi = "latest"
 colima = "latest"
 "github:lusingander/serie" = "latest"
 "github:nushell/nushell" = { version = "latest", exe = "nu" }
