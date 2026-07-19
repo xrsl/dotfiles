@@ -124,3 +124,18 @@ minimum_release_age = "0d"
 
 [settings.github]
 use_git_credentials = true
+
+[tasks.gh-auth]
+description = "Log in to GitHub so git works over HTTPS (disposable-VM friendly; no SSH keys)"
+run = """
+set -e
+gh config set git_protocol https
+if gh auth status --hostname github.com >/dev/null 2>&1; then
+  echo 'Already authenticated:'
+  gh auth status --hostname github.com
+else
+  gh auth login --hostname github.com --git-protocol https --web
+fi
+echo
+echo 'Done. git now uses gh over HTTPS. Test: git ls-remote https://github.com/xrsl/dotfiles'
+"""
