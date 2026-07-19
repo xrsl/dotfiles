@@ -23,6 +23,7 @@ Host tart-*
     ProxyCommand /bin/sh -c 'vm=${1#tart-}; exec /usr/bin/nc "$(/opt/homebrew/bin/tart ip "$vm" --wait 60)" %p' -- %n
 
 Host ubuntu tahoe tart-*
+    ForwardAgent yes
     PermitLocalCommand yes
     LocalCommand command -v herdr >/dev/null 2>&1 && test -n "$HERDR_TAB_ID" && herdr tab rename "$HERDR_TAB_ID" "vm:%n" >/dev/null 2>&1 || true
 
