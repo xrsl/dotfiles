@@ -1,0 +1,10 @@
+# Managed by chezmoi. Cross-platform zsh plugins loaded via `sheldon source`
+# from ~/.zshrc. sheldon itself is installed by mise, so no brew dependency.
+shell = "zsh"
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+
+# Must be last: syntax-highlighting has to load after all other widgets.
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"

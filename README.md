@@ -15,7 +15,7 @@ The bootstrap order is:
 1. Homebrew and the macOS command-line prerequisites
 2. mise
 3. chezmoi, run once through mise to apply this repository
-4. Homebrew libraries, applications, Zsh plugins, and fonts
+4. Homebrew libraries, applications, and fonts (Zsh plugins come from mise/sheldon)
 5. mise-managed developer runtimes and CLI tools
 6. a fresh login Zsh
 
@@ -84,6 +84,21 @@ mise use --global <tool>@latest          # updates config + lock
 mise lock --global                      # only needed after editing config.toml by hand
 mise install --locked                   # verify the locked install
 chezmoi add ~/.config/mise/{config.toml,mise.lock}
+```
+
+## Fonts
+
+Terminal font: **JetBrains Mono Nerd Font** (Ghostty uses `JetBrainsMono Nerd Font Mono`).
+
+```bash
+# macOS
+brew install --cask font-jetbrains-mono-nerd-font
+
+# Linux (Tart VMs)
+curl -fLo /tmp/JetBrainsMono.zip \
+  https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip \
+  && unzip -o /tmp/JetBrainsMono.zip -d ~/.local/share/fonts \
+  && fc-cache -f
 ```
 
 ## Daily usage

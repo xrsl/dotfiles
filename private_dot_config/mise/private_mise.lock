@@ -1280,6 +1280,10 @@ checksum = "sha256:95ea25517e283397009ffb512b0d72b65e11aa7fc18cc0c4558f09d29224c
 url = "https://github.com/Versent/saml2aws/releases/download/v2.36.19/saml2aws_2.36.19_darwin_amd64.tar.gz"
 url_api = "https://api.github.com/repos/Versent/saml2aws/releases/assets/237266593"
 
+[[tools.sheldon]]
+version = "0.8.5"
+backend = "aqua:rossmacarthur/sheldon"
+
 [[tools.skate]]
 version = "1.0.1"
 backend = "aqua:charmbracelet/skate"

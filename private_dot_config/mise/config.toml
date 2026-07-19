@@ -39,6 +39,7 @@ actionlint = "latest"
 bat = "latest"
 fd = "latest"
 starship = "latest"
+sheldon = "latest"   # zsh plugin manager (autosuggestions + syntax-highlighting)
 yazi = "latest"
 tombi = "latest"
 typst = "latest"

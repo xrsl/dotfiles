@@ -35,10 +35,6 @@ brew "portaudio"
 brew "tree"
 # Simple terminal image viewer written in Rust
 brew "viu"
-# Fish-like fast/unobtrusive autosuggestions for zsh
-brew "zsh-autosuggestions"
-# Fish shell like syntax highlighting for zsh
-brew "zsh-syntax-highlighting"
 # Compact TeX distribution as alternative to the full TeX Live / MacTeX
 cask "basictex"
 # Free and open-source web browser
