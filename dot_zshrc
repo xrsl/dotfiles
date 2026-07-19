@@ -211,7 +211,7 @@ fpath+=~/.zfunc
 fpath=(~/.zsh/completions $fpath)
 
 # fpath/completion plugins (e.g. zsh-completions) must reach fpath before compinit.
-command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source --profile pre)"
+command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile pre source)"
 
 # One compinit; skip the security audit (compaudit) when the dump is < 24h old.
 autoload -Uz compinit
@@ -524,4 +524,4 @@ function y() {
 # (fpath plugins like zsh-completions load earlier via `--profile pre`.)
 # sheldon is installed by mise, so this is identical on macOS and Linux.
 # Config: ~/.config/sheldon/plugins.toml
-command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source --profile post)"
+command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
