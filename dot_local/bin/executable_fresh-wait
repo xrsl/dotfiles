@@ -1,0 +1,30 @@
+#!/bin/sh
+set -eu
+
+if [ "${HERDR_ENV:-}" = "1" ] && command -v herdr >/dev/null 2>&1; then
+  workspace_id="${HERDR_WORKSPACE_ID:-${HERDR_TAB_ID%%:*}}"
+  label="fresh"
+  if [ "$#" -gt 0 ]; then
+    label="fresh: $(basename "$1")"
+  fi
+
+  pane_id=$(
+    herdr tab create --workspace "$workspace_id" --cwd "$PWD" --label "$label" --focus |
+      python3 -c 'import json,sys; print(json.load(sys.stdin)["result"]["root_pane"]["pane_id"])'
+  )
+
+  cmd=$(
+    python3 - "$@" <<'PY'
+import shlex
+import sys
+
+args = ["fresh", "--no-restore", *sys.argv[1:]]
+print(" ".join(shlex.quote(arg) for arg in args) + "; exit")
+PY
+  )
+
+  herdr pane run "$pane_id" "$cmd"
+  exit 0
+fi
+
+exec fresh --no-restore "$@"
