@@ -61,7 +61,10 @@ sudo dnf install -y ca-certificates curl git zsh gcc gcc-c++ make util-linux-use
 curl -fsSL https://mise.run | sh
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
 MISE_GLOBAL_CONFIG_FILE=/dev/null mise --verbose install chezmoi@latest
-MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi init --apply --verbose https://github.com/xrsl/dotfiles.git
+git clone https://github.com/xrsl/dotfiles.git ~/.local/share/chezmoi
+MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi init
+MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi apply --verbose
+mise trust ~/.config/mise/config.toml
 mise install --locked
 exec zsh -l
 ```
