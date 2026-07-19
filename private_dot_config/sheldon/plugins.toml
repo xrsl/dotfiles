@@ -1,10 +1,32 @@
-# Managed by chezmoi. Cross-platform zsh plugins loaded via `sheldon source`
-# from ~/.zshrc. sheldon itself is installed by mise, so no brew dependency.
+# Managed by chezmoi. Cross-platform zsh plugins via sheldon (installed by mise,
+# so no brew dependency). Loaded from ~/.zshrc at two points:
+#   profile "pre"  -> BEFORE compinit (fpath / completion plugins)
+#   profile "post" -> AFTER compinit and all widgets (order matters;
+#                     syntax-highlighting MUST be last)
 shell = "zsh"
+
+# ── pre-compinit (fpath) ──────────────────────────────────────────────────────
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+dir = "src"
+apply = ["fpath"]
+profiles = ["pre"]
+
+# ── post-compinit (widgets), in load order ────────────────────────────────────
+# fzf-tab must come after compinit and before the widget-wrapping plugins.
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+profiles = ["post"]
 
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
+profiles = ["post"]
+
+[plugins.zsh-you-should-use]
+github = "MichaelAquilina/zsh-you-should-use"
+profiles = ["post"]
 
 # Must be last: syntax-highlighting has to load after all other widgets.
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
+profiles = ["post"]

@@ -210,6 +210,9 @@ fi
 fpath+=~/.zfunc
 fpath=(~/.zsh/completions $fpath)
 
+# fpath/completion plugins (e.g. zsh-completions) must reach fpath before compinit.
+command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source --profile pre)"
+
 # One compinit; skip the security audit (compaudit) when the dump is < 24h old.
 autoload -Uz compinit
 if [[ -n ~/.zcompdump(#qNmh+24) ]]; then
@@ -516,8 +519,9 @@ function y() {
 	command rm -f -- "$tmp"
 }
 
-# Plugins via sheldon (zsh-autosuggestions, then zsh-syntax-highlighting — the
-# latter must load after all widgets/bindings). sheldon is installed by mise,
-# so this works the same on macOS and Linux, no brew needed.
+# Widget plugins (profile "post"): fzf-tab, autosuggestions, you-should-use, then
+# syntax-highlighting LAST — all load after compinit and all widgets/bindings.
+# (fpath plugins like zsh-completions load earlier via `--profile pre`.)
+# sheldon is installed by mise, so this is identical on macOS and Linux.
 # Config: ~/.config/sheldon/plugins.toml
-command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source)"
+command -v sheldon >/dev/null 2>&1 && eval "$(sheldon source --profile post)"
