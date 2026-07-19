@@ -1,10 +1,12 @@
 # XDG-aware macOS tools use ~/.config instead of ~/Library/Application Support.
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
-# Prefer the 1Password SSH agent on macOS. In VMs this socket does not exist,
-# so an SSH-forwarded agent socket remains untouched.
+# Prefer the 1Password SSH agent on the macOS host. Inside a VM / ssh session,
+# leave the forwarded agent socket ($SSH_AUTH_SOCK) untouched. Keying on
+# SSH_CONNECTION rather than socket-exists means a host pane started before
+# 1Password unlocked still targets the agent and self-heals once it is up.
 _onepassword_ssh_agent="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-if [[ -S "$_onepassword_ssh_agent" ]]; then
+if [[ -z "$SSH_CONNECTION" && "$OSTYPE" == darwin* ]]; then
     export SSH_AUTH_SOCK="$_onepassword_ssh_agent"
 fi
 unset _onepassword_ssh_agent
