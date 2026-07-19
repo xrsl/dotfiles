@@ -22,11 +22,14 @@ prompt_new_tab_name = false   # create tabs immediately with the generated name,
 agent_panel_scope = "all"
 agent_panel_sort = "priority" # moved here from a stray line under [[keys.command]] so it actually applies
 show_agent_labels_on_pane_borders = true
-# Accent paints the focused pane/tab highlight. Rendered per-machine by chezmoi at `apply` time:
-# soft magenta on ANY Tart VM guest — Linux guests (os != darwin) or macOS guests
-# (hw.model = VirtualMac*) — and blue on real hardware. Set once; covers every VM.
-{{- if or (ne .chezmoi.os "darwin") (hasPrefix "VirtualMac" (output "sysctl" "-n" "hw.model" | trim)) }}
-accent = "#f5c2e7"   # catppuccin Pink (soft magenta) — VM guest (Linux or macOS)
+# Accent paints the focused pane/tab highlight. Rendered per-machine by chezmoi:
+#   Linux VM guest  (ubuntu, os != darwin)         -> soft green
+#   macOS VM guest  (tahoe,  hw.model = VirtualMac*) -> soft magenta
+#   real hardware   (host Mac)                      -> blue
+{{- if ne .chezmoi.os "darwin" }}
+accent = "#a6e3a1"   # catppuccin Green (soft green) — Linux VM guest (ubuntu)
+{{- else if hasPrefix "VirtualMac" (output "sysctl" "-n" "hw.model" | trim) }}
+accent = "#f5c2e7"   # catppuccin Pink (soft magenta) — macOS VM guest (tahoe)
 {{- else }}
 accent = "#89b4fa"   # catppuccin Blue — real hardware (host)
 {{- end }}

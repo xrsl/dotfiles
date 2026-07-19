@@ -1,0 +1,14 @@
+#!/bin/sh
+# Linux VM (ubuntu / Tart guest): install zsh and make it the default login shell,
+# so herdr panes launch zsh -> ~/.zshrc -> Starship. No-op on macOS (host already zsh).
+{{ if ne .chezmoi.os "darwin" -}}
+set -e
+if ! command -v zsh >/dev/null 2>&1; then
+  sudo apt-get update && sudo apt-get install -y zsh
+fi
+z="$(command -v zsh || true)"
+if [ -n "$z" ] && [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$z" ]; then
+  sudo chsh -s "$z" "$(id -un)"
+  echo "default shell -> $z (reconnect/restart herdr to start zsh)"
+fi
+{{ end -}}
