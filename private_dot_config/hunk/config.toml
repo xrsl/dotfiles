@@ -1,0 +1,9 @@
+# https://github.com/modem-dev/hunk  ·  https://www.hunk.dev/
+# theme = one of: graphite | midnight | ember | zenburn |
+#                 catppuccin-mocha | catppuccin-latte  (hunk.dev buttons)
+theme = "catppuccin-mocha"
+transparent_bg = false  # paint theme surfaces for richer diff bg; do not blend into terminal (was --no-transparent-bg)
+watch = true       # auto-reload as the agent/you edit
+mode  = "auto"
+wrap_lines = false # truncate long lines, less noise
+prompt_save_view_preferences = false  # stop the quit-time save nag
