@@ -3,6 +3,7 @@ onboarding = false
 [keys]
 new_tab = "ctrl+t"      # NOTE: shadows shell transpose-char / Fresh "Show All Symbols" in panes
 close_tab = "prefix+q"  # prefix-isolated so ctrl+q passes through to Fresh / pane apps
+detach = "prefix+d"     # leave Herdr while keeping its session and Tart VM running
 previous_workspace = "ctrl+shift+up"     # jump to previous workspace
 next_workspace = "ctrl+shift+down"       # jump to next workspace
 previous_tab = "ctrl+shift+left"         # jump to previous tab
