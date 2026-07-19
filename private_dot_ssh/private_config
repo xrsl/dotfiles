@@ -27,5 +27,5 @@ Host ubuntu tahoe tart-*
     PermitLocalCommand yes
     LocalCommand command -v herdr >/dev/null 2>&1 && test -n "$HERDR_TAB_ID" && herdr tab rename "$HERDR_TAB_ID" "vm:%n" >/dev/null 2>&1 || true
 
-Host *
-  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+Match exec "test -S '%d/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock'"
+    IdentityAgent "%d/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
