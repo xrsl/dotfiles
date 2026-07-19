@@ -384,15 +384,17 @@ dpr() {
   fi
 }
 
-# HUNK — agent-authored changeset review (brew install hunk).
-# Parallel to d/dpr, but built for live, agent-driven review.
-#   h      working-tree changes (untracked auto-included by `hunk diff`)
-#   hw     same, with --watch — stays open alongside the running agent
-#   hpr    working-tree + untracked vs local default branch (main or master)
-h()   { command hunk diff "$@"; }
-hw()  { command hunk diff --watch "$@"; }
+# HUNK — review-first TUI for agent-authored changesets (github.com/modem-dev/hunk).
+# Parallels d/dpr. `hunk diff` reads the repo directly (untracked included);
+# `hunk patch -` reads a precomputed diff from stdin (hunk has no git revset for ranges).
+#   h        working-tree changes
+#   hw       working-tree changes, --watch (stays open beside a running agent)
+#   hpr      branch changes vs the local default branch ref (mirrors dpr)
+h()  { command hunk diff "$@"; }
+hw() { command hunk diff --watch "$@"; }
 hpr() {
-  local base f
+  local base
+
   base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
   if [[ -z "$base" ]]; then
     for c in main master; do
@@ -400,14 +402,8 @@ hpr() {
     done
   fi
   [[ -z "$base" ]] && base=main
-  # `hunk pager` (unlike `hunk diff`) does NOT auto-include untracked files,
-  # so append each untracked file as a creation diff ourselves.
-  {
-    git diff "$base" --no-color
-    while IFS= read -r -d '' f; do
-      git diff --no-index --no-color /dev/null "$f" 2>/dev/null || true
-    done < <(git ls-files --others --exclude-standard -z)
-  } | command hunk pager "$@"
+
+  git diff "${base}..HEAD" --no-color | command hunk patch -
 }
 
 
