@@ -54,6 +54,20 @@ checksum = "sha256:1462150b611d231d2950d10a676303eaeb1019ff330735882aaae09b52e2e
 url = "https://github.com/asciinema/agg/releases/download/v1.9.0/agg-x86_64-apple-darwin"
 url_api = "https://api.github.com/repos/asciinema/agg/releases/assets/433215207"
 
+[[tools."aqua:cirruslabs/cirrus-cli"]]
+version = "1.0.0"
+backend = "aqua:cirruslabs/cirrus-cli"
+
+[tools."aqua:cirruslabs/cirrus-cli"."platforms.macos-arm64"]
+checksum = "sha256:cf2b56e7afcf0cd0999acf08fc7ce8c0e8dbf5e641eadf9fafb22e9e0af95efb"
+url = "https://github.com/cirruslabs/cirrus-cli/releases/download/v1.0.0/cirrus-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/cirruslabs/cirrus-cli/releases/assets/435484872"
+
+[tools."aqua:cirruslabs/cirrus-cli"."platforms.macos-x64"]
+checksum = "sha256:4b88adb3160598ff7c7c91dd51763ed053e7d29feba5b7e066349dabfffa9bfc"
+url = "https://github.com/cirruslabs/cirrus-cli/releases/download/v1.0.0/cirrus-darwin-amd64.tar.gz"
+url_api = "https://api.github.com/repos/cirruslabs/cirrus-cli/releases/assets/435484822"
+
 [[tools."aqua:nushell/nushell"]]
 version = "0.114.1"
 backend = "aqua:nushell/nushell"
