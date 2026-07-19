@@ -61,3 +61,10 @@
 	helper = !gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = !gh auth git-credential
+
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+	insteadOf = ssh://git@github.com/
+[url "https://gist.github.com/"]
+	insteadOf = git@gist.github.com:
+	insteadOf = ssh://git@gist.github.com/
