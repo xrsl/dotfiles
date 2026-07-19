@@ -51,6 +51,21 @@ exec zsh -l
 
 After the first setup, start and enter it with `vmu ubuntu && ssh ubuntu`.
 
+## Fedora Tart VM
+
+```bash
+tart clone ghcr.io/cirruslabs/fedora:latest fedora
+vmu fedora
+ssh tart-fedora
+sudo dnf install -y ca-certificates curl git zsh gcc gcc-c++ make util-linux-user
+curl -fsSL https://mise.run | sh
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+MISE_GLOBAL_CONFIG_FILE=/dev/null mise --verbose install chezmoi@latest
+MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi init --apply --verbose https://github.com/xrsl/dotfiles.git
+mise install --locked
+exec zsh -l
+```
+
 ## Reconcile an existing machine
 
 ```bash
