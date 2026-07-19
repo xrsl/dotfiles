@@ -31,7 +31,7 @@ The terminal font is `font-jetbrains-mono-nerd-font`; Ghostty uses
 Start the VM and bootstrap the mise-managed development environment from macOS:
 
 ```bash
-vmu ubuntu && ssh -t ubuntu 'sudo apt-get update && sudo apt-get install -y ca-certificates curl git zsh build-essential && curl -fsSL https://mise.run | sh && MISE_GLOBAL_CONFIG_FILE=/dev/null ~/.local/bin/mise exec chezmoi@latest -- chezmoi init --apply https://github.com/xrsl/dotfiles.git && ~/.local/bin/mise install --locked && chsh -s "$(command -v zsh)"'
+vmu ubuntu && ssh -t ubuntu 'sudo apt-get update && sudo apt-get install -y ca-certificates curl git zsh build-essential && curl -fsSL https://mise.run | sh && export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH" && MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi init --apply https://github.com/xrsl/dotfiles.git && mise install --locked && chsh -s "$(command -v zsh)"'
 ```
 
 After the first setup, start and enter it with `vmu ubuntu && ssh ubuntu`.
