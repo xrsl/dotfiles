@@ -1,6 +1,14 @@
 # XDG-aware macOS tools use ~/.config instead of ~/Library/Application Support.
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
+# Prefer the 1Password SSH agent on macOS. In VMs this socket does not exist,
+# so an SSH-forwarded agent socket remains untouched.
+_onepassword_ssh_agent="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+if [[ -S "$_onepassword_ssh_agent" ]]; then
+    export SSH_AUTH_SOCK="$_onepassword_ssh_agent"
+fi
+unset _onepassword_ssh_agent
+
 # lean-ctx shell hook for non-interactive agent commands.
 if [[ -z "$LEAN_CTX_ACTIVE" && -n "$ZSH_EXECUTION_STRING" ]] && command -v lean-ctx &>/dev/null; then
     if [[ -n "$LEAN_CTX_AGENT" || -n "$CLAUDECODE" || -n "$CODEX_CLI_SESSION" || -n "$GEMINI_SESSION" ]]; then
