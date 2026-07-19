@@ -1,10 +1,19 @@
 #!/bin/sh
-# Linux VM (ubuntu / Tart guest): install zsh and make it the default login shell,
+# Linux VM (Tart guest): install zsh and make it the default login shell,
 # so herdr panes launch zsh -> ~/.zshrc -> Starship. No-op on macOS (host already zsh).
 {{ if ne .chezmoi.os "darwin" -}}
 set -e
 if ! command -v zsh >/dev/null 2>&1; then
-  sudo apt-get update && sudo apt-get install -y zsh
+  if command -v apt-get >/dev/null 2>&1; then
+    sudo apt-get update && sudo apt-get install -y zsh
+  elif command -v dnf >/dev/null 2>&1; then
+    sudo dnf install -y zsh
+  elif command -v pacman >/dev/null 2>&1; then
+    sudo pacman -S --noconfirm zsh
+  else
+    echo "default-shell: no supported package manager (apt-get/dnf/pacman) found to install zsh" >&2
+    exit 1
+  fi
 fi
 z="$(command -v zsh || true)"
 if [ -n "$z" ] && [ "$(getent passwd "$(id -un)" | cut -d: -f7)" != "$z" ]; then

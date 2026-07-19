@@ -52,4 +52,4 @@ echo "Installing mise tools..."
 "$MISE_BIN" install --locked
 
 echo "Bootstrap complete. Starting a fresh login shell."
-exec /bin/zsh -l
+exec "$(command -v zsh)" -l
