@@ -88,23 +88,34 @@ chezmoi add ~/.config/mise/{config.toml,mise.lock}
 
 ## Daily usage
 
-```bash
-chezmoi edit ~/.zshrc                    # edit a dotfile (auto-commits and pushes on save)
-chezmoi add ~/.some-new-file             # track a new file
-chezmoi update                           # pull latest and apply
-chezmoi diff                             # preview changes without applying
-chezmoi apply                            # apply changes
-chezmoi status                           # see pending changes
-chezmoi managed --include=files          # list all tracked files
-chezmoi init                             # regenerate config from template (run after template changes)
+Three commands cover almost everything.
+Auto-commit and auto-push are on, so saving a change also commits and pushes it — there is no separate `git` step.
 
-# for repo-only files (README and bootstrap script) not managed by chezmoi:
-cd ~/.local/share/chezmoi && git add -A && git commit -m "msg" && git push
+```bash
+chezmoi re-add     # 1. SAVE UP:   this machine's edits -> repo (commit + push)
+chezmoi update     # 2. PULL DOWN: repo -> this machine (git pull + apply)
+chezmoi diff       # 3. CHECK:     what differs, before you touch anything
 ```
 
-> **Warning:** auto-commit only works for chezmoi-managed dotfiles
-> (`chezmoi add`/`chezmoi edit`). Commit repo-only files directly from the source
-> directory.
+Mental model: **check** (`diff`) → **save up** (`re-add`) → **pull down** (`update`).
+
+Two more, only occasionally:
+
+```bash
+chezmoi add ~/.newfile     # 4. track a NEW file (once); re-add handles it afterwards
+chezmoi edit ~/.zshrc      # 5. edit a tracked file in place (also auto-commits + pushes)
+```
+
+### The one gotcha
+
+Auto-commit/push fires **only for chezmoi-managed dotfiles**.
+This README and `bootstrap.sh` live in the repo but are not managed by chezmoi, so editing them needs a plain git commit from the source dir:
+
+```bash
+chezmoi cd     # open a shell in the source repo (~/.local/share/chezmoi)
+git add -A && git commit -m "msg" && git push
+exit
+```
 
 ## Never track
 
