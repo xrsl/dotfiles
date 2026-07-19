@@ -119,7 +119,7 @@ claude = "latest"
 # In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
 idiomatic_version_file_enable_tools = ["node"]
 lockfile = true
-lockfile_platforms = ["macos-arm64", "macos-x64"]
+lockfile_platforms = ["macos-arm64", "macos-x64", "linux-arm64"]
 minimum_release_age = "0d"
 
 [settings.github]

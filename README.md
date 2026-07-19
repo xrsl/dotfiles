@@ -20,11 +20,21 @@ The bootstrap order is:
 6. a fresh login Zsh
 
 Homebrew state is declared in `~/.config/homebrew/Brewfile`. Developer tools and
-runtimes are declared in `~/.config/mise/config.toml` and pinned across Macs by
-`~/.config/mise/mise.lock`.
+runtimes are declared in `~/.config/mise/config.toml` and pinned across macOS and
+Linux ARM64 by `~/.config/mise/mise.lock`.
 
 The terminal font is `font-jetbrains-mono-nerd-font`; Ghostty uses
 `JetBrainsMono Nerd Font Mono`.
+
+## Ubuntu Tart VM
+
+Start the VM and bootstrap the mise-managed development environment from macOS:
+
+```bash
+vmu ubuntu && ssh -t ubuntu 'sudo apt-get update && sudo apt-get install -y ca-certificates curl git zsh build-essential && curl -fsSL https://mise.run | sh && MISE_GLOBAL_CONFIG_FILE=/dev/null ~/.local/bin/mise exec chezmoi@latest -- chezmoi init --apply https://github.com/xrsl/dotfiles.git && ~/.local/bin/mise install --locked && chsh -s "$(command -v zsh)"'
+```
+
+After the first setup, start and enter it with `vmu ubuntu && ssh ubuntu`.
 
 ## Reconcile an existing machine
 
