@@ -117,6 +117,10 @@ claude = "latest"
 "aqua:cirruslabs/cirrus-cli" = "latest"
 rumdl = "latest"
 
+[env]
+# Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
+UV_PYTHON = { value = "{{ tools.python.path }}", tools = true }
+
 [settings]
 # In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
 idiomatic_version_file_enable_tools = ["node"]

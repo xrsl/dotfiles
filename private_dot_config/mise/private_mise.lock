@@ -1093,6 +1093,10 @@ backend = "npm:ctx7"
 version = "1.5.0"
 backend = "npm:openskills"
 
+[[tools."npm:pi-skill-gate"]]
+version = "0.9.0"
+backend = "npm:pi-skill-gate"
+
 [[tools."npm:postman-cli"]]
 version = "1.43.0"
 backend = "npm:postman-cli"
