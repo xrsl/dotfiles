@@ -115,6 +115,7 @@ skate = "latest"
 prek = "latest"
 claude = "latest"
 "aqua:cirruslabs/cirrus-cli" = "latest"
+rumdl = "latest"
 
 [settings]
 # In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
