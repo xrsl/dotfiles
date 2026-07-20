@@ -350,7 +350,10 @@ alias epr='freshdiff -p'     # PR review: branch vs base/main (base..HEAD)
 alias gui="gitui"
 alias g="lazygit"
 alias gs="git status -sb"
-alias gu="git pull --ff-only"
+alias gP="git push"
+alias gP="git pull --ff-only"
+# discard everything since the last commit
+alias gD='git reset --hard HEAD && git clean -fd'
 # d — review working-tree changes in diffnav.
 #   d        unified view (default)
 #   d -s     side-by-side view

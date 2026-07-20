@@ -3,3 +3,4 @@ background-opacity = 1
 font-size = 15
 window-save-state = always
 font-family = JetBrainsMono Nerd Font Mono
+copy-on-select = true
