@@ -92,6 +92,20 @@ checksum = "sha256:4b88adb3160598ff7c7c91dd51763ed053e7d29feba5b7e066349dabfffa9
 url = "https://github.com/cirruslabs/cirrus-cli/releases/download/v1.0.0/cirrus-darwin-amd64.tar.gz"
 url_api = "https://api.github.com/repos/cirruslabs/cirrus-cli/releases/assets/435484822"
 
+[[tools."aqua:cirruslabs/tart"]]
+version = "2.33.0"
+backend = "aqua:cirruslabs/tart"
+
+[tools."aqua:cirruslabs/tart"."platforms.macos-arm64"]
+checksum = "sha256:8946aa4bb459ab55a9f5b5bce376b106c417a8228d3b89125debed3afc6ae3a7"
+url = "https://github.com/openai/tart/releases/download/2.33.0/tart.tar.gz"
+url_api = "https://api.github.com/repos/openai/tart/releases/assets/480708881"
+
+[tools."aqua:cirruslabs/tart"."platforms.macos-x64"]
+checksum = "sha256:8946aa4bb459ab55a9f5b5bce376b106c417a8228d3b89125debed3afc6ae3a7"
+url = "https://github.com/openai/tart/releases/download/2.33.0/tart.tar.gz"
+url_api = "https://api.github.com/repos/openai/tart/releases/assets/480708881"
+
 [[tools."aqua:jorgerojas26/lazysql"]]
 version = "0.5.5"
 backend = "aqua:jorgerojas26/lazysql"

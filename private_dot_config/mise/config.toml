@@ -121,6 +121,7 @@ bottom = "latest"
 "github:cesarferreira/stax" = "latest"
 "cargo:toppy" = "latest"
 "aqua:jorgerojas26/lazysql" = "latest"
+"aqua:cirruslabs/tart" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
