@@ -120,7 +120,6 @@ lazyssh = "latest"
 bottom = "latest"
 "github:cesarferreira/stax" = "latest"
 "cargo:toppy" = "latest"
-"github:blackwoodseven/mpcli" = "v0.10.0"
 "aqua:jorgerojas26/lazysql" = "latest"
 
 [env]

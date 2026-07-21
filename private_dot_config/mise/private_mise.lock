@@ -92,6 +92,25 @@ checksum = "sha256:4b88adb3160598ff7c7c91dd51763ed053e7d29feba5b7e066349dabfffa9
 url = "https://github.com/cirruslabs/cirrus-cli/releases/download/v1.0.0/cirrus-darwin-amd64.tar.gz"
 url_api = "https://api.github.com/repos/cirruslabs/cirrus-cli/releases/assets/435484822"
 
+[[tools."aqua:jorgerojas26/lazysql"]]
+version = "0.5.5"
+backend = "aqua:jorgerojas26/lazysql"
+
+[tools."aqua:jorgerojas26/lazysql"."platforms.linux-arm64"]
+checksum = "sha256:24287e6d958079b67062571c499e70d0610dcac743129e6e0fc6f0869a8b29fd"
+url = "https://github.com/jorgerojas26/lazysql/releases/download/v0.5.5/lazysql_Linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/jorgerojas26/lazysql/releases/assets/461522677"
+
+[tools."aqua:jorgerojas26/lazysql"."platforms.macos-arm64"]
+checksum = "sha256:73bc35b72ecba85d3ea595a044db29600bb9313186c0bfaff5743474f8ea3416"
+url = "https://github.com/jorgerojas26/lazysql/releases/download/v0.5.5/lazysql_Darwin_arm64.tar.gz"
+url_api = "https://api.github.com/repos/jorgerojas26/lazysql/releases/assets/461522678"
+
+[tools."aqua:jorgerojas26/lazysql"."platforms.macos-x64"]
+checksum = "sha256:714924dd54529723f5cd6c2f301b640716ddc0d5068f0b39306b22904abf12d8"
+url = "https://github.com/jorgerojas26/lazysql/releases/download/v0.5.5/lazysql_Darwin_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/jorgerojas26/lazysql/releases/assets/461522691"
+
 [[tools."aqua:nushell/nushell"]]
 version = "0.114.1"
 backend = "aqua:nushell/nushell"
@@ -577,6 +596,25 @@ checksum = "sha256:5531d3e1fac8b684e149ec297243324c00cc235ce471db7c09016346739e9
 url = "https://github.com/backnotprop/plannotator/releases/download/v0.23.1/plannotator-darwin-x64"
 url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/474754068"
 provenance = "github-attestations"
+
+[[tools."github:blackwoodseven/mpcli"]]
+version = "0.10.0"
+backend = "github:blackwoodseven/mpcli"
+
+[tools."github:blackwoodseven/mpcli"."platforms.linux-arm64"]
+checksum = "sha256:0415a876beaabc87632dd2cc6bd8843ba2c95ce01720ce3959fed46c8a73435a"
+url = "https://github.com/blackwoodseven/mpcli/releases/download/v0.10.0/mpcli-0.10.0.tar.gz"
+url_api = "https://api.github.com/repos/blackwoodseven/mpcli/releases/assets/411646002"
+
+[tools."github:blackwoodseven/mpcli"."platforms.macos-arm64"]
+checksum = "sha256:0415a876beaabc87632dd2cc6bd8843ba2c95ce01720ce3959fed46c8a73435a"
+url = "https://github.com/blackwoodseven/mpcli/releases/download/v0.10.0/mpcli-0.10.0.tar.gz"
+url_api = "https://api.github.com/repos/blackwoodseven/mpcli/releases/assets/411646002"
+
+[tools."github:blackwoodseven/mpcli"."platforms.macos-x64"]
+checksum = "sha256:0415a876beaabc87632dd2cc6bd8843ba2c95ce01720ce3959fed46c8a73435a"
+url = "https://github.com/blackwoodseven/mpcli/releases/download/v0.10.0/mpcli-0.10.0.tar.gz"
+url_api = "https://api.github.com/repos/blackwoodseven/mpcli/releases/assets/411646002"
 
 [[tools."github:cesarferreira/stax"]]
 version = "0.96.7"
@@ -1213,6 +1251,10 @@ url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/479689
 checksum = "sha256:892b3f385ae6779299c07a25d9280183897fcf755f7226f6b36c70d268f321be"
 url = "https://github.com/earendil-works/pi/releases/download/v0.80.10/pi-darwin-x64.tar.gz"
 url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/479689740"
+
+[[tools."pipx:blackwoodseven/mpcli"]]
+version = "v0.16.0"
+backend = "pipx:blackwoodseven/mpcli"
 
 [[tools.pnpm]]
 version = "11.15.0"
