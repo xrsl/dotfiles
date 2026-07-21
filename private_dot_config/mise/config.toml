@@ -117,6 +117,9 @@ claude = "latest"
 "aqua:cirruslabs/cirrus-cli" = "latest"
 rumdl = "latest"
 lazyssh = "latest"
+bottom = "latest"
+"github:cesarferreira/stax" = "latest"
+"cargo:toppy" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
