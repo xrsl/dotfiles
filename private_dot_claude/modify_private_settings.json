@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+current="$(cat)"
+if [ -z "$current" ]; then
+  current='{}'
+fi
+
+echo "$current" | jq --arg cmd 'bash "$HOME/.claude/statusline-command.sh"' \
+  '.statusLine = {"type": "command", "command": $cmd}'
