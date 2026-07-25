@@ -123,8 +123,8 @@ bottom = "latest"
 "npm:pi-skill-gate" = "latest"
 "github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true" }
 "github:hjr265/gittop" = "latest"
-"cargo:heroheman/whathaveidone" = "latest"
-"github:rikeda71/ghostty-pane-splitter" = "latest"
+"cargo:heroheman/whathaveidone" = { version = "latest", os = ["macos"] }
+"github:rikeda71/ghostty-pane-splitter" = { version = "latest", os = ["macos"] }
 "npm:@mcpjam/inspector" = "latest"
 "npm:@mcpjam/cli" = "latest"
 "npm:@modelcontextprotocol/inspector" = "latest"
