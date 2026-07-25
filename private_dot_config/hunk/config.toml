@@ -1,9 +1,94 @@
 # https://github.com/modem-dev/hunk  ·  https://www.hunk.dev/
-# theme = one of: graphite | midnight | ember | zenburn |
-#                 catppuccin-mocha | catppuccin-latte  (hunk.dev buttons)
-theme = "catppuccin-mocha"
-transparent_bg = false  # paint theme surfaces for richer diff bg; do not blend into terminal (was --no-transparent-bg)
+# theme = any bundled Shiki theme id (github-dark-default, catppuccin-mocha,
+#         ayu-dark, dark-plus, …) plus hunk's own: graphite | midnight |
+#         ember | zenburn. github-dark-default is hunk's built-in default.
+theme = "custom"  # "custom" activates the [custom_theme] table below
+transparent_background = false  # paint theme surfaces for richer diff bg; do not blend into terminal
 watch = true       # auto-reload as the agent/you edit
 mode  = "auto"
-wrap_lines = false # truncate long lines, less noise
-prompt_save_view_preferences = false  # stop the quit-time save nag
+wrap_lines = true  # wrap long lines instead of truncating
+hunk_headers = false  # hide the @@ hunk metadata rows
+agent_notes = true    # show agent rationale notes by default
+
+# Per-command override. `hpr` pipes a precomputed diff into `hunk patch -`, and
+# global watch = true makes that hard-fail: "--watch requires a file- or
+# Git-backed input that Hunk can reopen." Watch stays on for `h` / `hw`.
+[patch]
+watch = false
+
+# Full Catppuccin Mocha surface mapping.
+#
+# The grey was hunk's chrome, not the diff rows. buildShikiTheme() derives every
+# surface by blending the near-white FOREGROUND into the base:
+#     panel    = blend(#cdd6f4, #1e1e2e, 0.08) = #2c2d3e
+#     panelAlt = blend(#cdd6f4, #1e1e2e, 0.12) = #333446
+#     border   = blend(#cdd6f4, #1e1e2e, 0.18) = #3e3f52
+# Catppuccin never lightens toward white for chrome — it goes DARKER (Mantle,
+# Crust) and uses the violet Surface ramp for raised elements. Hence the wash.
+# Every value below is a real Mocha palette colour, cross-checked against
+# catppuccin.catppuccin-vsc-3.19.0/themes/mocha.json.
+#
+# NOTE: do NOT add a [custom_theme.syntax] table. Setting it makes hunk drop the
+# real Shiki theme (buildCustomTheme sets syntaxTheme: undefined) and fall back
+# to a flat 11-colour "pierre-dark" palette — much worse highlighting.
+[custom_theme]
+base  = "catppuccin-mocha"
+label = "Catppuccin Mocha"
+
+# --- surfaces: was #2c2d3e / #333446 / #3e3f52 grey ---
+background       = "#1e1e2e"  # Base    <- editor.background
+panel            = "#1e1e2e"  # Base — NOT Mantle: theme.panel is the bg of the
+                              # 1-char rail on EVERY diff line. Anything darker
+                              # than Base draws a black stripe down the diff.
+panelAlt         = "#313244"  # Surface0 — also the bg of "empty" cells in split
+                              # mode (the filler beside an add/delete). Crust made
+                              # those solid black blocks.
+border           = "#313244"  # Surface0
+selectedHunk     = "#313244"  # Surface0 <- list.activeSelectionBackground
+accent           = "#cba6f7"  # Mauve   <- focusBorder
+accentMuted      = "#313244"  # Surface0
+text             = "#cdd6f4"  # Text
+muted            = "#a6adc8"  # Subtext0
+contextBg        = "#1e1e2e"  # unchanged lines stay Base
+contextContentBg = "#1e1e2e"
+lineNumberBg     = "#1e1e2e"
+lineNumberFg     = "#7f849c"  # Overlay1 <- editorLineNumber.foreground
+
+# --- diff rows ---
+# These are NOT blends of Mocha Green/Red into Base any more, and that is the
+# point. Mocha Green #a6e3a1 is a 54%-saturation pastel; ANY blend of it into
+# #1e1e2e lands at ~12% saturation, i.e. sage grey. VS Code gets away with it
+# because it also paints a solid full-strength #a6e3a1 gutter bar — hunk dims
+# its equivalent (see addedSignColor below). So the row colour has to carry the
+# vividness itself: same lightness band, saturation raised 12% -> 50%.
+#   green  hue 146  L26 S50   red  hue 343  L30 S55
+# Word bg must differ from row bg by >= 28 (sum of RGB deltas) or hunk's
+# strengthenWordDiffBg() overrides it; these give 39 and 57.
+addedBg          = "#21633e"  # was #4c6155 (sat 12%) -> sat 50%, 5.0:1
+addedContentBg   = "#28774a"
+removedBg        = "#77223a"  # was #664357 (sat 21%) -> sat 56%, 7.0:1
+removedContentBg = "#962c4a"
+movedAddedBg     = "#68615a"  # Yellow 34%
+movedRemovedBg   = "#68615a"
+# The ▌ rail is hunk's editorGutter.addedBackground. But rowStyle.ts does
+#   dimRailColor(c) = blendHex(c, theme.panel, INACTIVE_RAIL_BLEND /* 0.35 */)
+# for every row that is not the cursor row — so Mocha Green #a6e3a1 (sat 54%)
+# renders as #4e6356 (sat 12%) on ~every line. VS Code never dims its gutter.
+# 0.35 is a hardcoded constant, so the only lever is a more saturated source:
+# these dim to sat 33% / 35% instead of 12% / 21%.
+addedSignColor   = "#57e389"  # dims to #32634e
+removedSignColor = "#ff5c8a"  # dims to #6d344e
+
+# --- badges / file status ---
+badgeAdded       = "#a6e3a1"
+badgeRemoved     = "#f38ba8"
+badgeNeutral     = "#a6adc8"
+fileNew          = "#a6e3a1"
+fileDeleted      = "#f38ba8"
+fileModified     = "#f9e2af"  # Yellow <- editorGutter.modifiedBackground
+fileRenamed      = "#89b4fa"  # Blue
+fileUntracked    = "#a6e3a1"
+noteBackground   = "#181825"  # Mantle <- editorWidget.background
+noteBorder       = "#cba6f7"  # Mauve
+noteTitleBackground = "#313244"
+noteTitleText    = "#cdd6f4"

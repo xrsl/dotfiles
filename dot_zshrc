@@ -96,7 +96,12 @@ vmh() {
     print -u2 "usage: vmh <name>"
     return 2
   fi
-  herdr --remote "tart-$(_tart_vm_name "$1")"
+  local vm="$(_tart_vm_name "$1")"
+  if ! tart ip "$vm" --wait 30 >/dev/null; then
+    print -u2 "vmh: $vm did not come up (no IP after 30s)"
+    return 1
+  fi
+  herdr --remote "tart-$vm"
 }
 
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
@@ -229,10 +234,6 @@ if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)
 # Just
 alias j=just
 alias .j='just --justfile ~/.justfile --working-directory .'
-
-# lean-ctx
-export LEAN_CTX_SHELL_ACTIVATION=agents-only
-command -v lean-ctx >/dev/null 2>&1 && eval "$(lean-ctx init zsh)"
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
@@ -394,7 +395,7 @@ dpr() {
 # `hunk patch -` reads a precomputed diff from stdin (hunk has no git revset for ranges).
 #   h        working-tree changes
 #   hw       working-tree changes, --watch (stays open beside a running agent)
-#   hpr      branch changes vs the local default branch ref (mirrors dpr)
+#   hpr      branch changes vs the merge-base with the default branch (what `gh pr diff` shows)
 h()  { command hunk diff "$@"; }
 hw() { command hunk diff --watch "$@"; }
 hpr() {
@@ -408,7 +409,9 @@ hpr() {
   fi
   [[ -z "$base" ]] && base=main
 
-  git diff "${base}..HEAD" --no-color | command hunk patch -
+  # Three-dot: diff against the merge-base, so commits that landed on the default
+  # branch after we forked don't show up inverted. Matches `gh pr diff` / the GitHub UI.
+  git diff "${base}...HEAD" --no-color | command hunk patch -
 }
 
 
@@ -490,6 +493,200 @@ cir() {
 # Open current repo in browser
 alias ghr="gh repo view --web"
 
+# ghrn <repo>|<owner>/<repo> [gh flags] — new private repo in ~/ghub, cloned, cd'd into.
+# Bare name assumes owner xrsl. Extra args are forwarded to `gh repo new`.
+ghrn() {
+  local slug="$1"
+  if [[ -z "$slug" ]]; then
+    print -u2 "ghrn: usage: ghrn <repo>|<owner>/<repo> [gh repo new flags...]"
+    return 2
+  fi
+  shift
+  [[ "$slug" == */* ]] || slug="xrsl/$slug"
+  local name="${slug##*/}"
+  local dest="$HOME/ghub/$name"
+  if [[ -e "$dest" ]]; then
+    print -u2 "ghrn: $dest already exists"
+    return 1
+  fi
+  ( cd "$HOME/ghub" && gh repo new "$slug" --private --clone --add-readme "$@" ) || return
+  cd "$dest"
+}
+
+# ghrD <repo>|<owner>/<repo> [-r] [-f] [-y] [gh flags] — remove a repo clone from ~/ghub.
+# Local dir goes to the Trash (recoverable). -r|--remote ALSO deletes the GitHub repo (permanent).
+# The owner is READ from the clone's git origin, never assumed, so -r cannot target the wrong
+# repo; naming an owner that disagrees with origin is an error. With no local clone, -r requires
+# <owner>/<repo>. Refuses on uncommitted/unpushed/stashed work or sibling worktrees unless -f.
+ghrD() {
+  emulate -L zsh
+  local arg="" remote=0 force=0 yes=0
+  local -a ghargs
+  while (( $# )); do
+    case "$1" in
+      -r|--remote) remote=1 ;;
+      -f|--force)  force=1 ;;
+      -y|--yes)    yes=1 ;;
+      -h|--help)
+        print "usage: ghrD <repo>|<owner>/<repo> [-r|--remote] [-f|--force] [-y|--yes] [gh flags]"
+        return 0 ;;
+      --) shift; ghargs+=("$@"); break ;;
+      -*) ghargs+=("$1") ;;
+      *)  if [[ -z "$arg" ]]; then arg="$1"; else ghargs+=("$1"); fi ;;
+    esac
+    shift
+  done
+
+  if [[ -z "$arg" ]]; then
+    print -u2 "ghrD: usage: ghrD <repo>|<owner>/<repo> [-r|--remote] [-f|--force] [-y|--yes]"
+    return 2
+  fi
+
+  arg="${arg%.git}"
+  if [[ "$arg" == *github.com[:/]* ]]; then
+    arg="${arg##*github.com}"
+    arg="${arg#[:/]}"
+  fi
+  local name="${arg##*/}" given_owner=""
+  [[ "$arg" == */* ]] && given_owner="${arg%/*}"
+  local dest="$HOME/ghub/$name"
+
+  # The GitHub owner is READ from the clone's origin, never assumed. A delete must
+  # know exactly what it is pointed at.
+  local slug="" origin=""
+  if [[ -d "$dest" ]] && git -C "$dest" rev-parse --git-dir >/dev/null 2>&1; then
+    origin=$(git -C "$dest" remote get-url origin 2>/dev/null)
+    origin="${origin%.git}"
+    origin="${origin##*github.com}"
+    origin="${origin#[:/]}"
+    [[ "$origin" == */* ]] && slug="$origin"
+  fi
+  if [[ -n "$given_owner" && -n "$slug" && "${given_owner:l}" != "${${slug%/*}:l}" ]]; then
+    print -u2 "ghrD: you named '$given_owner/$name' but $dest has origin '$slug'"
+    print -u2 "  refusing rather than guessing which you meant"
+    return 1
+  fi
+  [[ -z "$slug" && -n "$given_owner" ]] && slug="$given_owner/$name"
+
+  if [[ ! -d "$dest" ]]; then
+    if (( remote )); then
+      print "ghrD: no local clone at $dest — remote only"
+    else
+      print -u2 "ghrD: $dest does not exist (pass -r with <owner>/$name for the GitHub repo)"
+      return 1
+    fi
+  fi
+  if (( remote )) && [[ -z "$slug" ]]; then
+    print -u2 "ghrD: can't determine the GitHub owner of '$name' (no local clone, or no github origin)"
+    print -u2 "  name it explicitly: ghrD <owner>/$name -r"
+    return 2
+  fi
+
+  # Sibling worktrees are ~/ghub/<repo>.<branch> — deleting the main clone orphans them.
+  local -a worktrees=( "$HOME/ghub/$name".*(N/) )
+  local -a risks=()
+
+  if [[ -d "$dest" ]]; then
+    if git -C "$dest" rev-parse --git-dir >/dev/null 2>&1; then
+      [[ -n "$(git -C "$dest" status --porcelain 2>/dev/null)" ]] && risks+=("uncommitted or untracked changes")
+      local n
+      n=$(git -C "$dest" log --branches --not --remotes --oneline 2>/dev/null | wc -l | tr -d ' ')
+      (( n )) && risks+=("$n unpushed commit(s)")
+      n=$(git -C "$dest" stash list 2>/dev/null | wc -l | tr -d ' ')
+      (( n )) && risks+=("$n stash entry(ies)")
+    else
+      risks+=("not a git repo — nothing is backed up remotely")
+    fi
+  fi
+  (( ${#worktrees} )) && risks+=("${#worktrees} sibling worktree(s): ${(j:, :)${worktrees[@]:t}}")
+
+  if (( ${#risks} )) && (( ! force )); then
+    print -u2 "ghrD: refusing to delete '$name' —"
+    printf '  - %s\n' "${risks[@]}" >&2
+    print -u2 "  re-run with -f to override (worktrees are never removed for you; use 'wt rm')"
+    return 1
+  fi
+
+  if (( ! yes )); then
+    print "About to delete:"
+    [[ -d "$dest" ]] && print "  local   $dest  -> Trash (recoverable)"
+    (( remote ))     && print "  remote  github.com/$slug  -> PERMANENT, not recoverable"
+    (( ${#risks} ))  && printf '  !! %s\n' "${risks[@]}"
+    local reply
+    read "reply?Type the repo name to confirm ($name): "
+    if [[ "$reply" != "$name" ]]; then
+      print "aborted"
+      return 1
+    fi
+  fi
+
+  # Don't leave the shell sitting inside a directory we just removed.
+  [[ "$PWD" == "$dest" || "$PWD" == "$dest"/* ]] && cd "$HOME/ghub"
+
+  if [[ -d "$dest" ]]; then
+    trash "$dest" || return
+    print "trashed $dest"
+  fi
+  if (( remote )); then
+    gh repo delete "$slug" --yes "${ghargs[@]}" || return
+    print "deleted github.com/$slug"
+  fi
+}
+
+# ghrc <repo>|<owner>/<repo>|<url> [dir] [gh flags] — clone into ~/ghub and cd in.
+# Always lands in ~/ghub regardless of where you run it from. Bare name assumes owner
+# xrsl. Already-cloned is a no-op that just cds in (if the origin matches); a name
+# collision from a different owner is an error, not an overwrite.
+ghrc() {
+  emulate -L zsh
+  local slug="$1"
+  if [[ -z "$slug" ]]; then
+    print -u2 "ghrc: usage: ghrc <repo>|<owner>/<repo>|<url> [dir] [gh repo clone flags...]"
+    return 2
+  fi
+  shift
+
+  # Accept a pasted URL (https://github.com/o/r.git, git@github.com:o/r.git) as well as o/r.
+  slug="${slug%.git}"
+  if [[ "$slug" == *github.com[:/]* ]]; then
+    slug="${slug##*github.com}"
+    slug="${slug#[:/]}"
+  fi
+  [[ "$slug" == */* ]] || slug="xrsl/$slug"
+
+  # `gh repo clone <repo> [<dir>]` — an optional dir renames the checkout. Keep it a
+  # plain name so the clone can never land outside ~/ghub.
+  local dirarg=""
+  if [[ -n "$1" && "$1" != -* ]]; then
+    dirarg="$1"; shift
+    if [[ "$dirarg" == */* || "$dirarg" == ".." || "$dirarg" == "." ]]; then
+      print -u2 "ghrc: dir must be a plain name inside ~/ghub, got '$dirarg'"
+      return 2
+    fi
+  fi
+  local name="${dirarg:-${slug##*/}}"
+  local dest="$HOME/ghub/$name"
+
+  if [[ -d "$dest" ]]; then
+    local origin cur
+    origin=$(git -C "$dest" remote get-url origin 2>/dev/null)
+    cur="${origin%.git}"
+    cur="${cur##*github.com}"
+    cur="${cur#[:/]}"
+    if [[ -n "$cur" && "${cur:l}" == "${slug:l}" ]]; then
+      print "ghrc: already cloned at $dest"
+      cd "$dest"
+      return 0
+    fi
+    print -u2 "ghrc: $dest already exists but its origin is '${cur:-none}', not '$slug'"
+    print -u2 "  pass a different target dir: ghrc $slug <dir>"
+    return 1
+  fi
+
+  ( cd "$HOME/ghub" && gh repo clone "$slug" ${dirarg:+"$dirarg"} "$@" ) || return
+  cd "$dest"
+}
+
 # files
 alias f="spf"
 
@@ -506,16 +703,6 @@ mmv() {
   local out="${TMPDIR:-/tmp}/_mmv.png"
   mmdc -i "$1" -o "$out" -t dark -b '#1e1e2e' -s 3 && viu "$out"
 }
-
-# >>> lean-ctx agent aliases >>>
-alias claude='LEAN_CTX_AGENT=1 BASH_ENV="$HOME/.bashenv" claude'
-alias codex='LEAN_CTX_AGENT=1 BASH_ENV="$HOME/.bashenv" codex'
-alias gemini='LEAN_CTX_AGENT=1 BASH_ENV="$HOME/.bashenv" gemini'
-# <<< lean-ctx agent aliases <<<
-
-# >>> lean-ctx proxy env >>>
-export GEMINI_API_BASE_URL="http://127.0.0.1:4444"
-# <<< lean-ctx proxy env <<<
 
 function y() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd

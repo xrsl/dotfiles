@@ -5,7 +5,6 @@
 1password = "latest"
 "aqua:asciinema/agg" = "latest"
 rg = "latest"
-circleci = "latest"
 saml2aws = "latest"
 kubectx = "latest"
 kubens = "latest"
@@ -98,7 +97,6 @@ pnpm = "latest"
 eza = "0.23.4"
 zizmor = "latest"
 rclone = "latest"
-"github:yvgude/lean-ctx" = "latest"
 "npm:@upstash/context7-mcp" = "latest"
 "npm:ctx7" = "latest"
 tokei = "latest"
@@ -122,6 +120,15 @@ bottom = "latest"
 "cargo:toppy" = "latest"
 "aqua:jorgerojas26/lazysql" = "latest"
 "aqua:cirruslabs/tart" = { version = "latest", os = ["macos"] }
+"npm:pi-skill-gate" = "latest"
+"github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true" }
+"github:hjr265/gittop" = "latest"
+"cargo:heroheman/whathaveidone" = "latest"
+"github:rikeda71/ghostty-pane-splitter" = "latest"
+"npm:@mcpjam/inspector" = "latest"
+"npm:@mcpjam/cli" = "latest"
+"npm:@modelcontextprotocol/inspector" = "latest"
+"github:jkfran/killport" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
