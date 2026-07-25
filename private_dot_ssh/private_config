@@ -4,17 +4,17 @@ Host ubuntu
     User admin
     HostName ubuntu
     HostKeyAlias tart-ubuntu
-    ProxyCommand /bin/sh -c 'exec /usr/bin/nc "$(/opt/homebrew/bin/tart ip ubuntu --wait 60)" %p'
+    ProxyCommand /bin/sh -c 'exec /usr/bin/nc "$(/Users/resulal/.local/share/mise/shims/tart ip ubuntu --wait 60)" %p'
 
 Host tahoe
     User admin
     HostName tahoe
     HostKeyAlias tart-tahoe
-    ProxyCommand /bin/sh -c 'exec /usr/bin/nc "$(/opt/homebrew/bin/tart ip tahoe --wait 60)" %p'
+    ProxyCommand /bin/sh -c 'exec /usr/bin/nc "$(/Users/resulal/.local/share/mise/shims/tart ip tahoe --wait 60)" %p'
 
 Host tart-*
     User admin
-    ProxyCommand /bin/sh -c 'vm=${1#tart-}; exec /usr/bin/nc "$(/opt/homebrew/bin/tart ip "$vm" --wait 60)" %p' -- %n
+    ProxyCommand /bin/sh -c 'vm=${1#tart-}; exec /usr/bin/nc "$(/Users/resulal/.local/share/mise/shims/tart ip "$vm" --wait 60)" %p' -- %n
 
 Host ubuntu tahoe tart-*
     ForwardAgent yes

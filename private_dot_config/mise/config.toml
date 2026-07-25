@@ -129,6 +129,7 @@ bottom = "latest"
 "npm:@mcpjam/cli" = "latest"
 "npm:@modelcontextprotocol/inspector" = "latest"
 "github:jkfran/killport" = "latest"
+crane = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
