@@ -136,6 +136,7 @@ crane = "latest"
 # downgrade. Per-package by design — everything else in the tree is still checked. `npm:@mcpjam/cli`
 # needs the same exclusion whenever it is reinstalled from scratch.
 "npm:@apify/mcpc" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
+"aqua:yvgude/lean-ctx" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
