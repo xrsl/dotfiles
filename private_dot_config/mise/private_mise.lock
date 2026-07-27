@@ -45,28 +45,28 @@ url_api = "https://api.github.com/repos/rhysd/actionlint/releases/assets/3849248
 provenance = "github-attestations"
 
 [[tools.agy]]
-version = "1.1.6"
+version = "1.1.7"
 backend = "aqua:google-antigravity/antigravity-cli"
 
 [tools.agy."platforms.linux-arm64"]
-checksum = "sha256:78040d87f4fef72bb785af68cf7d9d6c25024710ee58f8281f85c3f1e47b975a"
-url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.6/agy_cli_linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/487920517"
+checksum = "sha256:0d6d488851745e80e69b8935d063e742945811b47111994b1a6dbd27df3010d5"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.7/agy_cli_linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/488927631"
 
 [tools.agy."platforms.linux-x64"]
-checksum = "sha256:2448b9bb1d3496063a6335d021dcab90c42d71fdaad6346ef8a395f0ca0fe9d0"
-url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.6/agy_cli_linux_x64.tar.gz"
-url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/487920640"
+checksum = "sha256:946cd06258d0ede72d0311550c914315798821f6a397f53ac760919826a19af4"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.7/agy_cli_linux_x64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/488927640"
 
 [tools.agy."platforms.macos-arm64"]
-checksum = "sha256:89b371597511dbd8399569ed85585ecd6769d7838d3e31c8cf97e231be570b9a"
-url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.6/agy_cli_mac_arm64.tar.gz"
-url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/487920658"
+checksum = "sha256:1ed31957d30e2d9735b1ce545a1e9106233bf7ce07739ea1f883957f5d240bed"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.7/agy_cli_mac_arm64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/488927656"
 
 [tools.agy."platforms.macos-x64"]
-checksum = "sha256:894e70ff5bbf5088ec97b7e7c9456132c6767acf92dc842b49c7cf55de3f3279"
-url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.6/agy_cli_mac_x64.tar.gz"
-url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/487920669"
+checksum = "sha256:67924f137f1ab884415fa5ab45de592d1d037eacb45be90f67d0bc6dd181498d"
+url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.7/agy_cli_mac_x64.tar.gz"
+url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/488927701"
 
 [[tools."aqua:asciinema/agg"]]
 version = "1.9.0"
@@ -177,30 +177,6 @@ url_api = "https://api.github.com/repos/nushell/nushell/releases/assets/47362972
 checksum = "sha256:4659a78545b7f6a303e661fe3bd276a765c64ccde67112d32045be5fe075f206"
 url = "https://github.com/nushell/nushell/releases/download/0.114.1/nu-0.114.1-x86_64-apple-darwin.tar.gz"
 url_api = "https://api.github.com/repos/nushell/nushell/releases/assets/473624186"
-
-[[tools."aqua:yvgude/lean-ctx"]]
-version = "3.9.12"
-backend = "aqua:yvgude/lean-ctx"
-
-[tools."aqua:yvgude/lean-ctx"."platforms.linux-arm64"]
-checksum = "sha256:3ba2fe886e905cb3797fe69072bac1b41f30c4a8232ea14073bac462aa01527c"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753384"
-
-[tools."aqua:yvgude/lean-ctx"."platforms.linux-x64"]
-checksum = "sha256:4f19d1f2b9522ae9629d40d73433ff38b71750d14ab0230c26a1c1a5d309c014"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753387"
-
-[tools."aqua:yvgude/lean-ctx"."platforms.macos-arm64"]
-checksum = "sha256:ba441a98e59490a3a41826041c9f12bc18d7b4b660113031be72693f280c5861"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753389"
-
-[tools."aqua:yvgude/lean-ctx"."platforms.macos-x64"]
-checksum = "sha256:77e240b7498cc51d594f1287497d2d431a6aeaf11b87e22e88c47418329338db"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753386"
 
 [[tools.argocd]]
 version = "3.4.5"
@@ -800,59 +776,59 @@ url = "https://github.com/CircleCI-Public/circleci-cli/releases/download/v1.0.45
 url_api = "https://api.github.com/repos/CircleCI-Public/circleci-cli/releases/assets/488610209"
 
 [[tools."github:backnotprop/plannotator"]]
-version = "0.24.2"
+version = "0.25.0"
 backend = "github:backnotprop/plannotator"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-arm64"]
-checksum = "sha256:8c99158c5c568fa96a0688ebb8b06246905fbd9367689fcb666a6a471faed4a5"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.24.2/plannotator-linux-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/485116886"
+checksum = "sha256:2130263e2e38c99b53639c5e2ace0066383361c58debd7a2dad3ba8593db6abd"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.25.0/plannotator-linux-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/491175917"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.linux-x64"]
-checksum = "sha256:e9cc92710861ff5843f17426b2dfc8e0d296130c6672244101e8c1532f1fd80d"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.24.2/plannotator-linux-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/485116896"
+checksum = "sha256:79785a373c77df5d9fa7dd146d3e2cda8e07ddddb43e7ad2f14f9b391c135325"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.25.0/plannotator-linux-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/491175913"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-arm64"]
-checksum = "sha256:d590a1b786b1299a25d228b30d5b97307a73b4f8f3c4ccade59f40b02f89f15d"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.24.2/plannotator-darwin-arm64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/485116884"
+checksum = "sha256:bc4da5b1a4f2b4bc37efdd8c721fa6679086aa935236edebee63cafc47482fe4"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.25.0/plannotator-darwin-arm64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/491175915"
 provenance = "github-attestations"
 
 [tools."github:backnotprop/plannotator"."platforms.macos-x64"]
-checksum = "sha256:930f5296eb75d885f44bff21323e17f876276a93b9f0a0c243fec65d2fb438aa"
-url = "https://github.com/backnotprop/plannotator/releases/download/v0.24.2/plannotator-darwin-x64"
-url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/485116893"
+checksum = "sha256:e115a8d2cb8247f1b3e34a1dc3d48d356f2f9741a5ab2871274ed62cd309f465"
+url = "https://github.com/backnotprop/plannotator/releases/download/v0.25.0/plannotator-darwin-x64"
+url_api = "https://api.github.com/repos/backnotprop/plannotator/releases/assets/491175914"
 provenance = "github-attestations"
 
 [[tools."github:cesarferreira/stax"]]
-version = "0.98.2"
+version = "0.100.0"
 backend = "github:cesarferreira/stax"
 
 [tools."github:cesarferreira/stax"."platforms.linux-arm64"]
-checksum = "sha256:463ca82c19a5e2a870e7cc0477ae3526dfa90ad6e2fc1d7a603bc93f5acae7d1"
-url = "https://github.com/cesarferreira/stax/releases/download/v0.98.2/stax-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/489375286"
+checksum = "sha256:d237de2da1407f5c7ac10dbbc017328665cf58fe7b06c7ab8ba2ebd1f6675f1e"
+url = "https://github.com/cesarferreira/stax/releases/download/v0.100.0/stax-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/491659833"
 provenance = "github-attestations"
 
 [tools."github:cesarferreira/stax"."platforms.linux-x64"]
-checksum = "sha256:5e93ca285ce8603e3accfc48602f41a267be1d6ef7ea198af91be0a4c91add45"
-url = "https://github.com/cesarferreira/stax/releases/download/v0.98.2/stax-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/489375281"
+checksum = "sha256:e7402047324d42e7b9a2b392008ce422fc28afac24b4831a5d86fa5f845a438a"
+url = "https://github.com/cesarferreira/stax/releases/download/v0.100.0/stax-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/491659834"
 provenance = "github-attestations"
 
 [tools."github:cesarferreira/stax"."platforms.macos-arm64"]
-checksum = "sha256:452b6dafb65980910263726a8fce8e6d063a862a783bbfdff1aaee3685457c94"
-url = "https://github.com/cesarferreira/stax/releases/download/v0.98.2/stax-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/489375284"
+checksum = "sha256:114370c0d4930f6301e37d48f5823c0b4716977ad67803ca5f9841bc6b29b75c"
+url = "https://github.com/cesarferreira/stax/releases/download/v0.100.0/stax-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/491659836"
 provenance = "github-attestations"
 
 [tools."github:cesarferreira/stax"."platforms.macos-x64"]
-checksum = "sha256:fb73a9103c9588bde71b6969602b7ec535d4ce1060abf77859ba1e7ed9bf3d15"
-url = "https://github.com/cesarferreira/stax/releases/download/v0.98.2/stax-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/489375285"
+checksum = "sha256:f219f5dd2284fca0b9679afaf8336ad31018986a73bcdfe077d5091b3ac4a2bf"
+url = "https://github.com/cesarferreira/stax/releases/download/v0.100.0/stax-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/cesarferreira/stax/releases/assets/491659838"
 provenance = "github-attestations"
 
 [[tools."github:dlvhdr/diffnav"]]
@@ -1050,47 +1026,28 @@ url_api = "https://api.github.com/repos/sinelaw/fresh/releases/assets/488549652"
 provenance = "github-attestations"
 
 [[tools."github:terror/just-lsp"]]
-version = "0.5.0"
+version = "0.5.1"
 backend = "github:terror/just-lsp"
 
 [tools."github:terror/just-lsp"."platforms.linux-arm64"]
-checksum = "sha256:920d6a686c5c15723323a838f3d5d0bcfe23a3c1746f611d27f07595093ae3c2"
-url = "https://github.com/terror/just-lsp/releases/download/0.5.0/just-lsp-0.5.0-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/488610936"
+checksum = "sha256:e44190ad016a34e8093222f0e2ba98e1b0c22a553805e7810b68e33d29a90284"
+url = "https://github.com/terror/just-lsp/releases/download/0.5.1/just-lsp-0.5.1-aarch64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/491523799"
 
 [tools."github:terror/just-lsp"."platforms.linux-x64"]
-checksum = "sha256:0f2d550a3eb98929a3e8b7900bbcaf2ed8b540b6d9bd0b9ba832a4c852721049"
-url = "https://github.com/terror/just-lsp/releases/download/0.5.0/just-lsp-0.5.0-x86_64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/488610968"
+checksum = "sha256:2f515fa3df3257f93ced3a675019b95bb7f97b2c1a4ddab6948b6b58f3a678ff"
+url = "https://github.com/terror/just-lsp/releases/download/0.5.1/just-lsp-0.5.1-x86_64-unknown-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/491523311"
 
 [tools."github:terror/just-lsp"."platforms.macos-arm64"]
-checksum = "sha256:8da54915639aa7f921075da714677f1f9c9fcaf46894f923f869447b7f9e0a7b"
-url = "https://github.com/terror/just-lsp/releases/download/0.5.0/just-lsp-0.5.0-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/488610710"
+checksum = "sha256:b2580d494409015870cf4ea8f1ddbce221381bee560a72e2ecd0fe8cdcb48784"
+url = "https://github.com/terror/just-lsp/releases/download/0.5.1/just-lsp-0.5.1-aarch64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/491524367"
 
 [tools."github:terror/just-lsp"."platforms.macos-x64"]
-checksum = "sha256:182e7cd7a6067883af5a255066fd32d36d1daa0a13dd3fe699c983610642e493"
-url = "https://github.com/terror/just-lsp/releases/download/0.5.0/just-lsp-0.5.0-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/488610477"
-
-[[tools."github:yvgude/lean-ctx"]]
-version = "3.9.12"
-backend = "github:yvgude/lean-ctx"
-
-[tools."github:yvgude/lean-ctx"."platforms.linux-arm64"]
-checksum = "sha256:c049662abc2cb5e30db127e0ce71e2d7c4ef63d50ac23d76967c4c43603c7211"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-aarch64-unknown-linux-gnu.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753393"
-
-[tools."github:yvgude/lean-ctx"."platforms.macos-arm64"]
-checksum = "sha256:ba441a98e59490a3a41826041c9f12bc18d7b4b660113031be72693f280c5861"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-aarch64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753389"
-
-[tools."github:yvgude/lean-ctx"."platforms.macos-x64"]
-checksum = "sha256:77e240b7498cc51d594f1287497d2d431a6aeaf11b87e22e88c47418329338db"
-url = "https://github.com/yvgude/lean-ctx/releases/download/v3.9.12/lean-ctx-x86_64-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/yvgude/lean-ctx/releases/assets/480753386"
+checksum = "sha256:e5380052d8c6113e6fc75a6bf6dde4607b35204ab4ffcfcd9d008a91445a0d79"
+url = "https://github.com/terror/just-lsp/releases/download/0.5.1/just-lsp-0.5.1-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/terror/just-lsp/releases/assets/491523813"
 
 [[tools.gitui]]
 version = "0.28.1"
@@ -1201,31 +1158,31 @@ url_api = "https://api.github.com/repos/golangci/golangci-lint/releases/assets/4
 provenance = "github-attestations"
 
 [[tools.goreleaser]]
-version = "2.17.0"
+version = "2.17.1"
 backend = "aqua:goreleaser/goreleaser"
 
 [tools.goreleaser."platforms.linux-arm64"]
-checksum = "sha256:75f93fc0e25d10d8535ffd0e4abcf39d6784a2467ba453d479ae513729a9ebbf"
-url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.0/goreleaser_Linux_arm64.tar.gz"
-url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/466714135"
+checksum = "sha256:702f03769ac8bcb0e47839c82243cc614ae995633599a98c63062e13ea85f829"
+url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.1/goreleaser_Linux_arm64.tar.gz"
+url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/490565875"
 provenance = "github-attestations"
 
 [tools.goreleaser."platforms.linux-x64"]
-checksum = "sha256:dde10e2d5a13cef969c0eec00c74f359c0ac306d702b1bd291ad9337b4e54c1d"
-url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.0/goreleaser_Linux_x86_64.tar.gz"
-url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/466714136"
+checksum = "sha256:a99bbc7ae0d8d897b07c4c497a9b62f222558804715ef219d1af05a7e417bc80"
+url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.1/goreleaser_Linux_x86_64.tar.gz"
+url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/490565870"
 provenance = "github-attestations"
 
 [tools.goreleaser."platforms.macos-arm64"]
-checksum = "sha256:4106ff54bcaa1d387d3317047169da28aed6ce36c8e035e76cf35ba349db06ef"
-url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.0/goreleaser_Darwin_all.tar.gz"
-url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/466714160"
+checksum = "sha256:f49d4fe67d283b5b5130c380c983087dca0a4d4ec15b6637b18fe1ab096780d8"
+url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.1/goreleaser_Darwin_all.tar.gz"
+url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/490565848"
 provenance = "github-attestations"
 
 [tools.goreleaser."platforms.macos-x64"]
-checksum = "sha256:4106ff54bcaa1d387d3317047169da28aed6ce36c8e035e76cf35ba349db06ef"
-url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.0/goreleaser_Darwin_all.tar.gz"
-url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/466714160"
+checksum = "sha256:f49d4fe67d283b5b5130c380c983087dca0a4d4ec15b6637b18fe1ab096780d8"
+url = "https://github.com/goreleaser/goreleaser/releases/download/v2.17.1/goreleaser_Darwin_all.tar.gz"
+url_api = "https://api.github.com/repos/goreleaser/goreleaser/releases/assets/490565848"
 provenance = "github-attestations"
 
 [[tools.gum]]
@@ -1633,52 +1590,52 @@ version = "4.7.0"
 backend = "npm:tokscale"
 
 [[tools.opencode]]
-version = "1.18.5"
+version = "1.18.7"
 backend = "aqua:anomalyco/opencode"
 
 [tools.opencode."platforms.linux-arm64"]
-checksum = "sha256:18b643362fdf0b8d5b8711b3e160dafb4e68d0bfc00288f56fd1298fd72da69d"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.5/opencode-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/488859772"
+checksum = "sha256:6c791e453c2ca03ee3dea09ebd16bfdfac4837e45d344a1487cd196b80090fc7"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.7/opencode-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/491142207"
 
 [tools.opencode."platforms.linux-x64"]
-checksum = "sha256:cd4a2557a3d6550f27cb5c0257ebe8d73388bb34beda8b6121e6428a74c1eae2"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.5/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/488859773"
+checksum = "sha256:cb5d9d6d2f8fbef0a9c975ed4494f73b2a62f4e4ffd508bcc3212da4fa76c3da"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.7/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/491142237"
 
 [tools.opencode."platforms.macos-arm64"]
-checksum = "sha256:85f6f9eece174d3bf0c92588086a65284388b891256c8f4102dc317d476ffca6"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.5/opencode-darwin-arm64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/488859705"
+checksum = "sha256:47efed233667713fd3e0603ddaea95d0ee2076ce00dc9faa7dbc9208aeb13505"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.7/opencode-darwin-arm64.zip"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/491142136"
 
 [tools.opencode."platforms.macos-x64"]
-checksum = "sha256:f972e376cf7d6af855919093674123f6912ec8388af83c9aee2c2e9d6e536203"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.5/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/488859703"
+checksum = "sha256:feee11da7697a80e2fcf943ff9ca392d4e960c5ddabd918bdd6e4de790279b7e"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.7/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/491142140"
 
 [[tools.pi]]
-version = "0.82.0"
+version = "0.82.1"
 backend = "aqua:earendil-works/pi"
 
 [tools.pi."platforms.linux-arm64"]
-checksum = "sha256:a0bd25d2f41a754463bc96fb21f5e790adb3b75d1eed98bed2b19d3529022b0f"
-url = "https://github.com/earendil-works/pi/releases/download/v0.82.0/pi-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/488078168"
+checksum = "sha256:9e7036f89370c443235a2a0a8ccc91a9cc2b7f4af5ec20b2dad1c6f72aa916e6"
+url = "https://github.com/earendil-works/pi/releases/download/v0.82.1/pi-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/489434433"
 
 [tools.pi."platforms.linux-x64"]
-checksum = "sha256:791abd8043bf85deb4d090b905c9ebce4eb4f5776f919b4e3d371f69a6b977d0"
-url = "https://github.com/earendil-works/pi/releases/download/v0.82.0/pi-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/488078165"
+checksum = "sha256:884a9dec7e0b75a54c4d1933c93a7d45af1fbb81c32964c1dd45d67fac1f6544"
+url = "https://github.com/earendil-works/pi/releases/download/v0.82.1/pi-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/489434437"
 
 [tools.pi."platforms.macos-arm64"]
-checksum = "sha256:6205debd0071ff56d765e0ee941f087f9a18d1f6c2f7dea17bdc8f97ff3cf9c1"
-url = "https://github.com/earendil-works/pi/releases/download/v0.82.0/pi-darwin-arm64.tar.gz"
-url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/488078170"
+checksum = "sha256:ca5b660ee0dbf2b4169f69753cf60f4e0edddff4a49427cdd34660e41280249f"
+url = "https://github.com/earendil-works/pi/releases/download/v0.82.1/pi-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/489434434"
 
 [tools.pi."platforms.macos-x64"]
-checksum = "sha256:a7541c599f5c235c9cef8ba5086986c0f8897a0c6a9389a2b8b1b3a59b76bfc8"
-url = "https://github.com/earendil-works/pi/releases/download/v0.82.0/pi-darwin-x64.tar.gz"
-url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/488078169"
+checksum = "sha256:a28cd67f9397a5ad99f9387713bf1c134b747d4b6cb25e00db4f7d009ee9f8c2"
+url = "https://github.com/earendil-works/pi/releases/download/v0.82.1/pi-darwin-x64.tar.gz"
+url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/489434436"
 
 [[tools.pnpm]]
 version = "11.17.0"

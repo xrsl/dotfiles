@@ -131,7 +131,6 @@ bottom = "latest"
 "github:jkfran/killport" = "latest"
 crane = "latest"
 "npm:@apify/mcpc" = "latest"
-"aqua:yvgude/lean-ctx" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
