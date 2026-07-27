@@ -130,12 +130,7 @@ bottom = "latest"
 "npm:@modelcontextprotocol/inspector" = "latest"
 "github:jkfran/killport" = "latest"
 crane = "latest"
-# `trust_policy_excludes` covers one transitive dependency, not the tool. mcpc's tree resolves
-# `@hono/node-server@1.19.15`: Hono publishes 2.x from CI with SLSA provenance but hand-publishes
-# the 1.x maintenance line with no attestation, so the newer 1.x release reads as a trust
-# downgrade. Per-package by design — everything else in the tree is still checked. `npm:@mcpjam/cli`
-# needs the same exclusion whenever it is reinstalled from scratch.
-"npm:@apify/mcpc" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
+"npm:@apify/mcpc" = "latest"
 "aqua:yvgude/lean-ctx" = "latest"
 
 [env]
