@@ -130,7 +130,12 @@ bottom = "latest"
 "npm:@modelcontextprotocol/inspector" = "latest"
 "github:jkfran/killport" = "latest"
 crane = "latest"
-"npm:@apify/mcpc" = "latest"
+# `trust_policy_excludes` covers one transitive dependency, not the tool. mcpc's tree resolves
+# `@hono/node-server@1.19.15`: Hono publishes 2.x from CI with SLSA provenance but hand-publishes
+# the 1.x maintenance line with no attestation, so the newer 1.x release reads as a trust
+# downgrade. Per-package by design — everything else in the tree is still checked. `npm:@mcpjam/cli`
+# needs the same exclusion whenever it is reinstalled from scratch.
+"npm:@apify/mcpc" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
