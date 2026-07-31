@@ -131,14 +131,14 @@ bottom = "latest"
 "github:jkfran/killport" = "latest"
 crane = "latest"
 "npm:@apify/mcpc" = "latest"
+"github:lightpanda-io/browser" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
 UV_PYTHON = { value = "{{ tools.python.path }}", tools = true }
 
 [settings]
-# In project dirs, honor an existing .nvmrc / .node-version so repos still pin themselves.
-idiomatic_version_file_enable_tools = ["node"]
+idiomatic_version_file_enable_tools = ["node", "python"]
 lockfile = true
 lockfile_platforms = ["macos-arm64", "macos-x64", "linux-arm64"]
 minimum_release_age = "0d"

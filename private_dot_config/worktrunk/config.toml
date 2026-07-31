@@ -75,6 +75,15 @@ template-append = """
 """
 
 [projects]
+
+# ai-framework-mono: data/pyproject.toml pins requires-python == "3.14.3", but
+# mise exports UV_PYTHON from the global python (latest), so plain `uv run` and
+# `just ci` fail from the repo root. mise.local.toml pins 3.14.3 for the
+# worktree; it's gitignored via ~/.gitignore_global, so each new worktree needs
+# its own copy. pre-start runs in the new worktree root.
+[projects."github.com/blackwoodseven/ai-framework-mono"]
+pre-start.mise = "mise use --env local python@3.14.3"
+
 # # User Configuration
 #
 # Create with `wt config create`. Values shown are defaults unless noted otherwise.
