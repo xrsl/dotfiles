@@ -1,8 +1,6 @@
 gui:
-  sidePanelWidth: 0.2   # narrower left bar → wider diff/main panel
-
+  sidePanelWidth: 0.2 # narrower left bar → wider diff/main panel
 git:
-  pagers:
-    - pager: delta --dark --paging=never
-    - {} # built-in diff; cycle to it with `|`
-
+  diffRenderers:
+    - command: delta --dark --paging=never
+    - type: rawGit

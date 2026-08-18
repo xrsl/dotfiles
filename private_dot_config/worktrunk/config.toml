@@ -25,10 +25,10 @@ scp = "{ wt step commit {{ args }} || git commit; } && git push -u origin HEAD"
 scp-cx = "git add -A && wt step commit --show-prompt | codex exec -m gpt-5.1-codex-mini -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - | jq -sr '[.[] | select(.item.type? == \"agent_message\")] | last.item.text' | git commit -F - && git push -u origin HEAD"
 scp-pi = "git add -A && pi --print --no-prompt-templates --model qwen3.5:35b-a3b-coding-nvfp4 \"$(wt step commit --show-prompt)\" | git commit -F - && git push -u origin HEAD"
 
-# SHIP — commit (chosen backend) → push → open PR. `wt pr` = claude default,
-# and only commits if the tree is dirty; the pr-<x> variants assume you have
-# changes to commit. Conventional prefix comes from template-append below.
-pr = "{ git diff --quiet && git diff --cached --quiet || wt step commit || git commit; } && git push -u origin HEAD && gh pr create --fill {{ args }}"
+# SHIP — commit → validate → push → compose through the repository's
+# .claude/skills/pr-composer → verify title/body/label → mark ready.
+# New PRs stay draft if composition or validation fails. Supports --draft.
+pr = "~/.local/bin/wt-pr-compose {{ args }}"
 pr-cx = "git add -A && wt step commit --show-prompt | codex exec -m gpt-5.1-codex-mini -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - | jq -sr '[.[] | select(.item.type? == \"agent_message\")] | last.item.text' | git commit -F - && git push -u origin HEAD && gh pr create --fill {{ args }}"
 pr-oc = "git add -A && wt step commit --show-prompt | opencode run -m anthropic/claude-haiku-4.5 --variant fast | git commit -F - && git push -u origin HEAD && gh pr create --fill {{ args }}"
 pr-co = "git add -A && copilot --output-format text -p \"$(wt step commit --show-prompt)\" | git commit -F - && git push -u origin HEAD && gh pr create --fill {{ args }}"
@@ -64,7 +64,7 @@ summary = true
 
 [commit.generation]
 # Generate commit messages with Claude Code (haiku, text-only, fast).
-command = "CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p --no-session-persistence --model=haiku --tools='' --disable-slash-commands --setting-sources='' --system-prompt=''"
+command = "~/.local/bin/wt-claude-commit"
 
 # Append the Conventional Commits rule to worktrunk's default prompt (keeps its
 # diff/style handling). Drives the PR title prefix the GitHub auto-labeler reads.
