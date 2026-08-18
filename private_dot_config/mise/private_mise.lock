@@ -424,21 +424,17 @@ url_api = "https://api.github.com/repos/twpayne/chezmoi/releases/assets/49917393
 provenance = "cosign"
 
 [[tools.claude]]
-version = "2.1.234"
+version = "2.1.235"
 backend = "aqua:anthropics/claude-code"
 
 [tools.claude."platforms.linux-arm64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.234/linux-arm64/claude"
-
-[tools.claude."platforms.linux-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.234/linux-x64/claude"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.235/linux-arm64/claude"
 
 [tools.claude."platforms.macos-arm64"]
-checksum = "blake3:8ec79a5c65d1de044c908a49fe2e9434a7088a216d1ab1507f8f3659483a39fe"
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.234/darwin-arm64/claude"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.235/darwin-arm64/claude"
 
 [tools.claude."platforms.macos-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.234/darwin-x64/claude"
+url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.235/darwin-x64/claude"
 
 [[tools.codex]]
 version = "0.147.0"
@@ -1605,8 +1601,11 @@ version = "3.24.0"
 backend = "npm:@mcpjam/cli"
 
 [[tools."npm:@mcpjam/inspector"]]
-version = "2.34.0"
+version = "2.40.0"
 backend = "npm:@mcpjam/inspector"
+
+[tools."npm:@mcpjam/inspector".options]
+trust_policy_excludes = '["cytoscape@3.34.1"]'
 
 [[tools."npm:@mermaid-js/mermaid-cli"]]
 version = "11.16.0"
