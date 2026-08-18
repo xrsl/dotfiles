@@ -125,13 +125,16 @@ bottom = "latest"
 "github:hjr265/gittop" = "latest"
 "cargo:heroheman/whathaveidone" = { version = "latest", os = ["macos"] }
 "github:rikeda71/ghostty-pane-splitter" = { version = "latest", os = ["macos"] }
-"npm:@mcpjam/inspector" = "latest"
+"npm:@mcpjam/inspector" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
 "npm:@mcpjam/cli" = "latest"
 "npm:@modelcontextprotocol/inspector" = "latest"
 "github:jkfran/killport" = "latest"
 crane = "latest"
 "npm:@apify/mcpc" = "latest"
 "github:lightpanda-io/browser" = "latest"
+"github:tt-a1i/archify" = "latest"
+"github:vercel-labs/agent-browser" = "latest"
+"npm:@openai/codex-security" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
