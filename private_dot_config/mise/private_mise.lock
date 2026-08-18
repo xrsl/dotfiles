@@ -430,9 +430,6 @@ backend = "aqua:anthropics/claude-code"
 [tools.claude."platforms.linux-arm64"]
 url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.235/linux-arm64/claude"
 
-[tools.claude."platforms.linux-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.235/linux-x64/claude"
-
 [tools.claude."platforms.macos-arm64"]
 checksum = "blake3:ad36b4b12eebf6f94039655f05bad203e41a2da34cdc7decf66e8cad048808b4"
 url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.235/darwin-arm64/claude"
