@@ -6,7 +6,7 @@ export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 # SSH_CONNECTION rather than socket-exists means a host pane started before
 # 1Password unlocked still targets the agent and self-heals once it is up.
 _onepassword_ssh_agent="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
-if [[ -z "$SSH_CONNECTION" && "$OSTYPE" == darwin* ]]; then
+if [[ -z "${SSH_CONNECTION:-}" && "$OSTYPE" == darwin* ]]; then
     export SSH_AUTH_SOCK="$_onepassword_ssh_agent"
 fi
 unset _onepassword_ssh_agent
