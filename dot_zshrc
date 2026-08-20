@@ -233,7 +233,14 @@ if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)
 
 # Just
 alias j=just
-alias .j='just --justfile ~/.justfile --working-directory .'
+# A function, not an alias: just's completion is clap-dynamic, and passing
+# --justfile/--working-directory on the command line makes it stop treating the
+# positional as a recipe and fall back to path completion, which is why
+# `.j llm::<TAB>` offered directories. The env vars do the same job invisibly,
+# leaving a bare `just` for the completer to read. compdef because a function,
+# unlike an alias, does not inherit just's completion.
+.j() { JUST_JUSTFILE="$HOME/.justfile" JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
+compdef _just .j
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
@@ -244,7 +251,7 @@ alias cxc='codex --yolo resume'
 alias co='copilot --autopilot --allow-all-tools'
 alias coc='copilot --autopilot --allow-all-tools --resume'
 alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
-alias pq='pi --model qwen3.8:27b'
+alias pq='pi --provider optiq --model qwen3.8:27b'
 alias cr="crush --yolo"
 alias crc="crush --yolo --continue"
 
