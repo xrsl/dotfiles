@@ -92,7 +92,14 @@ opencode = "latest"
 codex = "latest"
 agy = "latest"
 pi = "latest"
-"npm:@slidev/cli" = "latest"
+# cytoscape 3.34.1 is a hand publish by the project owner (2026-08-11) with no attestation, while
+# 3.33.4 and 3.34.0 before it were published from GitHub Actions with SLSA provenance, so mise's
+# no-downgrade trust policy reads it as a trust downgrade. Reviewed: the v3.34.1 GitHub release is
+# by the same maintainer, and the tag diff is nine ordinary commits plus the dist/ rebuild - no new
+# dependencies, no install scripts. Slidev reaches it transitively through mermaid, which depends on
+# cytoscape ^3.34.0. Pinned to the exact version so a future manual 3.34.x publish re-triggers this
+# review instead of inheriting a blanket pass.
+"npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
 pnpm = "latest"
 eza = "0.23.4"
 zizmor = "latest"
