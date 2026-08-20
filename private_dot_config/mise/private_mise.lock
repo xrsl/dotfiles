@@ -1722,6 +1722,10 @@ checksum = "sha256:808cf02a93cd601d3ea05d47dc15c45074b120ac81decc8644cd3e40a3582
 url = "https://github.com/earendil-works/pi/releases/download/v0.84.2/pi-darwin-x64.tar.gz"
 url_api = "https://api.github.com/repos/earendil-works/pi/releases/assets/514255759"
 
+[[tools."pipx:mlx-optiq"]]
+version = "0.4.25"
+backend = "pipx:mlx-optiq"
+
 [[tools.pnpm]]
 version = "11.22.0"
 backend = "aqua:pnpm/pnpm"

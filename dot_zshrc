@@ -244,7 +244,7 @@ alias cxc='codex --yolo resume'
 alias co='copilot --autopilot --allow-all-tools'
 alias coc='copilot --autopilot --allow-all-tools --resume'
 alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
-alias pq='pi --model qwen3.5:35b-a3b-coding-nvfp4'
+alias pq='pi --model qwen3.8:27b'
 alias cr="crush --yolo"
 alias crc="crush --yolo --continue"
 
