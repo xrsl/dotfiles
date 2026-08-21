@@ -68,6 +68,34 @@ checksum = "sha256:af48ab23e69caefe1fb9b14efd7e1aea8cc46db2a6191afa8949b28afdd25
 url = "https://github.com/google-antigravity/antigravity-cli/releases/download/1.1.17/agy_cli_mac_x64.tar.gz"
 url_api = "https://api.github.com/repos/google-antigravity/antigravity-cli/releases/assets/522855956"
 
+[[tools."aqua:Byron/dua-cli"]]
+version = "2.42.1"
+backend = "aqua:Byron/dua-cli"
+
+[tools."aqua:Byron/dua-cli"."platforms.linux-arm64"]
+checksum = "sha256:3b68248d4b6c4b05042f1ba7579502cc6a62fbe903be3871b54f3fd99fd5c98d"
+url = "https://github.com/Byron/dua-cli/releases/download/v2.42.1/dua-v2.42.1-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/Byron/dua-cli/releases/assets/515321877"
+provenance = "github-attestations"
+
+[tools."aqua:Byron/dua-cli"."platforms.linux-x64"]
+checksum = "sha256:897e1f394c696c5be81670f95fb457c89ee35e898aa3100f95b7abf1563bf329"
+url = "https://github.com/Byron/dua-cli/releases/download/v2.42.1/dua-v2.42.1-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/Byron/dua-cli/releases/assets/515321819"
+provenance = "github-attestations"
+
+[tools."aqua:Byron/dua-cli"."platforms.macos-arm64"]
+checksum = "sha256:7568c5960074f4250781fcddd1d8bac0178b3cf2cf22f76377dcc63121bf7e81"
+url = "https://github.com/Byron/dua-cli/releases/download/v2.42.1/dua-v2.42.1-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/Byron/dua-cli/releases/assets/515321170"
+provenance = "github-attestations"
+
+[tools."aqua:Byron/dua-cli"."platforms.macos-x64"]
+checksum = "sha256:7568c5960074f4250781fcddd1d8bac0178b3cf2cf22f76377dcc63121bf7e81"
+url = "https://github.com/Byron/dua-cli/releases/download/v2.42.1/dua-v2.42.1-x86_64-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/Byron/dua-cli/releases/assets/515321170"
+provenance = "github-attestations"
+
 [[tools."aqua:asciinema/agg"]]
 version = "1.9.0"
 backend = "aqua:asciinema/agg"
@@ -427,16 +455,24 @@ version = "2.1.238"
 backend = "aqua:anthropics/claude-code"
 
 [tools.claude."platforms.linux-arm64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.238/linux-arm64/claude"
+checksum = "sha256:304d1cb6043935f2cd95e14b7a85843220d3e71afdd0dc8b1f4e90b574d4c9cb"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.238/claude-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/522593179"
 
 [tools.claude."platforms.linux-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.238/linux-x64/claude"
+checksum = "sha256:1504400055a4427392cf27ccb3f93b4aa9566b6dadd1dfd98279cd25f79ce490"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.238/claude-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/522593336"
 
 [tools.claude."platforms.macos-arm64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.238/darwin-arm64/claude"
+checksum = "sha256:342ca2606ee1f37c8ce9bc3e3b71b23b6f3fd48f9974f389cd71ec32c9c65858"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.238/claude-darwin-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/522593184"
 
 [tools.claude."platforms.macos-x64"]
-url = "https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/claude-code-releases/2.1.238/darwin-x64/claude"
+checksum = "sha256:79e5a4707513ca9d0f811d400356faa58e80ae9add0809bacf641597e64d0f3c"
+url = "https://github.com/anthropics/claude-code/releases/download/v2.1.238/claude-darwin-x64.tar.gz"
+url_api = "https://api.github.com/repos/anthropics/claude-code/releases/assets/522593185"
 
 [[tools.codex]]
 version = "0.149.0"
@@ -1643,7 +1679,7 @@ backend = "npm:@slidev/cli"
 trust_policy_excludes = '["cytoscape@3.34.1"]'
 
 [[tools."npm:@upstash/context7-mcp"]]
-version = "4.0.2"
+version = "4.0.3"
 backend = "npm:@upstash/context7-mcp"
 
 [[tools."npm:@z_ai/coding-helper"]]
@@ -1683,28 +1719,28 @@ version = "4.13.0"
 backend = "npm:tokscale"
 
 [[tools.opencode]]
-version = "1.18.19"
+version = "1.18.20"
 backend = "aqua:anomalyco/opencode"
 
 [tools.opencode."platforms.linux-arm64"]
-checksum = "sha256:506f98a1f618551f1f6fc5dcf591f824bef9d6819d40b27928ad7febcb7c363b"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.19/opencode-linux-arm64.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/521836933"
+checksum = "sha256:4c85612e92e8bca95628cadf7dcd92d4150105954004758b2910f868d97ba741"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.20/opencode-linux-arm64.tar.gz"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/523422343"
 
 [tools.opencode."platforms.linux-x64"]
-checksum = "sha256:7bb35487c55f9957f5d91ae60be6fa49fc8f74629c210c1719ed75fdbf7e2bd9"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.19/opencode-linux-x64.tar.gz"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/521837205"
+checksum = "sha256:8603214aa1e2e18f9312360c9360dfae6174f5cff6dc4f72b6045c80608af4d4"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.20/opencode-linux-x64.tar.gz"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/523422470"
 
 [tools.opencode."platforms.macos-arm64"]
-checksum = "sha256:0026326bd77a3277ab3726be237410b19389f7829e8bb3c82dfaf9044162067c"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.19/opencode-darwin-arm64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/521836784"
+checksum = "sha256:b483e547c029b4f0ba381f0d0c5b420bec48c24c2bbec1fb7f22252bae83da46"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.20/opencode-darwin-arm64.zip"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/523422194"
 
 [tools.opencode."platforms.macos-x64"]
-checksum = "sha256:ee495d7c30263c2cecb81a4558a9c4d29ac7b27c1df822e9d344a69cb56a75c3"
-url = "https://github.com/anomalyco/opencode/releases/download/v1.18.19/opencode-darwin-x64.zip"
-url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/521836928"
+checksum = "sha256:abff81c995a137273526044b528ae0dc66b1aafdebd47198a875e7700a571340"
+url = "https://github.com/anomalyco/opencode/releases/download/v1.18.20/opencode-darwin-x64.zip"
+url_api = "https://api.github.com/repos/anomalyco/opencode/releases/assets/523422273"
 
 [[tools.pi]]
 version = "0.84.2"
@@ -1823,7 +1859,7 @@ url = "https://github.com/astral-sh/python-build-standalone/releases/download/20
 provenance = "github-attestations"
 
 [tools.python."platforms.macos-arm64"]
-checksum = "blake3:2658330816d6c6b6f99a4b92c24c14a1fef09caa072952e799815d01e60e2911"
+checksum = "sha256:423717c485b9ee7822590b9d973c1b5fb2cda0fe43448ab82a3d44f823bd329c"
 url = "https://github.com/astral-sh/python-build-standalone/releases/download/20260814/cpython-3.14.7+20260814-aarch64-apple-darwin-install_only_stripped.tar.gz"
 provenance = "github-attestations"
 

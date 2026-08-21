@@ -10,3 +10,15 @@ if [[ -z "${SSH_CONNECTION:-}" && "$OSTYPE" == darwin* ]]; then
     export SSH_AUTH_SOCK="$_onepassword_ssh_agent"
 fi
 unset _onepassword_ssh_agent
+
+# API keys for tools that read them from the environment rather than from their
+# own config (opencode, which now uses {env:...} instead of inline literals).
+# ~/.env is the unmanaged secrets file, but it also sets PATH/LDFLAGS for R/libpq
+# builds — sourcing it wholesale would clobber PATH, so lift out only these keys.
+if [[ -r "$HOME/.env" ]]; then
+    for _k in CONTEXT7_API_KEY ZAI_API_KEY; do
+        _v="$(sed -n "s/^${_k}=//p" "$HOME/.env" | tail -1)"
+        [[ -n "$_v" ]] && export "${_k}=${_v}"
+    done
+    unset _k _v
+fi

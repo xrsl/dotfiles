@@ -160,6 +160,7 @@ crane = "latest"
 "github:vercel-labs/agent-browser" = "latest"
 "npm:@openai/codex-security" = "latest"
 "pipx:mlx-optiq" = "latest"
+"aqua:Byron/dua-cli" = "latest"
 
 [env]
 # Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
