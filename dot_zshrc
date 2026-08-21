@@ -233,22 +233,10 @@ if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)
 
 # Just
 alias j=just
-# A function, not an alias: just's completion is clap-dynamic, and passing
-# --justfile/--working-directory on the command line makes it stop treating the
-# positional as a recipe and fall back to path completion, which is why
-# `.j llm::<TAB>` offered directories. The env vars do the same job invisibly,
-# leaving a bare `just` for the completer to read. compdef because a function,
-# unlike an alias, does not inherit just's completion.
-.j() { JUST_JUSTFILE="$HOME/.justfile" JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
-# The completer shells out to `just` itself, so it needs the same env the function
-# sets. A prefix on the function body would not reach it: that runs at execution
-# time, while completion runs here. Without this, TAB completes against whatever
-# justfile the current directory resolves to instead of the global one.
-_dot_j() {
-  local -x JUST_JUSTFILE="$HOME/.justfile" JUST_WORKING_DIRECTORY="$PWD"
-  _just "$@"
-}
-compdef _dot_j .j
+# -g is just's own global-justfile flag: it resolves ~/.justfile, runs recipes in
+# the invocation directory, and unlike an explicit --justfile leaves the completer
+# able to see the positional as a recipe.
+alias .j='just -g'
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
