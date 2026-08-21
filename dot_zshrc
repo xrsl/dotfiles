@@ -240,7 +240,15 @@ alias j=just
 # leaving a bare `just` for the completer to read. compdef because a function,
 # unlike an alias, does not inherit just's completion.
 .j() { JUST_JUSTFILE="$HOME/.justfile" JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
-compdef _just .j
+# The completer shells out to `just` itself, so it needs the same env the function
+# sets. A prefix on the function body would not reach it: that runs at execution
+# time, while completion runs here. Without this, TAB completes against whatever
+# justfile the current directory resolves to instead of the global one.
+_dot_j() {
+  local -x JUST_JUSTFILE="$HOME/.justfile" JUST_WORKING_DIRECTORY="$PWD"
+  _just "$@"
+}
+compdef _dot_j .j
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
