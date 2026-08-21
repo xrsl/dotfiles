@@ -133,11 +133,28 @@ bottom = "latest"
 "cargo:heroheman/whathaveidone" = { version = "latest", os = ["macos"] }
 "github:rikeda71/ghostty-pane-splitter" = { version = "latest", os = ["macos"] }
 "npm:@mcpjam/inspector" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
-"npm:@mcpjam/cli" = "latest"
-"npm:@modelcontextprotocol/inspector" = "latest"
+# mise's npm installer refuses a "trust downgrade": `@hono/node-server` publishes 2.x from GitHub
+# Actions with SLSA provenance, while `1.19.15` - the `latest-1` maintenance release this tree
+# resolves - was published by hand by the project owner with no attestation, so the newer-but-
+# unattested 1.x release looks like a regression in trust. Hono simply never adopted trusted
+# publishing on the maintenance branch. Without this exclusion the install fails outright and the
+# lockfile entry stays frozen at whatever version last succeeded. Same exclusion as the one
+# ~/ghub/liftroi-mcp-server/mise.toml carries for the same two packages.
+"npm:@mcpjam/cli" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
+# Unrelated to Hono: this tree reaches `pino@9.14.0`, a maintenance backport the project owner
+# published by hand on 2025-10-18 - fifteen days after 10.0.0 shipped from GitHub Actions with
+# SLSA provenance - so mise reads the newer-but-unattested 9.x release as a trust downgrade.
+# Pinned to the exact version so a future 9.x backport re-triggers the review. Drop it once the
+# Inspector moves to pino 10.x.
+"npm:@modelcontextprotocol/inspector" = { version = "latest", trust_policy_excludes = [
+  "pino@9.14.0",
+] }
 "github:jkfran/killport" = "latest"
 crane = "latest"
-"npm:@apify/mcpc" = "latest"
+# Same Hono trust downgrade as `npm:@mcpjam/cli` above: mcpc reaches `@hono/node-server@1.19.15`
+# through `@modelcontextprotocol/sdk`, so this is a property of the MCP TypeScript ecosystem
+# rather than of any one tool.
+"npm:@apify/mcpc" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
 "github:lightpanda-io/browser" = "latest"
 "github:tt-a1i/archify" = "latest"
 "github:vercel-labs/agent-browser" = "latest"
