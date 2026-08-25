@@ -244,6 +244,8 @@ alias ccc='claude -c --dangerously-skip-permissions'
 alias ccr='claude -r --dangerously-skip-permissions'
 alias cx='codex --yolo'
 alias cxc='codex --yolo resume'
+# Copilot CLI only emits token usage via OTel file export; tokscale reads ~/.copilot/otel
+export COPILOT_OTEL_FILE_EXPORTER_PATH="$HOME/.copilot/otel"
 alias co='copilot --autopilot --allow-all-tools'
 alias coc='copilot --autopilot --allow-all-tools --resume'
 alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
