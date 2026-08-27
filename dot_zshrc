@@ -304,6 +304,7 @@ wtcp() {
 }
 alias wtrm='wt rm'       # 'wt remove -D': removes worktree AND force-deletes the branch (even unmerged)
 alias wth='wt home'
+alias wtpr='wt pr'      # user alias -> ~/.local/bin/wt-pr-compose
 
 export EDITOR="$HOME/.local/bin/fresh-wait"
 
@@ -690,6 +691,14 @@ ghrc() {
 
   ( cd "$HOME/ghub" && gh repo clone "$slug" ${dirarg:+"$dirarg"} "$@" ) || return
   cd "$dest"
+}
+
+# 1Password CLI
+alias opil='op item list'
+# opig <ITEM> — reveal an item's credential field, e.g. `opig MP_STG_API_KEY`
+opig() {
+  if [ -z "$1" ]; then echo "usage: opig <item>" >&2; return 1; fi
+  op item get "$1" --reveal --fields label=credential
 }
 
 # files
