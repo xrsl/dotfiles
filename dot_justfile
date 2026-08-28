@@ -6,6 +6,7 @@ set script-interpreter := ['uv', 'run', '--script']
 export UV_SYSTEM_CERTS := "true"
 
 
+mod ado '~/ghub/ado/justfile'
 mod aws '~/ghub/aws/justfile'
 mod docker '~/ghub/docker/justfile'
 mod llm '~/ghub/llm/justfile'
