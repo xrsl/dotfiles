@@ -117,7 +117,6 @@ yq = "latest"
 zellij = "latest"
 zizmor = "latest"
 zoxide = "latest"
-"npm:@mdesjardins/prequel" = "latest"
 
 [env]
 UV_PYTHON = { value = "{{ tools.python.path }}", tools = true }
