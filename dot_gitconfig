@@ -70,3 +70,6 @@
 [url "https://gist.github.com/"]
 	insteadOf = git@gist.github.com:
 	insteadOf = ssh://git@gist.github.com/
+[alias]
+	pr = "!f() { exec az repos pr \"$@\"; }; f"
+	repo = "!f() { exec az repos \"$@\"; }; f"

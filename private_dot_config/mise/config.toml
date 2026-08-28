@@ -1,170 +1,125 @@
-# mise global config — managed by chezmoi (source: private_dot_config/mise/config.toml)
-# Docs: https://mise.jdx.dev  •  Reproduce on a new machine with: mise install
-
 [tools]
 1password = "latest"
+"npm:9router" = "latest"
+actionlint = "latest"
+"github:vercel-labs/agent-browser" = "latest"
 "aqua:asciinema/agg" = "latest"
-rg = "latest"
-saml2aws = "latest"
-kubectx = "latest"
-kubens = "latest"
-zoxide = "latest"
-fx = "latest"
-trivy = "latest"
+agy = "latest"
+"github:tt-a1i/archify" = "latest"
 argocd = "latest"
-uv = "latest"
 atuin = "latest"
 aws = "latest"
-just = "latest"
-glow = "latest"
-gum = "latest"
-gh = "latest"
-typos = "latest"
-cue = "latest"
-delta = "latest"
-gitui = "latest"
-golangci-lint = "latest"
-goreleaser = "latest"
-helm = "latest"
-lazygit = "latest"
-jq = "latest"
-fzf = "latest"
-minikube = "latest"
-# Colima needs limactl; Homebrew previously supplied this dependency implicitly.
-lima = "latest"
-yq = "latest"
-"github:ogulcancelik/herdr" = "latest"
-actionlint = "latest"
-bat = "latest"
-fd = "latest"
-starship = "latest"
-sheldon = "latest"   # zsh plugin manager (autosuggestions + syntax-highlighting)
-yazi = "latest"
-tombi = "latest"
-typst = "latest"
-watchexec = "latest"
-superfile = "latest"
-zellij = "latest"
-bun = "latest"
-# CLI for Git worktree management.
-worktrunk = "latest"
-chezmoi = "latest"
-colima = "latest"
-dagger = "latest"
-go = "latest"
-# The leading v avoids mise's nested-module fallback to the invalid 0.23.0 tag.
-"go:golang.org/x/tools/gopls" = "v0.23.0"
-"go:golang.org/x/vuln/cmd/govulncheck" = "latest"
-"github:jnsahaj/lumen" = "latest"
-"github:lusingander/serie" = "latest"
-"github:sinelaw/fresh" = "latest"
-# No registry short name; prefer the prebuilt release over compiling with Cargo.
-"github:terror/just-lsp" = "latest"
-
-# Pin Node to the current LTS. This takes Node out of Homebrew's hands (was v26,
-# a bleeding-edge line) so `brew upgrade` can never break your global CLI tools.
-node = "lts"
-"npm:9router" = "latest"
-"npm:@colbymchenry/codegraph" = "latest"
-"npm:@kilocode/cli" = "latest"
-"npm:@marp-team/marp-cli" = "latest"
-"npm:@mermaid-js/mermaid-cli" = "latest"
-"npm:@robzolkos/lazypi" = "latest"
-"npm:@z_ai/coding-helper" = "latest"
-"npm:cline" = "latest"
-"npm:openskills" = "latest"
-"npm:postman-cli" = "latest"
-"npm:slop-scan" = "latest"
-"npm:tokscale" = "latest"
-python = "latest"
-# Rust toolchain — mise's `core:rust` does NOT install a standalone Rust; it installs
-# rustup if absent and drives toolchains through it (standard ~/.rustup and ~/.cargo;
-# override with MISE_RUSTUP_HOME / MISE_CARGO_HOME to isolate). rustup stays the real
-# manager (components, targets, nightly); this line only declares Rust so `mise install`
-# provisions it reproducibly and can build the cargo:* tools above.
-# Docs: https://mise.jdx.dev/lang/rust.html
-rust = "latest"
-"aqua:nushell/nushell" = "latest"
-cspell = "latest"
-hunk = "latest"
-copilot = "latest"
-opencode = "latest"
-codex = "latest"
-agy = "latest"
-pi = "0.84.3"
-# cytoscape 3.34.1 is a hand publish by the project owner (2026-08-11) with no attestation, while
-# 3.33.4 and 3.34.0 before it were published from GitHub Actions with SLSA provenance, so mise's
-# no-downgrade trust policy reads it as a trust downgrade. Reviewed: the v3.34.1 GitHub release is
-# by the same maintainer, and the tag diff is nine ordinary commits plus the dist/ rebuild - no new
-# dependencies, no install scripts. Slidev reaches it transitively through mermaid, which depends on
-# cytoscape ^3.34.0. Pinned to the exact version so a future manual 3.34.x publish re-triggers this
-# review instead of inheriting a blanket pass.
-"npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
-pnpm = "latest"
-eza = "0.23.4"
-zizmor = "latest"
-rclone = "latest"
-"npm:@upstash/context7-mcp" = "latest"
-"npm:ctx7" = "latest"
-tokei = "latest"
 azure = { version = "latest", uvx_args = "--prerelease=allow" }
-kubectl = "latest"
-docker-cli = "latest"
-neovim = "latest"
-crush = "latest"
-"github:backnotprop/plannotator" = "latest"
-buf = "latest"
-protobuf = "latest"
-"github:dlvhdr/diffnav" = "latest"
-skate = "latest"
-prek = "latest"
-claude = "latest"
-"aqua:cirruslabs/cirrus-cli" = "latest"
-rumdl = "latest"
-lazyssh = "latest"
+bat = "latest"
 bottom = "latest"
-"github:cesarferreira/stax" = "latest"
-"cargo:toppy" = "latest"
-"aqua:jorgerojas26/lazysql" = "latest"
-"aqua:cirruslabs/tart" = { version = "latest", os = ["macos"] }
-"npm:pi-skill-gate" = "latest"
+buf = "latest"
+bun = "latest"
+chezmoi = "latest"
 "github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true" }
-"github:hjr265/gittop" = "latest"
-"github:rikeda71/ghostty-pane-splitter" = { version = "latest", os = ["macos"] }
-"npm:@mcpjam/inspector" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
-# mise's npm installer refuses a "trust downgrade": `@hono/node-server` publishes 2.x from GitHub
-# Actions with SLSA provenance, while `1.19.15` - the `latest-1` maintenance release this tree
-# resolves - was published by hand by the project owner with no attestation, so the newer-but-
-# unattested 1.x release looks like a regression in trust. Hono simply never adopted trusted
-# publishing on the maintenance branch. Without this exclusion the install fails outright and the
-# lockfile entry stays frozen at whatever version last succeeded. Same exclusion as the one
-# ~/ghub/liftroi-mcp-server/mise.toml carries for the same two packages.
+"aqua:cirruslabs/cirrus-cli" = "latest"
+claude = "latest"
+"npm:@kilocode/cli" = "latest"
 "npm:@mcpjam/cli" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
-# Unrelated to Hono: this tree reaches `pino@9.14.0`, a maintenance backport the project owner
-# published by hand on 2025-10-18 - fifteen days after 10.0.0 shipped from GitHub Actions with
-# SLSA provenance - so mise reads the newer-but-unattested 9.x release as a trust downgrade.
-# Pinned to the exact version so a future 9.x backport re-triggers the review. Drop it once the
-# Inspector moves to pino 10.x.
-"npm:@modelcontextprotocol/inspector" = { version = "latest", trust_policy_excludes = [
-  "pino@9.14.0",
-] }
-"github:jkfran/killport" = "latest"
-crane = "latest"
-# Same Hono trust downgrade as `npm:@mcpjam/cli` above: mcpc reaches `@hono/node-server@1.19.15`
-# through `@modelcontextprotocol/sdk`, so this is a property of the MCP TypeScript ecosystem
-# rather than of any one tool.
-"npm:@apify/mcpc" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
-"github:lightpanda-io/browser" = "latest"
-"github:tt-a1i/archify" = "latest"
-"github:vercel-labs/agent-browser" = "latest"
+"npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
+"npm:cline" = "latest"
+"npm:@colbymchenry/codegraph" = "latest"
+codex = "latest"
 "npm:@openai/codex-security" = "latest"
-"pipx:mlx-optiq" = "latest"
+"npm:@z_ai/coding-helper" = "latest"
+colima = "latest"
+"npm:@upstash/context7-mcp" = "latest"
+copilot = "latest"
+crane = "latest"
+crush = "latest"
+"npm:ctx7" = "latest"
+dagger = "latest"
+delta = "latest"
+"github:dlvhdr/diffnav" = "latest"
+docker-cli = "latest"
 "aqua:Byron/dua-cli" = "latest"
-"pipx:markitdown" = { version = "latest", extras = "all" }
+eza = "0.23.4"
+fd = "latest"
+"github:sinelaw/fresh" = "latest"
+fx = "latest"
+fzf = "latest"
+gh = "latest"
+"github:rikeda71/ghostty-pane-splitter" = { version = "latest", os = ["macos"] }
+"github:hjr265/gittop" = "latest"
+gitui = "latest"
+glow = "latest"
+go = "latest"
+golangci-lint = "latest"
+"go:golang.org/x/tools/gopls" = "v0.23.0"
+goreleaser = "latest"
+"go:golang.org/x/vuln/cmd/govulncheck" = "latest"
+gum = "latest"
+helm = "latest"
+"github:ogulcancelik/herdr" = "latest"
+hunk = "latest"
+"npm:@mcpjam/inspector" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
+"npm:@modelcontextprotocol/inspector" = { version = "latest", trust_policy_excludes = ["pino@9.14.0"] }
+jq = "latest"
+just = "latest"
+"github:terror/just-lsp" = "latest"
+"github:jkfran/killport" = "latest"
+kubectl = "latest"
+kubectx = "latest"
+kubens = "latest"
+lazygit = "latest"
+"npm:@robzolkos/lazypi" = "latest"
+"aqua:jorgerojas26/lazysql" = "latest"
+lazyssh = "latest"
+lima = "latest"
 "llama.cpp" = { version = "latest", version_prefix = "b" }
+"github:jnsahaj/lumen" = "latest"
+"pipx:markitdown" = { version = "latest", extras = "all" }
+"npm:@marp-team/marp-cli" = "latest"
+"npm:@apify/mcpc" = { version = "latest", trust_policy_excludes = ["@hono/node-server"] }
+"npm:@mermaid-js/mermaid-cli" = "latest"
+minikube = "latest"
+"pipx:mlx-optiq" = "latest"
+neovim = "latest"
+node = "lts"
+"aqua:nushell/nushell" = "latest"
+opencode = "latest"
+"npm:openskills" = "latest"
+pi = "0.84.3"
+"npm:pi-skill-gate" = "latest"
+"github:backnotprop/plannotator" = "latest"
+pnpm = "latest"
+"npm:postman-cli" = "latest"
+prek = "latest"
+protobuf = "latest"
+python = "latest"
+rclone = "latest"
+rg = "latest"
+rumdl = "latest"
+rust = "latest"
+saml2aws = "latest"
+"github:lusingander/serie" = "latest"
+sheldon = "latest"
+skate = "latest"
+"npm:slop-scan" = "latest"
+starship = "latest"
+"github:cesarferreira/stax" = "latest"
+superfile = "latest"
+"aqua:cirruslabs/tart" = { version = "latest", os = ["macos"] }
+tokei = "latest"
+"npm:tokscale" = "latest"
+"cargo:toppy" = "latest"
+trivy = "latest"
+typos = "latest"
+uv = "latest"
+watchexec = "latest"
+worktrunk = "latest"
+yazi = "latest"
+yq = "latest"
+zellij = "latest"
+zizmor = "latest"
+zoxide = "latest"
+"npm:@mdesjardins/prequel" = "latest"
 
 [env]
-# Hand uv the mise-managed interpreter, otherwise uv downloads a second Python of its own and every .venv breaks the moment mise's rolls forward.
 UV_PYTHON = { value = "{{ tools.python.path }}", tools = true }
 
 [settings]

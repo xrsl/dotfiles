@@ -694,11 +694,78 @@ ghrc() {
 }
 
 # 1Password CLI
-alias opil='op item list'
+# opil [op item list flags] — list Employee vault items, newest saved first
+opil() {
+  local json
+  json=$(op item list --vault Employee --format json "$@") || return
+  print -r -- "$json" | python3 -c '
+import json, sys
+from datetime import datetime
+items = json.load(sys.stdin)
+items.sort(key=lambda i: i.get("updated_at", ""), reverse=True)
+if not items:
+    sys.exit(0)
+rows = []
+for n, i in enumerate(items, 1):
+    ts = datetime.fromisoformat(i["updated_at"]).astimezone().strftime("%Y-%m-%d %H:%M")
+    rows.append((str(n), i["title"], ts, i["id"]))
+head = ("#", "KEY", "UPDATED", "ID")
+w = [max(len(r[c]) for r in (head, *rows)) for c in range(4)]
+def line(r):
+    return f"{r[0]:>{w[0]}}  {r[1]:<{w[1]}}  {r[2]:<{w[2]}}  {r[3]}".rstrip()
+gray, reset = ("\033[90m", "\033[0m") if sys.stdout.isatty() else ("", "")
+print(gray + line(head) + reset)
+for r in rows:
+    print(line(r))
+'
+}
 # opig <ITEM> — reveal an item's credential field, e.g. `opig MP_STG_API_KEY`
 opig() {
   if [ -z "$1" ]; then echo "usage: opig <item>" >&2; return 1; fi
-  op item get "$1" --reveal --fields label=credential
+  op item get "$1" --vault Employee --reveal --fields label=credential
+}
+# opic <ITEM> — copy an item's credential to the clipboard, printing nothing
+opic() {
+  if [ -z "$1" ]; then echo "usage: opic <item>" >&2; return 1; fi
+  op item get "$1" --vault Employee --reveal --fields label=credential \
+    | tr -d '\n' | pbcopy
+}
+# opis <ITEM> [VALUE] — save a key in the same shape as MP_STG_API_KEY
+# (Employee vault, API Credential, username=<ITEM>, credential=<VALUE>, type=bearer).
+# Omit VALUE to be prompted without echoing it (keeps the secret out of history).
+# Updates the credential in place if the item already exists.
+opis() {
+  if [ -z "$1" ]; then echo "usage: opis <item> [value]" >&2; return 1; fi
+  local item="$1" val="$2"
+  if [ -z "$val" ]; then
+    read -rs "val?value for $item: "
+    echo
+  fi
+  if [ -z "$val" ]; then echo "opis: empty value" >&2; return 1; fi
+  if op item get "$item" --vault Employee >/dev/null 2>&1; then
+    op item edit "$item" --vault Employee "credential=$val" >/dev/null || return
+    echo "opis: updated $item"
+  else
+    op item create --category "API Credential" --title "$item" --vault Employee \
+      "username=$item" "credential=$val" "type=bearer" >/dev/null || return
+    echo "opis: created $item"
+  fi
+}
+# opid <ITEM|ID> [-f] — permanently delete an item by key or ID.
+# Confirms first unless -f is given; there is no undo.
+opid() {
+  if [ -z "$1" ]; then echo "usage: opid <item|id> [-f]" >&2; return 1; fi
+  local item="$1" force="$2" title reply
+  title=$(op item get "$item" --vault Employee --format json 2>/dev/null \
+    | python3 -c 'import json,sys; print(json.load(sys.stdin)["title"])' 2>/dev/null) || {
+    echo "opid: no such item: $item" >&2; return 1
+  }
+  if [ "$force" != "-f" ]; then
+    read -r "reply?delete '$title' from Employee? [y/N] "
+    case "$reply" in [yY]*) ;; *) echo "opid: aborted" >&2; return 1 ;; esac
+  fi
+  op item delete "$item" --vault Employee || return
+  echo "opid: deleted $title"
 }
 
 # files
