@@ -688,7 +688,7 @@ url = "https://download.docker.com/mac/static/stable/aarch64/docker-29.7.2.tgz"
 url = "https://download.docker.com/mac/static/stable/x86_64/docker-29.7.2.tgz"
 
 [[tools.eza]]
-version = "0.23.4"
+version = "0.23.5"
 backend = "asdf:eza"
 
 [[tools.fd]]
@@ -924,6 +924,11 @@ backend = "github:jkfran/killport"
 checksum = "sha256:7b2f524dce0a66f452e28c9d74f9ad3173c0a2459626b181357657d96c1608f4"
 url = "https://github.com/jkfran/killport/releases/download/v2.0.2/killport-aarch64-linux-gnu.tar.gz"
 url_api = "https://api.github.com/repos/jkfran/killport/releases/assets/497717610"
+
+[tools."github:jkfran/killport"."platforms.linux-x64"]
+checksum = "sha256:c65463fe93947ef0f14405a61a1428877801f7aa884db29b71a58b21d83fe80b"
+url = "https://github.com/jkfran/killport/releases/download/v2.0.2/killport-x86_64-linux-gnu.tar.gz"
+url_api = "https://api.github.com/repos/jkfran/killport/releases/assets/497717638"
 
 [tools."github:jkfran/killport"."platforms.macos-arm64"]
 checksum = "sha256:09e7fd05e77d6a3ae1f23bfa1b3a416534a4f32e25986ab4b1f4859f1449e8ff"
@@ -1633,20 +1638,24 @@ url = "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-macos-arm
 url = "https://github.com/neovim/neovim/releases/download/v0.12.5/nvim-macos-x86_64.tar.gz"
 
 [[tools.node]]
-version = "24.19.0"
+version = "24.20.0"
 backend = "core:node"
 
 [tools.node."platforms.linux-arm64"]
-checksum = "sha256:d28c8a5bf0a808f0ed434a1dce8c54ae98f0371c0bd86ac58abc613f73e6643f"
-url = "https://nodejs.org/dist/v24.19.0/node-v24.19.0-linux-arm64.tar.gz"
+checksum = "sha256:3515603e2487879a39bc75716f1a2affd027500c64ba50e845cf72cb33219013"
+url = "https://nodejs.org/dist/v24.20.0/node-v24.20.0-linux-arm64.tar.gz"
+
+[tools.node."platforms.linux-x64"]
+checksum = "sha256:855d581f8a4eb1a8117e3426de25fe02770592febcfb31369aee1ffbfee9e8ec"
+url = "https://nodejs.org/dist/v24.20.0/node-v24.20.0-linux-x64.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:8294b7aa9b03997481c06babf1e8b270c859358f27da57a11509afe537ac381d"
-url = "https://nodejs.org/dist/v24.19.0/node-v24.19.0-darwin-arm64.tar.gz"
+checksum = "sha256:40e5607e5ecb3db9192723776da2d75d966260fc74a7a9e731c1bd67dda96bc8"
+url = "https://nodejs.org/dist/v24.20.0/node-v24.20.0-darwin-arm64.tar.gz"
 
 [tools.node."platforms.macos-x64"]
-checksum = "sha256:d1b5e999db158c62fe8f7267a4476b035d8bd93b1a605bac24a3f0dd166e3316"
-url = "https://nodejs.org/dist/v24.19.0/node-v24.19.0-darwin-x64.tar.gz"
+checksum = "sha256:9e5b2644cf107befb6aefca676b96d3296bc10138096f022ed378d6233ed81f4"
+url = "https://nodejs.org/dist/v24.20.0/node-v24.20.0-darwin-x64.tar.gz"
 
 [[tools."npm:9router"]]
 version = "0.5.55"
@@ -1672,14 +1681,14 @@ version = "4.5.0"
 backend = "npm:@marp-team/marp-cli"
 
 [[tools."npm:@mcpjam/cli"]]
-version = "4.0.0"
+version = "5.2.0"
 backend = "npm:@mcpjam/cli"
 
 [tools."npm:@mcpjam/cli".options]
 trust_policy_excludes = '["@hono/node-server"]'
 
 [[tools."npm:@mcpjam/inspector"]]
-version = "2.46.0"
+version = "3.2.0"
 backend = "npm:@mcpjam/inspector"
 
 [tools."npm:@mcpjam/inspector".options]
@@ -1694,7 +1703,7 @@ version = "11.16.0"
 backend = "npm:@mermaid-js/mermaid-cli"
 
 [[tools."npm:@modelcontextprotocol/inspector"]]
-version = "2.3.0"
+version = "2.4.0"
 backend = "npm:@modelcontextprotocol/inspector"
 
 [tools."npm:@modelcontextprotocol/inspector".options]
