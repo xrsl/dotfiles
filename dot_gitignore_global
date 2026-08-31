@@ -3,5 +3,7 @@ __pycache__/
 .pytest_cache/
 .gitconfig.local
 mise.local.toml
+mise.local.lock
+mise.*.local.lock
 
 **/.claude/settings.local.json
