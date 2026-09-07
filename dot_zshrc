@@ -364,6 +364,10 @@ alias gp="git pull --ff-only"
 alias gP="git push"
 # discard everything since the last commit
 alias gd='git reset --hard HEAD && git clean -fd'
+# list tags newest-first by creation date, with date + annotation subject
+alias gtl="git tag --sort=-creatordate --format='%(color:yellow)%(refname:short)%(color:reset)  %(color:green)%(creatordate:short)%(color:reset)  %(contents:subject)'"
+# lazygit-style commit list: graph, sha, author, relative time, refs, subject
+alias gcl="git log --graph --decorate --format='%C(yellow)%h %C(blue)%<(14,trunc)%an %C(magenta)%<(12,trunc)%ar%C(auto)%d %C(reset)%s'"
 # d — review working-tree changes in diffnav.
 #   d        unified view (default)
 #   d -s     side-by-side view
@@ -399,11 +403,79 @@ dpr() {
 # HUNK — review-first TUI for agent-authored changesets (github.com/modem-dev/hunk).
 # Parallels d/dpr. `hunk diff` reads the repo directly (untracked included);
 # `hunk patch -` reads a precomputed diff from stdin (hunk has no git revset for ranges).
-#   h        working-tree changes
-#   hw       working-tree changes, --watch (stays open beside a running agent)
+#   h        every uncommitted change: staged + unstaged + untracked
+#   hw       the same, --watch (stays open beside a running agent)
 #   hpr      branch changes vs the merge-base with the default branch (what `gh pr diff` shows)
-h()  { command hunk diff "$@"; }
-hw() { command hunk diff --watch "$@"; }
+#   hls      the files `h` is reviewing, each one usable as an `h` pathspec
+#
+# Bare `hunk diff` reviews the unstaged working tree, and `--staged` swaps to the index
+# *instead of* it -- so neither one alone shows a changeset an agent has partly staged.
+# Passing HEAD as the target diffs the working tree against the last commit, which spans
+# both, and untracked files still come along (drop them with --exclude-untracked).
+#
+# hunk's grammar is `diff [target] [-- <pathspec...>]`, so a bare path is read as a *ref*,
+# not a filter: `hunk diff .gitignore` finds no such ref and shows an empty review. These
+# wrappers sort the first argument out instead of making you remember the `--`:
+#   h                 -> diff HEAD                    (everything uncommitted)
+#   h .gitignore      -> diff HEAD -- .gitignore      (path on disk => pathspec)
+#   h HEAD~3 / h main -> diff HEAD~3                  (resolves as a rev => target)
+#   h old.txt new.txt -> diff old.txt new.txt         (two files => compare mode)
+#   h -- a b          -> diff HEAD -- a b             (force pathspec for the two-file case)
+_hunk_argv() {  # sets `reply` to the argv to hand hunk; caller declares it local
+  if (( $# == 0 )) || [[ $1 == -* ]]; then
+    reply=(HEAD "$@")
+  elif (( $# == 2 )) && [[ -f $1 && -f $2 ]]; then
+    reply=("$@")                           # two concrete files: hunk's compare mode
+  elif [[ -e $1 ]]; then
+    reply=(HEAD -- "$@")                   # a path that exists is a filter, never a ref
+  elif git rev-parse --verify --quiet "$1" >/dev/null 2>&1; then
+    reply=("$@")                           # a real rev: use it as the target
+  else
+    reply=(HEAD -- "$@")                   # neither: assume pathspec (glob, deleted file)
+  fi
+}
+h() {
+  local -a reply; _hunk_argv "$@"
+  command hunk diff "${reply[@]}"
+}
+hw() {
+  # --watch has to sit with the target, ahead of any `--`, or hunk reads it as a pathspec.
+  local -a reply; _hunk_argv "$@"
+  command hunk diff "${reply[1]}" --watch "${reply[@]:1}"
+}
+# hls -- the files in `h`'s review, so you can narrow to one without guessing its path.
+# Same set `h` shows (staged + unstaged + untracked, ignored files excluded), in `gs`'s
+# two-letter status shorthand. Renames print their new path and `-uall` lists untracked
+# directories file by file, because those are the names a pathspec has to match.
+# On a terminal it prints `XY path`; piped, bare paths -- so `h $(hls | fzf)` just works.
+# The columns carry `gs`'s colours: X (index) green, Y (worktree) red, `??` both red, so
+# a file staged and since re-edited reads as MM at a glance. NO_COLOR drops the escapes.
+hls() {
+  git rev-parse --git-dir >/dev/null 2>&1 || { print -u2 "hls: not a git repository"; return 1 }
+  # NB: never `local path` -- zsh ties it to PATH, and a local one empties PATH for the
+  # whole function body, so even `git` stops resolving.
+  local line xy file old x y tty= g='' r='' z=''
+  [[ -t 1 ]] && tty=1
+  [[ -n $tty && -z $NO_COLOR ]] && { g=$'\e[32m' r=$'\e[31m' z=$'\e[0m' }
+  # -z: NUL-delimited and unquoted, so a path with a space or an accent stays verbatim
+  # and can be pasted straight back into `h`. It also splits a rename into two records --
+  # "R  <new>" followed by a bare "<old>" -- so the old name is read off and dropped.
+  git status --porcelain=v1 -z --untracked-files=all "$@" |
+  while IFS= read -r -d '' line; do
+    xy=${line[1,2]}
+    file=${line[4,-1]}
+    [[ $xy == [RC]* ]] && IFS= read -r -d '' old
+    [[ -z $tty ]] && { print -r -- "$file"; continue }
+    if [[ $xy == "??" ]]; then
+      print -r -- "${r}??${z} $file"          # untracked: git paints both columns red
+    else
+      x=${xy[1]} y=${xy[2]}                   # a blank column stays a plain space
+      [[ $x != " " ]] && x="${g}${x}${z}"
+      [[ $y != " " ]] && y="${r}${y}${z}"
+      print -r -- "${x}${y} $file"
+    fi
+  done
+}
 hpr() {
   local base
 
