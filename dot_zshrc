@@ -101,7 +101,13 @@ vmh() {
     print -u2 "vmh: $vm did not come up (no IP after 30s)"
     return 1
   fi
-  herdr --remote "tart-$vm"
+  # herdr 0.9 renders the UI client-side, so the VM's own green accent is ignored.
+  # Re-derive a client config from the real one with only the accent swapped.
+  local cfg="${XDG_CACHE_HOME:-$HOME/.cache}/herdr/vm-config.toml"
+  mkdir -p "${cfg:h}"
+  sed 's|^accent = .*|accent = "#a6e3a1"   # catppuccin Green — remote VM session|' \
+    ~/.config/herdr/config.toml > "$cfg"
+  HERDR_CONFIG_PATH="$cfg" herdr --remote "tart-$vm"
 }
 
 # ── TOOLS ─────────────────────────────────────────────────────────────────────

@@ -25,6 +25,12 @@ show_agent_labels_on_pane_borders = true
 #   Linux VM guest  (ubuntu, os != darwin)         -> soft green
 #   macOS VM guest  (tahoe,  hw.model = VirtualMac*) -> soft magenta
 #   real hardware   (host Mac)                      -> blue
+#
+# CAVEAT (herdr 0.9.0, #3487): the terminal UI now runs in the *client*, so accent
+# is read from the client's config, never the remote server's. Reaching a VM with
+# `vmh <name>` (herdr --remote) therefore ignores the guest branches below — the
+# green/magenta come from HERDR_CONFIG_PATH in vmh() in .zshrc instead. The guest
+# branches only apply when herdr is launched from inside that machine directly.
 {{- if ne .chezmoi.os "darwin" }}
 accent = "#a6e3a1"   # catppuccin Green (soft green) — Linux VM guest (ubuntu)
 {{- else if hasPrefix "VirtualMac" (output "sysctl" "-n" "hw.model" | trim) }}
