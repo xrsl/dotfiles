@@ -110,7 +110,7 @@ yq = "latest"
 zellij = "latest"
 zizmor = "latest"
 zoxide = "latest"
-"aqua:PaulJuliusMartinez/jless" = "latest"
+"aqua:PaulJuliusMartinez/jless" = { version = "latest", os = ["macos", "linux/x64"] }
 cue = "latest"
 "aqua:duckdb/duckdb" = "latest"
 "github:AlexsJones/llmfit" = "latest"
