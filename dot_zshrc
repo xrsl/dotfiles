@@ -366,6 +366,8 @@ alias gP="git push"
 alias gd='git reset --hard HEAD && git clean -fd'
 # list tags newest-first by creation date, with date + annotation subject
 alias gtl="git tag --sort=-creatordate --format='%(color:yellow)%(refname:short)%(color:reset)  %(color:green)%(creatordate:short)%(color:reset)  %(contents:subject)'"
+# list branches (local + remote) newest-first, with date, upstream and subject
+alias gbl="git for-each-ref --exclude='refs/remotes/*/HEAD' --sort=-committerdate refs/heads refs/remotes --format='%(color:red)%(HEAD)%(color:reset) %(color:yellow)%(align:width=40,position=left)%(refname:short)%(end)%(color:reset) %(color:green)%(committerdate:short)%(color:reset)  %(color:blue)%(align:width=14,position=left)%(upstream:short)%(end)%(color:reset) %(contents:subject)'"
 # lazygit-style commit list: graph, sha, author, relative time, refs, subject
 alias gcl="git log --graph --decorate --format='%C(yellow)%h %C(blue)%<(14,trunc)%an %C(magenta)%<(12,trunc)%ar%C(auto)%d %C(reset)%s'"
 # d — review working-tree changes in diffnav.
@@ -863,6 +865,19 @@ function y() {
 	IFS= read -r -d '' cwd < "$tmp"
 	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
 	command rm -f -- "$tmp"
+}
+
+# orgid <slug> — print the Modeling Platform (staging) organization ID for an org slug.
+# Token is read from ~/.config/mpcli/.env (MP_API_STG_TOKEN) so it is never stored here.
+orgid() {
+  if [ -z "$1" ]; then echo "usage: orgid <org-slug>" >&2; return 1; fi
+  local tok=${MP_API_STG_TOKEN:-$(grep -m1 '^MP_API_STG_TOKEN=' ~/.config/mpcli/.env 2>/dev/null | cut -d= -f2-)}
+  if [ -z "$tok" ]; then
+    echo "orgid: no MP_API_STG_TOKEN (env or ~/.config/mpcli/.env)" >&2
+    return 1
+  fi
+  curl -fsS -H "APIApplicationUser: $tok" \
+    "https://api.modeling.staging.bw7.io/api/organizations/$1" | jq -e '.ID'
 }
 
 # Widget plugins (profile "post"): fzf-tab, autosuggestions, you-should-use, then

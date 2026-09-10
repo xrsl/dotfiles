@@ -112,9 +112,15 @@ zizmor = "latest"
 zoxide = "latest"
 "aqua:PaulJuliusMartinez/jless" = "latest"
 cue = "latest"
+"aqua:duckdb/duckdb" = "latest"
+"github:AlexsJones/llmfit" = "latest"
+"pipx:graphifyy" = "latest"
+"github:atanunq/viu" = "latest"
 
 [env]
-UV_PYTHON = { value = "{{ tools.python.path }}", tools = true }
+# A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
+# pyvenv.cfg records the install dir, so uv saw a mismatch and rebuilt .venv on every call.
+UV_PYTHON = "3.14"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node", "python"]

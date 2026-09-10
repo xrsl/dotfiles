@@ -1,5 +1,18 @@
 skip-commit-generation-prompt = true
 
+# Carry a gitignored .env into every new worktree, for every repo.
+#
+# pre-start, not post-start: post-* hooks run in the background, so `wt switch --create -x <cmd>`
+# and the first command typed in a fresh worktree can both beat the copy and still see no .env.
+# Tools that read credentials from .env then fall through to whatever their default is — in
+# liftroi-mcp that is the literal client "test", and Keycloak answers "Client not found", which
+# reads as a broken recipe rather than a missing file.
+#
+# A repo with no .env in its primary worktree is a no-op, not an error; that is what the trailing
+# `|| true` is for. This moves a secret between two directories the same person owns, and .env
+# stays gitignored in the copy, so it cannot reach a commit.
+pre-start.env = "test -f '{{ primary_worktree_path }}/.env' && cp '{{ primary_worktree_path }}/.env' '{{ worktree_path }}/.env' || true"
+
 [aliases]
 # switch/list/remove — cd from switch & remove propagates via shell integration.
 new = "git fetch -q origin {{ args[0] }} 2>/dev/null; git fetch -q origin {{ default_branch }} || true; if git show-ref --verify --quiet refs/remotes/origin/{{ args[0] }}; then wt switch {{ args[0] }}; else wt switch --create {{ args[0] }} --base {{ args[1] | default('origin/' ~ default_branch) }}; fi"
