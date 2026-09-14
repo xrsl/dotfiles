@@ -289,6 +289,30 @@ wtn() {
     wt new
   fi
 }
+# wti <issue#|url>... [<branch>] — worktree from GitHub issue(s).
+#   wti 42            branch name slugged from the issue title
+#   wti 42 66         two issues; name from the first
+#   wti 42 feat/authz explicit name
+# `gh issue develop` creates the branch on origin and links it to the FIRST
+# issue, so GitHub closes that one on merge with no body keyword at all.
+# gh cannot link a second issue to an existing branch, so every issue is also
+# written to the branch description as a Closes line for pr-composer to pick up.
+wti() {
+  local -a issues=()
+  # ##*/ turns an issue URL into its trailing number; a bare 42 or #42 is unchanged.
+  while [[ ${1#\#} == <-> || "$1" == https://*/issues/<-> ]]; do issues+=("${${1#\#}##*/}"); shift; done
+  (( ${#issues} )) || { print -u2 "usage: wti <issue#|url>... [branch]"; return 2; }
+  # Title → branch name: lowercase, non-alphanumerics to -, trimmed, 40 chars.
+  local branch="${1:-$(gh issue view "${issues[1]}" --json title -q .title |
+    tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/^-*//;s/-*$//' | cut -c1-40)}"
+  [[ -n "$branch" ]] || { print -u2 "wti: could not derive a branch name from issue #${issues[1]}"; return 1; }
+  # Fails (creating nothing) without push access, or if the branch already
+  # exists — `wtn <branch>` is the way back into one of those.
+  gh issue develop "${issues[1]}" --name "$branch" >/dev/null || return
+  wt new "$branch" || return
+  local desc; for i in $issues; do desc+="Closes #$i"$'\n'; done
+  git config branch."$branch".description "$desc"
+}
 # wtc [cx|co|oc|pi] — commit with LLM-generated message.
 #   wtc          → claude (default backend, 'wt sc'); forwards extra args to step commit
 #   wtc cx       → codex     (wt sc-cx)
