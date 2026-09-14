@@ -886,6 +886,41 @@ orgid() {
     "https://api.modeling.staging.bw7.io/api/organizations/$1" | jq -e '.ID'
 }
 
+# nvimtheme — install and pin a Neovim colorscheme (themes from vimcolorschemes.com).
+#   nvimtheme rebelot/kanagawa.nvim        install, pin "kanagawa"
+#   nvimtheme rose-pine/neovim rose-pine   when the repo name != the colorscheme name
+#   nvimtheme tokyonight-moon              pin something already installed
+#   nvimtheme                              print what is pinned
+# Edits the chezmoi source of lua/plugins/colorscheme.lua via its nvimtheme: markers.
+nvimtheme() {
+  local src=~/.local/share/chezmoi/private_dot_config/nvim/lua/plugins/colorscheme.lua
+  local dst=~/.config/nvim/lua/plugins/colorscheme.lua
+  local arg=$1 name=$2
+
+  if [ -z "$arg" ]; then
+    perl -ne 'print "$1\n" if /^local theme = "(.*?)"/' $src
+    return
+  fi
+
+  if [[ $arg == */* ]]; then
+    : ${name:=${${arg:t}%%.*}}
+    grep -q "\"$arg\"" $src ||
+      perl -pi -e "s|^( *)(-- nvimtheme:end)|\${1}{ \"$arg\", lazy = true },\n\${1}\$2|" $src
+    chezmoi apply $dst && nvim --headless '+Lazy! sync' +qa
+  else
+    : ${name:=$arg}
+  fi
+
+  # verify before pinning: a bad name means every launch falls back to habamax with an error
+  if ! nvim --headless "+lua os.exit(pcall(vim.cmd.colorscheme, '$name') and 0 or 1)" >/dev/null 2>&1; then
+    echo "nvimtheme: '$name' did not load. Plugin is installed; pass the colorscheme name as arg 2, or browse with <leader>uC." >&2
+    return 1
+  fi
+
+  perl -pi -e "s/^local theme = \".*?\"/local theme = \"$name\"/" $src
+  chezmoi apply $dst && echo "pinned $name"
+}
+
 # Widget plugins (profile "post"): fzf-tab, autosuggestions, you-should-use, then
 # syntax-highlighting LAST — all load after compinit and all widgets/bindings.
 # (fpath plugins like zsh-completions load earlier via `--profile pre`.)

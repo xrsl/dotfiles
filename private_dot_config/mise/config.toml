@@ -116,6 +116,7 @@ cue = "latest"
 "github:AlexsJones/llmfit" = "latest"
 "pipx:graphifyy" = "latest"
 "github:atanunq/viu" = "latest"
+"pipx:complexipy" = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
