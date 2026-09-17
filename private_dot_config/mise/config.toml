@@ -71,7 +71,7 @@ lima = "latest"
 "npm:@marp-team/marp-cli" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 minikube = "latest"
-"pipx:mlx-optiq" = { version = "latest", os = ["macos"] }
+"pipx:mlx-optiq" = { version = "latest", os = ["macos"], uvx_args = "--python 3.12" }  # pygame ships no cp314 wheel
 neovim = "latest"
 node = "lts"
 "aqua:nushell/nushell" = "latest"
