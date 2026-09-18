@@ -7,7 +7,7 @@
 	process = git-lfs filter-process
 [core]
 	excludesfile = ~/.gitignore_global
-	pager = delta
+	pager = hunk pager
 	editor = fresh --cmd session open-file . --wait
 
 [interactive]
@@ -22,22 +22,45 @@
 
 [merge]
     conflictStyle = zdiff3
+    # hunk cannot do 3-way; nvim can. `git mergetool` opens the default
+    # (LOCAL,BASE,REMOTE)/MERGED layout: three read-only panes over the merged buffer.
+    # From the bottom pane, pull a side in by BUFFER NAME -- git names its temp files
+    # f_LOCAL_<pid>.ext, so the name is what :diffget matches:
+    #     :diffget LOCAL     take ours for the hunk under the cursor
+    #     :diffget REMOTE    take theirs
+    #     %diffget REMOTE    take theirs for the whole file
+    # NOT :diffget //2 and //3 -- that is the old vimdiff backend and fails with E94.
+    tool = nvimdiff
+
+[mergetool]
+    # no f.txt.orig left behind after every resolve; the pre-merge content is
+    # still in the index and in ORIG_HEAD if a resolve goes wrong.
+    keepBackup = false
+
+# hunk renders difftool file pairs too, so `git difftool` uses the same viewer
+# as the pager and the h/hpr wrappers.
+[diff]
+    tool = hunk
+[difftool]
+    prompt = false
+[difftool "hunk"]
+    cmd = hunk difftool "$LOCAL" "$REMOTE" "$MERGED"
 
 [include]
     path = ~/.gitconfig.local
     path = ~/.config/delta/catppuccin/catppuccin.gitconfig
-[pager]
-	diff = diffnav
 
+# delta is no longer a viewer you invoke: `hunk pager` is core.pager now.
+# It stays for lazygit's diffRenderers and `git add -p` colouring, and reads
+# these styles from here.
 [delta]
   features = catppuccin-mocha
   syntax-theme = tokyonight_night
-  navigate = true
   dark = true
   tabs = 2
   line-numbers = false
 
-  # diffnav's file tree already shows paths; keep delta's file header out of the way
+  # delta now only renders inside lazygit, which already names the file in its panel
   file-style = omit
   file-decoration-style = none
 

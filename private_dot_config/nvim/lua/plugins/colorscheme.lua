@@ -1,8 +1,22 @@
 -- The pinned line and the bench block below are edited by the `nvimtheme` shell function.
-local theme = "nekomi" -- nvimtheme:pinned
+local theme = "catppuccin-mocha" -- nvimtheme:pinned
 
 return {
   { "LazyVim/LazyVim", opts = { colorscheme = theme } },
+
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    opts = {
+      flavour = "mocha", -- same palette ghostty and herdr already draw; base is #1e1e2e in both
+      no_italic = true,
+      term_colors = true, -- :terminal buffers inherit the same 16 colors
+      color_overrides = {
+        -- stock mocha comments (overlay0 #6c7086) read muddy on #1e1e2e; one step up.
+        mocha = { overlay0 = "#7f849c" },
+      },
+    },
+  },
 
   {
     "rose-pine/neovim",
@@ -15,7 +29,6 @@ return {
   },
 
   -- nvimtheme:bench -- installed but never loaded; preview them with <leader>uC
-  { "catppuccin/nvim", name = "catppuccin", lazy = true },
   { "folke/tokyonight.nvim", lazy = true },
   { "rebelot/kanagawa.nvim", lazy = true },
   { "EdenEast/nightfox.nvim", lazy = true },

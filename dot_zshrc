@@ -400,45 +400,14 @@ alias gtl="git tag --sort=-creatordate --format='%(color:yellow)%(refname:short)
 alias gbl="git for-each-ref --exclude='refs/remotes/*/HEAD' --sort=-committerdate refs/heads refs/remotes --format='%(color:red)%(HEAD)%(color:reset) %(color:yellow)%(align:width=40,position=left)%(refname:short)%(end)%(color:reset) %(color:green)%(committerdate:short)%(color:reset)  %(color:blue)%(align:width=14,position=left)%(upstream:short)%(end)%(color:reset) %(contents:subject)'"
 # lazygit-style commit list: graph, sha, author, relative time, refs, subject
 alias gcl="git log --graph --decorate --format='%C(yellow)%h %C(blue)%<(14,trunc)%an %C(magenta)%<(12,trunc)%ar%C(auto)%d %C(reset)%s'"
-# d — review working-tree changes in diffnav.
-#   d        unified view (default)
-#   d -s     side-by-side view
-d() {
-  if (( $# == 0 )); then
-    git diff | diffnav -u
-  else
-    git diff | diffnav "$@"
-  fi
-}
-
-# dpr — review branch changes against the local default branch ref.
-#   dpr       unified view (default)
-#   dpr -s    side-by-side view
-dpr() {
-  local base
-
-  base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
-  if [[ -z "$base" ]]; then
-    for c in main master; do
-      git show-ref --quiet --verify "refs/heads/$c" 2>/dev/null && { base=$c; break; }
-    done
-  fi
-  [[ -z "$base" ]] && base=main
-
-  if (( $# == 0 )); then
-    git diff "${base}..HEAD" | diffnav -u
-  else
-    git diff "${base}..HEAD" | diffnav "$@"
-  fi
-}
-
 # HUNK — review-first TUI for agent-authored changesets (github.com/modem-dev/hunk).
-# Parallels d/dpr. `hunk diff` reads the repo directly (untracked included);
+# `hunk diff` reads the repo directly (untracked included);
 # `hunk patch -` reads a precomputed diff from stdin (hunk has no git revset for ranges).
 #   h        every uncommitted change: staged + unstaged + untracked
 #   hw       the same, --watch (stays open beside a running agent)
 #   hpr      branch changes vs the merge-base with the default branch (what `gh pr diff` shows)
 #   hls      the files `h` is reviewing, each one usable as an `h` pathspec
+#   hf       pick from `hls` with fzf, then review only the picked files
 #
 # Bare `hunk diff` reviews the unstaged working tree, and `--staged` swaps to the index
 # *instead of* it -- so neither one alone shows a changeset an agent has partly staged.
@@ -508,6 +477,23 @@ hls() {
     fi
   done
 }
+# hf — pick from the files `h` would review with fzf, then review only those.
+# Tab multi-selects, Enter opens, Esc picks nothing. Two traps this handles:
+#   * `hls` prints repo-root-relative paths (that is what `git status` emits) but
+#     git pathspecs resolve against the CWD, so running this from a subdirectory
+#     would silently match nothing. Everything happens at the root.
+#   * `h a b` with two existing files is hunk's two-file COMPARE mode, not a
+#     filter. The leading `--` forces pathspec for any number of picks.
+hf() {
+  local root
+  root=$(git rev-parse --show-toplevel) || return
+  local -a files
+  files=("${(@f)$(builtin cd -q $root && hls "$@" |
+    fzf --multi --layout=reverse --prompt='hunk ' \
+        --preview='d=$(git diff HEAD --color=always -- {}); [ -n "$d" ] && printf "%s\n" "$d" || cat {}')}")
+  [[ -n ${files[1]} ]] && (builtin cd -q $root && h -- "${files[@]}")
+}
+
 hpr() {
   local base
 
@@ -897,17 +883,38 @@ function y() {
 	command rm -f -- "$tmp"
 }
 
-# orgid <slug> — print the Modeling Platform (staging) organization ID for an org slug.
+# org_id / org_slug — translate between Modeling Platform (staging) org slugs and IDs.
+#   org_id acme-corp   -> 42
+#   org_slug 42        -> acme-corp
 # Token is read from ~/.config/mpcli/.env (MP_API_STG_TOKEN) so it is never stored here.
-orgid() {
-  if [ -z "$1" ]; then echo "usage: orgid <org-slug>" >&2; return 1; fi
+_mp_stg_token() {
   local tok=${MP_API_STG_TOKEN:-$(grep -m1 '^MP_API_STG_TOKEN=' ~/.config/mpcli/.env 2>/dev/null | cut -d= -f2-)}
   if [ -z "$tok" ]; then
-    echo "orgid: no MP_API_STG_TOKEN (env or ~/.config/mpcli/.env)" >&2
+    echo "${funcstack[2]:-mp}: no MP_API_STG_TOKEN (env or ~/.config/mpcli/.env)" >&2
     return 1
   fi
+  print -r -- "$tok"
+}
+
+# org_id <slug> — the API has GET /organizations/:organization-slug, so this is one call.
+org_id() {
+  if [ -z "$1" ]; then echo "usage: org_id <org-slug>" >&2; return 1; fi
+  local tok; tok=$(_mp_stg_token) || return 1
   curl -fsS -H "APIApplicationUser: $tok" \
     "https://api.modeling.staging.bw7.io/api/organizations/$1" | jq -e '.ID'
+}
+
+# org_slug <id> — the reverse has no endpoint: routes/main.go only exposes GetBySlug,
+# never GetByID. So list every org the token can see and match on ID client-side.
+# An ID outside the token's visibility reads as "not found", not as an error.
+org_slug() {
+  if [ -z "$1" ]; then echo "usage: org_slug <org-id>" >&2; return 1; fi
+  if [[ $1 != <-> ]]; then echo "org_slug: <org-id> must be a number, got '$1'" >&2; return 1; fi
+  local tok; tok=$(_mp_stg_token) || return 1
+  curl -fsS -H "APIApplicationUser: $tok" \
+    "https://api.modeling.staging.bw7.io/api/organizations" \
+    | jq -re --argjson id "$1" 'map(select(.ID == $id)) | .[0].Slug // empty' \
+    || { echo "org_slug: no organization with ID $1 visible to this token" >&2; return 1; }
 }
 
 # nvimtheme — install and pin a Neovim colorscheme (themes from vimcolorschemes.com).

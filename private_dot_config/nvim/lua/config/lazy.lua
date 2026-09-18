@@ -30,12 +30,11 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = { colorscheme = { "tokyonight", "habamax" } },
+  install = { colorscheme = { "catppuccin", "habamax" } },
   rocks = { enabled = false }, -- no plugin here needs luarocks
-  checker = {
-    enabled = true, -- check for plugin updates periodically
-    notify = false, -- notify on update
-  }, -- automatically check for plugin updates
+  -- Off: the hourly check spawns git across every plugin and blocks the UI for ~400ms
+  -- on the first launch of each hour. Run `:Lazy check` by hand instead.
+  checker = { enabled = false },
   performance = {
     rtp = {
       -- disable some rtp plugins
