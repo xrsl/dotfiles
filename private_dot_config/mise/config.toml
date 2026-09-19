@@ -20,7 +20,6 @@ chezmoi = "latest"
 "npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
 "npm:cline" = "latest"
 "npm:@colbymchenry/codegraph" = "latest"
-codex = "latest"
 "npm:@openai/codex-security" = "latest"
 "npm:@z_ai/coding-helper" = "latest"
 colima = "latest"
@@ -116,6 +115,14 @@ cue = "latest"
 "pipx:graphifyy" = "latest"
 "github:atanunq/viu" = "latest"
 "pipx:complexipy" = "latest"
+"npm:@sentry/cli" = "latest"
+"cargo:plannotator/plannotator-tui" = "latest"
+"aqua:dalance/procs" = "latest"
+"aqua:bahdotsh/wrkflw" = "latest"
+"aqua:jesseduffield/lazydocker" = "latest"
+"aqua:simeji/jid" = "latest"
+"cargo:matthart1983/syswatch" = "latest"
+"aqua:ducaale/xh" = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's

@@ -13,6 +13,8 @@ agent_notes = true    # show agent rationale notes by default
 # Per-command override. `hpr` pipes a precomputed diff into `hunk patch -`, and
 # global watch = true makes that hard-fail: "--watch requires a file- or
 # Git-backed input that Hunk can reopen." Watch stays on for `h` / `hw`.
+prompt_save_view_preferences = false
+
 [patch]
 watch = false
 
