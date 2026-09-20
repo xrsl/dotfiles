@@ -122,6 +122,7 @@ cue = "latest"
 "aqua:simeji/jid" = "latest"
 "cargo:matthart1983/syswatch" = "latest"
 "aqua:ducaale/xh" = "latest"
+codex = { version = "latest", os = ["linux/x64"] }
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
