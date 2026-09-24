@@ -479,6 +479,7 @@ hls() {
     fi
   done
 }
+alias hl="hls"
 # hf — pick from the files `h` would review with fzf, then review only those.
 # Tab multi-selects, Enter opens, Esc picks nothing. Two traps this handles:
 #   * `hls` prints repo-root-relative paths (that is what `git status` emits) but
