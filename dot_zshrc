@@ -258,7 +258,9 @@ alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
 alias pq='pi --provider optiq --model qwen3.8:27b'
 alias cr="crush --yolo"
 alias crc="crush --yolo --continue"
-
+alias kl="kilo --auto"
+alias klc="kilo --auto --continue"
+alias klm="kilo --auto --mini"
 #alias pi='pi --provider ollama --model gemma4:31b'
 #alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
 
