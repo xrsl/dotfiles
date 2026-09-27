@@ -43,7 +43,7 @@ sudo apt-get update
 sudo apt-get install -y ca-certificates curl git zsh build-essential
 curl -fsSL https://mise.run | sh
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
-MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi init --apply https://github.com/xrsl/dotfiles.git
+MISE_NO_CONFIG=1 mise exec chezmoi@latest -- chezmoi init --apply https://github.com/xrsl/dotfiles.git
 mise install --locked
 chsh -s "$(command -v zsh)"
 exec zsh -l
@@ -60,10 +60,10 @@ ssh tart-fedora
 sudo dnf install -y ca-certificates curl git zsh gcc gcc-c++ make util-linux-user
 curl -fsSL https://mise.run | sh
 export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
-MISE_GLOBAL_CONFIG_FILE=/dev/null mise --verbose install chezmoi@latest
+MISE_NO_CONFIG=1 mise --verbose install chezmoi@latest
 git clone https://github.com/xrsl/dotfiles.git ~/.local/share/chezmoi
-MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi init
-MISE_GLOBAL_CONFIG_FILE=/dev/null mise exec chezmoi@latest -- chezmoi apply --verbose
+MISE_NO_CONFIG=1 mise exec chezmoi@latest -- chezmoi init
+MISE_NO_CONFIG=1 mise exec chezmoi@latest -- chezmoi apply --verbose
 mise trust ~/.config/mise/config.toml
 mise install --locked
 exec zsh -l

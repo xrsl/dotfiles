@@ -36,10 +36,10 @@ fi
 # Isolate chezmoi from any stale managed mise config during bootstrap.
 echo "Applying dotfiles..."
 if [[ -d "$HOME/.local/share/chezmoi/.git" ]]; then
-    MISE_GLOBAL_CONFIG_FILE=/dev/null "$MISE_BIN" exec chezmoi@latest -- \
+    MISE_NO_CONFIG=1 "$MISE_BIN" exec chezmoi@latest -- \
         chezmoi update
 else
-    MISE_GLOBAL_CONFIG_FILE=/dev/null "$MISE_BIN" exec chezmoi@latest -- \
+    MISE_NO_CONFIG=1 "$MISE_BIN" exec chezmoi@latest -- \
         chezmoi init --apply https://github.com/xrsl/dotfiles.git
 fi
 
