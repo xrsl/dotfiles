@@ -123,6 +123,11 @@ cue = "latest"
 "cargo:matthart1983/syswatch" = "latest"
 "aqua:ducaale/xh" = "latest"
 "github:rezigned/upmd" = "latest"
+"aqua:koalaman/shellcheck" = "latest"
+"cargo:https://github.com/block/buzz" = { version = "latest", crate = "buzz-cli" }
+"npm:paperclipai" = "latest"
+cliamp = "latest"
+"pipx:huggingface_hub" = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's

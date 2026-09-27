@@ -261,6 +261,11 @@ alias crc="crush --yolo --continue"
 alias kl="kilo --auto"
 alias klc="kilo --auto --continue"
 alias klm="kilo --auto --mini"
+alias ca="cursor-agent --yolo"
+alias cac="cursor-agent --yolo --continue"
+alias car="cursor-agent --yolo --resume"
+
+
 #alias pi='pi --provider ollama --model gemma4:31b'
 #alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
 
@@ -409,7 +414,7 @@ alias gcl="git log --graph --decorate --format='%C(yellow)%h %C(blue)%<(14,trunc
 #   hw       the same, --watch (stays open beside a running agent)
 #   hpr      branch changes vs the merge-base with the default branch (what `gh pr diff` shows)
 #   hls      the files `h` is reviewing, each one usable as an `h` pathspec
-#   hf       pick from `hls` with fzf, then review only the picked files
+#   hpick    pick from `hls` with fzf, then review only the picked files
 #
 # Bare `hunk diff` reviews the unstaged working tree, and `--staged` swaps to the index
 # *instead of* it -- so neither one alone shows a changeset an agent has partly staged.
@@ -480,14 +485,14 @@ hls() {
   done
 }
 alias hl="hls"
-# hf — pick from the files `h` would review with fzf, then review only those.
+# hpick — pick from the files `h` would review with fzf, then review only those.
 # Tab multi-selects, Enter opens, Esc picks nothing. Two traps this handles:
 #   * `hls` prints repo-root-relative paths (that is what `git status` emits) but
 #     git pathspecs resolve against the CWD, so running this from a subdirectory
 #     would silently match nothing. Everything happens at the root.
 #   * `h a b` with two existing files is hunk's two-file COMPARE mode, not a
 #     filter. The leading `--` forces pathspec for any number of picks.
-hf() {
+hpick() {
   local root
   root=$(git rev-parse --show-toplevel) || return
   local -a files
@@ -961,3 +966,9 @@ nvimtheme() {
 # sheldon is installed by mise, so this is identical on macOS and Linux.
 # Config: ~/.config/sheldon/plugins.toml
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<

@@ -24,3 +24,18 @@ uv *args:
 
 uvx *args:
     uvx {{ args }}
+	
+	
+buzz *args:
+    buzz {{ args }}	
+	
+# j gh-to-buzz owner/repo → private channel + unlisted repo + unlisted project
+gh-to-buzz slug:
+    #!/usr/bin/env zsh
+    set -euo pipefail
+    s={{ slug }}; id=${s#*/}
+    d=$(gh repo view {{ slug }} --json description -q .description)
+    ch=$(buzz channels create --name $id --type stream --visibility private | jq -er .channel_id)
+    buzz repos create --id $id --name $id --clone https://github.com/{{ slug }}.git --web https://github.com/{{ slug }} ${d:+--description=$d} --channel $ch | jq -r .link
+    buzz projects create $id --repo $id --name $id ${d:+--description=$d} --channel $ch --visibility unlisted | jq -r .link
+    git clone https://github.com/{{ slug }}.git ~/.buzz/REPOS/$id
