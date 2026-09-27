@@ -128,6 +128,7 @@ cue = "latest"
 "npm:paperclipai" = "latest"
 cliamp = "latest"
 "pipx:huggingface_hub" = "latest"
+ori = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's

@@ -1,3 +1,4 @@
+Include config.local
 Include /Users/resulal/.colima/ssh_config
 
 Host ubuntu
