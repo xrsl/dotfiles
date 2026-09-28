@@ -91,6 +91,20 @@ vmn() {
   tart clone "$2" "$1"
 }
 
+hr() {
+  if (( $# != 1 )); then
+    print -u2 "usage: hr <ssh-target>"
+    return 2
+  fi
+  # herdr 0.9 renders the UI client-side, so the remote's own green accent is ignored.
+  # Re-derive a client config from the real one with only the accent swapped.
+  local cfg="${XDG_CACHE_HOME:-$HOME/.cache}/herdr/vm-config.toml"
+  mkdir -p "${cfg:h}"
+  sed 's|^accent = .*|accent = "#a6e3a1"   # catppuccin Green — remote session|' \
+    ~/.config/herdr/config.toml > "$cfg"
+  HERDR_CONFIG_PATH="$cfg" herdr --remote "$1"
+}
+
 vmh() {
   if (( $# != 1 )); then
     print -u2 "usage: vmh <name>"
@@ -101,13 +115,7 @@ vmh() {
     print -u2 "vmh: $vm did not come up (no IP after 30s)"
     return 1
   fi
-  # herdr 0.9 renders the UI client-side, so the VM's own green accent is ignored.
-  # Re-derive a client config from the real one with only the accent swapped.
-  local cfg="${XDG_CACHE_HOME:-$HOME/.cache}/herdr/vm-config.toml"
-  mkdir -p "${cfg:h}"
-  sed 's|^accent = .*|accent = "#a6e3a1"   # catppuccin Green — remote VM session|' \
-    ~/.config/herdr/config.toml > "$cfg"
-  HERDR_CONFIG_PATH="$cfg" herdr --remote "tart-$vm"
+  hr "tart-$vm"
 }
 
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
@@ -265,7 +273,6 @@ alias ca="cursor-agent --yolo"
 alias cac="cursor-agent --yolo --continue"
 alias car="cursor-agent --yolo --resume"
 
-
 #alias pi='pi --provider ollama --model gemma4:31b'
 #alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
 
@@ -348,8 +355,6 @@ export EDITOR="$HOME/.local/bin/fresh-wait"
 # VSCode
 vsc() { code "${@:-.}" }
 
-
-
 # freshdiff — open the fresh editor straight into a git diff view
 #   freshdiff [file...]        working-tree review (uncommitted changes, magit-style)
 #   freshdiff -p               PR review: changed files vs base/main (base..HEAD),
@@ -390,7 +395,6 @@ alias e='fresh'              # open a file in fresh
 alias ec='freshdiff'         # review changes (working tree); Enter on a file = side-by-side
 alias epr='freshdiff -p'     # PR review: branch vs base/main (base..HEAD)
 # niche single-file diffs still available unaliased: freshdiff -s|-H|-D|-b <file>
-
 
 alias v="nvim"
 alias gui="gitui"
@@ -517,7 +521,6 @@ hpr() {
   # branch after we forked don't show up inverted. Matches `gh pr diff` / the GitHub UI.
   git diff "${base}...HEAD" --no-color | command hunk patch -
 }
-
 
 alias da="gh dash"
 pr() { gh pr view "$1" --web }
@@ -973,5 +976,4 @@ fpath=(~/.grok/completions/zsh $fpath)
 autoload -Uz compinit && compinit -C
 # <<< grok installer <<<
 
-# Hermes Agent command
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
