@@ -96,13 +96,7 @@ hr() {
     print -u2 "usage: hr <ssh-target>"
     return 2
   fi
-  # herdr 0.9 renders the UI client-side, so the remote's own green accent is ignored.
-  # Re-derive a client config from the real one with only the accent swapped.
-  local cfg="${XDG_CACHE_HOME:-$HOME/.cache}/herdr/vm-config.toml"
-  mkdir -p "${cfg:h}"
-  sed 's|^accent = .*|accent = "#a6e3a1"   # catppuccin Green — remote session|' \
-    ~/.config/herdr/config.toml > "$cfg"
-  HERDR_CONFIG_PATH="$cfg" herdr --remote "$1"
+  herdr --remote "$1"
 }
 
 vmh() {
