@@ -4,6 +4,7 @@ font-size = 15
 window-save-state = always
 font-family = JetBrainsMono Nerd Font Mono
 copy-on-select = true
+shell-integration-features = ssh-env,ssh-terminfo
 
 keybind = super+d=new_split:right
 keybind = super+shift+d=new_split:down
