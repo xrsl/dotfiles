@@ -91,12 +91,31 @@ vmn() {
   tart clone "$2" "$1"
 }
 
+# Tab color for a separate Herdr client. Herdr reads accent from the client, so
+# each target gets its own config file instead of a machine registered in this one.
+#   dev, vps        peach
+#   *tahoe*         pink
+#   ubuntu, tart-*  green
+#   anything else   red
+_herdr_accent() {
+  case "$1" in
+    dev|vps)       print -r -- '#fab387' ;;
+    *tahoe*)       print -r -- '#f5c2e7' ;;
+    ubuntu|tart-*) print -r -- '#a6e3a1' ;;
+    *)             print -r -- '#f38ba8' ;;
+  esac
+}
+
 hr() {
   if (( $# != 1 )); then
     print -u2 "usage: hr <ssh-target>"
     return 2
   fi
-  herdr --remote "$1"
+  local accent=$(_herdr_accent "$1")
+  local cfg="${XDG_CACHE_HOME:-$HOME/.cache}/herdr/client-${${1}//[^A-Za-z0-9._-]/_}.toml"
+  mkdir -p "${cfg:h}"
+  sed "s|^accent = .*|accent = \"$accent\"|" ~/.config/herdr/config.toml > "$cfg"
+  HERDR_CONFIG_PATH="$cfg" herdr --remote "$1"
 }
 
 vmh() {

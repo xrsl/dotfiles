@@ -24,26 +24,18 @@ auto_switch = false
 prompt_new_tab_name = false   # create tabs immediately with the generated name, no prompt
 agent_panel_sort = "priority" # moved here from a stray line under [[keys.command]] so it actually applies
 show_agent_labels_on_pane_borders = true
-accent = "#89b4fa"   # client chrome; which machine you are on is the sidebar label
-tab_bar_right = [{ type = "hostname" }]   # hostname of the server the focused panes run on
-window_title = "{hostname}: {workspace}"
+# Accent paints the focused pane/tab highlight. This file is the host client.
+# `hr` / `vmh` launch a separate client per machine and swap this color there
+# (`_herdr_accent` in .zshrc): dev = peach, tahoe = pink, other VMs = green.
+# These branches apply only when herdr is started on that machine itself.
 
-# Colors match the label passed to `herdr machine add --label`.
-#   Local -> this Mac, vm -> VMs, vps -> servers. Any other label stays neutral.
-[ui.sidebar.agents]
-rows = [
-  [
-    "state_icon",
-    { token = "machine", fg = "#a6adc8", rules = [
-      { equals = "Local", fg = "#89b4fa" },
-      { equals = "vm", fg = "#f5c2e7" },
-      { equals = "vps", fg = "#fab387" },
-    ]},
-    "workspace",
-    "tab",
-  ],
-  ["agent"],
-]
+{{- if ne .chezmoi.os "darwin" }}
+accent = "#a6e3a1"   # catppuccin Green (soft green) — Linux VM guest (ubuntu)
+{{- else if hasPrefix "VirtualMac" (output "sysctl" "-n" "hw.model" | trim) }}
+accent = "#f5c2e7"   # catppuccin Pink (soft magenta) — macOS VM guest (tahoe)
+{{- else }}
+accent = "#89b4fa"   # catppuccin Blue — real hardware (host)
+{{- end }}
 
 [[keys.command]]              # open in a split beside your work
 key = "prefix+f"
