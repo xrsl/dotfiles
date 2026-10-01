@@ -16,6 +16,8 @@ path=(
 export CDPATH=".:$HOME/ghub"
 
 # mise owns developer runtimes and CLI tools.
+# Stub so mise's `$+functions[compdef]` guard skips its early compinit; the real compinit below redefines it.
+compdef() { :; }
 command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
 
 # Nested shells may inherit paths from installers that mise replaced.
@@ -256,7 +258,13 @@ fi
 zstyle ':completion:*' menu select
 
 # worktrunk (uses compdef, so must run after compinit)
-if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+if command -v wt >/dev/null 2>&1; then
+  # Cached: regenerated only when the wt binary is newer than the cache.
+  _wt_init=${XDG_CACHE_HOME:-$HOME/.cache}/wt-init.zsh
+  [[ $_wt_init -nt =wt ]] || command wt config shell init zsh >| $_wt_init
+  source $_wt_init
+  unset _wt_init
+fi
 
 # Just
 alias j=just
@@ -983,10 +991,5 @@ nvimtheme() {
 # Config: ~/.config/sheldon/plugins.toml
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
 
-# >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
-# <<< grok installer <<<
 
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
