@@ -65,11 +65,9 @@ lazyssh = "latest"
 lima = "latest"
 "llama.cpp" = { version = "latest", version_prefix = "b" }
 "github:jnsahaj/lumen" = "latest"
-"pipx:markitdown" = { version = "latest", extras = "all", uvx_args = "--python 3.12" }  # onnxruntime ships no cp314 wheel
 "npm:@marp-team/marp-cli" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 minikube = "latest"
-"pipx:mlx-optiq" = { version = "latest", os = ["macos"], uvx_args = "--python 3.12" }  # pygame ships no cp314 wheel
 "pipx:mlx-lm" = { version = "latest", os = ["macos"] }
 neovim = "latest"
 node = "lts"
