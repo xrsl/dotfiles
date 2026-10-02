@@ -4,7 +4,6 @@
 actionlint = "latest"
 "github:vercel-labs/agent-browser" = "latest"
 agy = "latest"
-"github:tt-a1i/archify" = "latest"
 argocd = "latest"
 atuin = "latest"
 aws = "latest"
@@ -15,7 +14,6 @@ buf = "latest"
 bun = "latest"
 chezmoi = "latest"
 "github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true" }
-"aqua:cirruslabs/cirrus-cli" = "latest"
 "npm:@kilocode/cli" = "latest"
 "npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
 "npm:cline" = "latest"
@@ -40,7 +38,6 @@ fzf = "latest"
 gh = "latest"
 "github:rikeda71/ghostty-pane-splitter" = { version = "latest", os = ["macos"] }
 "github:hjr265/gittop" = "latest"
-gitui = "latest"
 glow = "latest"
 go = "latest"
 golangci-lint = "latest"
@@ -64,7 +61,6 @@ lazygit = "latest"
 lazyssh = "latest"
 lima = "latest"
 "llama.cpp" = { version = "latest", version_prefix = "b" }
-"github:jnsahaj/lumen" = "latest"
 "npm:@marp-team/marp-cli" = "latest"
 "npm:@mermaid-js/mermaid-cli" = "latest"
 minikube = "latest"
@@ -75,7 +71,6 @@ node = "lts"
 opencode = "latest"
 "npm:openskills" = "latest"
 pi = "latest"
-"npm:pi-skill-gate" = "latest"
 "github:backnotprop/plannotator" = "latest"
 pnpm = "latest"
 "npm:postman-cli" = "latest"
@@ -92,7 +87,6 @@ sheldon = "latest"
 skate = "latest"
 "npm:slop-scan" = "latest"
 starship = "latest"
-"github:cesarferreira/stax" = "latest"
 superfile = "latest"
 "aqua:cirruslabs/tart" = { version = "latest", os = ["macos"] }
 tokei = "latest"
@@ -128,7 +122,6 @@ cue = "latest"
 cliamp = "latest"
 "pipx:huggingface_hub" = "latest"
 ori = "latest"
-"cargo:graykode/abtop" = "latest"
 "github:findyourexit/zonetimeline-tui" = "latest"
 "github:findyourexit/excise" = "latest"
 fnox = "latest"
@@ -141,7 +134,7 @@ UV_PYTHON = "3.14"
 [settings]
 idiomatic_version_file_enable_tools = ["node", "python"]
 lockfile = true
-lockfile_platforms = ["macos-arm64", "macos-x64", "linux-arm64"]
+lockfile_platforms = ["macos-arm64", "macos-x64", "linux-arm64", "linux-x64"]
 minimum_release_age = "0d"
 auto_update = true
 
