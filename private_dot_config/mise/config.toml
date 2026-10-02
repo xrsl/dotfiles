@@ -8,7 +8,7 @@ agy = "latest"
 argocd = "latest"
 atuin = "latest"
 aws = "latest"
-azure = { version = "latest", uvx_args = "--prerelease=allow" }
+azure = { version = "latest", dependency_prereleases = "allow" }
 bat = "latest"
 bottom = "latest"
 buf = "latest"
@@ -113,7 +113,6 @@ zoxide = "latest"
 cue = "latest"
 "aqua:duckdb/duckdb" = "latest"
 "github:AlexsJones/llmfit" = "latest"
-"pipx:graphifyy" = "latest"
 "github:atanunq/viu" = "latest"
 "pipx:complexipy" = "latest"
 "npm:@sentry/cli" = "latest"
@@ -150,6 +149,9 @@ auto_update = true
 
 [settings.github]
 use_git_credentials = true
+
+[settings.upgrade]
+prune_after = "0s"
 
 [tasks.gh-auth]
 description = "Log in to GitHub so git works over HTTPS (disposable-VM friendly; no SSH keys)"
