@@ -1,0 +1,196 @@
+#!/bin/sh
+set -eu
+
+# Commit, push, and compose a PR with the pr-composer skill (repo-local
+# .claude/skills/pr-composer, else the global ~/.claude one).
+#
+# Failure policy: any PR this script opens is closed again if composition does
+# not finish cleanly, so a failed run never leaves a placeholder PR behind.
+
+PLACEHOLDER_TITLE="Compose pull request"
+PLACEHOLDER_BODY="PR composition is in progress."
+MIN_BODY_CHARS=80
+
+draft=false
+case "${1-}" in
+    "") ;;
+    --draft) draft=true ;;
+    -h|--help)
+        echo "Usage: wt pr [--draft]"
+        echo "Commit, push, and compose a PR with the pr-composer skill."
+        exit 0
+        ;;
+    *)
+        echo "wt pr: unsupported argument: $1" >&2
+        echo "Usage: wt pr [--draft]" >&2
+        exit 2
+        ;;
+esac
+if [ "$#" -gt 1 ]; then
+    echo "wt pr: unexpected extra arguments after $1" >&2
+    echo "Usage: wt pr [--draft]" >&2
+    exit 2
+fi
+
+repo_root=$(git rev-parse --show-toplevel)
+cd "$repo_root"
+
+skill_path=.claude/skills/pr-composer/SKILL.md
+global_skill_path="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills/pr-composer/SKILL.md"
+if [ ! -f "$skill_path" ] && [ ! -f "$global_skill_path" ]; then
+    echo "wt pr: $skill_path (or $global_skill_path) is required" >&2
+    exit 1
+fi
+
+# Close a PR we opened ourselves if we exit before composition is verified.
+created_pr=""
+cleanup() {
+    status=$?
+    if [ "$status" -ne 0 ] && [ -n "$created_pr" ]; then
+        echo "wt pr: composition did not complete; closing placeholder PR #$created_pr" >&2
+        gh pr close "$created_pr" >/dev/null 2>&1 ||
+            echo "wt pr: could not close PR #$created_pr; close it by hand" >&2
+    fi
+    exit $status
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
+
+# --porcelain also reports untracked files, which `git diff` does not.
+if [ -n "$(git status --porcelain)" ]; then
+    wt step commit
+fi
+
+subject=$(git log -1 --format=%s)
+if [ -z "$subject" ] || [ "$subject" = null ] || ! printf '%s\n' "$subject" | grep -Eq '^[[:alpha:]]+(\([^)]*\))?!?: .+'; then
+    echo "wt pr: refusing to push invalid commit subject: $subject" >&2
+    echo "Amend it to a Conventional Commit title, then rerun wt pr." >&2
+    exit 1
+fi
+
+git push -u origin HEAD
+
+base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')
+base=${base:-main}
+
+if ! gh pr view --json number >/dev/null 2>&1; then
+    if [ -z "$(git log --oneline "origin/$base..HEAD")" ]; then
+        echo "wt pr: no commits ahead of origin/$base; nothing to open a PR for" >&2
+        exit 1
+    fi
+    gh pr create \
+        --draft \
+        --base "$base" \
+        --title "$PLACEHOLDER_TITLE" \
+        --body "$PLACEHOLDER_BODY"
+    created_pr=$(gh pr view --json number --jq .number)
+fi
+
+prompt='/pr-composer Compose and apply the pull request for the current branch. Follow the repository skill exactly. Rewrite both the title and the body; the placeholder title and body must not survive. If the PR resolves an issue, the body must contain a `Closes #<n>` line for it. Finish only after the title and body are verified. Do not change repository files or commits. Your only job is the title and body: do not run, watch, wait for, or report on CI checks or workflow runs.'
+
+composer_log=$(mktemp -t wt-pr-compose)
+composer_rc="$composer_log.rc"
+cleanup_log() { rm -f "$composer_log" "$composer_rc"; }
+
+# `user` matters: the skill usually lives in ~/.claude/skills, and omitting it
+# leaves the session without /pr-composer in any repo without a vendored copy.
+# stdin is /dev/null: under `wt` it is an open pipe, and claude -p blocks
+# reading it forever before doing any work.
+# Piping to tee hides claude's exit status from `set -e`, so stash it in a file.
+{ claude -p "$prompt" \
+    --no-session-persistence \
+    --model=sonnet \
+    --permission-mode=dontAsk \
+    --setting-sources=user,project \
+    --disallowedTools \
+    'Bash(gh pr checks *)' \
+    'Bash(gh run *)' \
+    'Bash(gh pr merge *)' \
+    --allowedTools \
+    'Bash(gh pr *)' \
+    'Bash(gh issue list *)' \
+    'Bash(gh issue view *)' \
+    'Bash(git branch *)' \
+    'Bash(git diff *)' \
+    'Bash(git log *)' \
+    'Bash(git status *)' \
+    Read </dev/null 2>&1 || echo "$?" >"$composer_rc"; } | tee "$composer_log"
+
+if [ -f "$composer_rc" ]; then
+    echo "wt pr: composer session exited $(cat "$composer_rc")" >&2
+    cleanup_log
+    exit 1
+fi
+
+# Without this the only symptom is a surviving placeholder title, which blames
+# the composer's output rather than the skill never having loaded at all.
+if grep -q 'Unknown command: /pr-composer' "$composer_log"; then
+    echo "wt pr: the composer session could not load the pr-composer skill" >&2
+    echo "Looked for it in .claude/skills and ${CLAUDE_CONFIG_DIR:-$HOME/.claude}/skills" >&2
+    cleanup_log
+    exit 1
+fi
+cleanup_log
+
+title=$(gh pr view --json title --jq .title)
+body=$(gh pr view --json body --jq '.body // ""')
+
+if ! printf '%s\n' "$title" | grep -Eq '^[A-Za-z]+(\([^)]*\))?!?: .+'; then
+    echo "wt pr: composer left an invalid title: $title" >&2
+    exit 1
+fi
+if [ "$title" = "$PLACEHOLDER_TITLE" ]; then
+    echo "wt pr: composer did not replace the placeholder title" >&2
+    exit 1
+fi
+
+# Ignore HTML comments so an untouched PR template counts as an empty body.
+body_len=$(printf '%s' "$body" | perl -0777 -pe 's/<!--.*?-->//gs' | tr -d '[:space:]' | wc -c | tr -d ' ')
+case "$body" in
+    *"$PLACEHOLDER_BODY"*)
+        echo "wt pr: composer did not replace the placeholder body" >&2
+        exit 1
+        ;;
+esac
+if [ "$body_len" -lt "$MIN_BODY_CHARS" ]; then
+    echo "wt pr: composer body is empty or template-only ($body_len chars of prose)" >&2
+    exit 1
+fi
+
+# Reconcile labels ourselves rather than racing labeler.yml, which only ever
+# adds labels and never removes the stale one after a retitle.
+type=$(printf '%s\n' "$title" | sed -nE 's/^([A-Za-z]+)(\([^)]*\))?!?:.*/\1/p' | tr '[:upper:]' '[:lower:]')
+case "$type" in
+    feat|feature)                  want=enhancement ;;
+    fix|bugfix)                    want=bug ;;
+    docs|doc)                      want=documentation ;;
+    chore|refactor|perf|test|style) want=chore ;;
+    build|ci)                      want=ci ;;
+    *)                             want="" ;;
+esac
+
+if [ -z "$want" ]; then
+    echo "wt pr: title prefix \"$type\" maps to no release-notes label" >&2
+    exit 1
+fi
+
+current=$(gh pr view --json labels --jq '.labels[].name')
+for stale in enhancement bug documentation chore ci; do
+    [ "$stale" = "$want" ] && continue
+    if printf '%s\n' "$current" | grep -qx "$stale"; then
+        gh pr edit --remove-label "$stale" >/dev/null
+    fi
+done
+if ! printf '%s\n' "$current" | grep -qx "$want"; then
+    gh pr edit --add-label "$want" >/dev/null
+fi
+
+if [ "$draft" = false ] && [ "$(gh pr view --json isDraft --jq .isDraft)" = true ]; then
+    gh pr ready
+fi
+
+# Composition succeeded: disarm the placeholder cleanup.
+created_pr=""
+
+gh pr view --json url --jq .url
