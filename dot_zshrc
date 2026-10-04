@@ -468,12 +468,13 @@ _hunk_argv() {  # sets `reply` to the argv to hand hunk; caller declares it loca
 }
 h() {
   local -a reply; _hunk_argv "$@"
-  command hunk diff "${reply[@]}"
+  # --mode has to sit with the target, ahead of any `--`, same as --watch below.
+  command hunk diff "${reply[1]}" --mode unified "${reply[@]:1}"
 }
 hw() {
   # --watch has to sit with the target, ahead of any `--`, or hunk reads it as a pathspec.
   local -a reply; _hunk_argv "$@"
-  command hunk diff "${reply[1]}" --watch "${reply[@]:1}"
+  command hunk diff "${reply[1]}" --watch --mode unified "${reply[@]:1}"
 }
 # hls -- the files in `h`'s review, so you can narrow to one without guessing its path.
 # Same set `h` shows (staged + unstaged + untracked, ignored files excluded), in `gs`'s
@@ -539,7 +540,7 @@ hpr() {
 
   # Three-dot: diff against the merge-base, so commits that landed on the default
   # branch after we forked don't show up inverted. Matches `gh pr diff` / the GitHub UI.
-  git diff "${base}...HEAD" --no-color | command hunk patch -
+  git diff "${base}...HEAD" --no-color | command hunk patch --mode unified -
 }
 
 alias da="gh dash"
