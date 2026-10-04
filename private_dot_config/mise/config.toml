@@ -125,6 +125,8 @@ ori = "latest"
 "github:findyourexit/zonetimeline-tui" = "latest"
 "github:findyourexit/excise" = "latest"
 fnox = "latest"
+usage = "latest"
+"npm:mint" = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
