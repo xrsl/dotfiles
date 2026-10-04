@@ -305,7 +305,7 @@ alias wtlf='wt l --full' # full (~11s cold): + CI status & LLM summaries (networ
 alias wtlr='wt l --remotes'
 alias wtd='wt d'         # 'wt step diff': all changes since branching (committed+staged+unstaged+untracked)
 alias wts='wt s'
-# wtn <branch> [<base>]: 'wt new'. Optional 2nd positional is the base ref
+# wtn <branch> [<base>]: 'wt newtree' (not 'new': repos may define their own). Optional 2nd positional is the base ref
 # (main, origin/main, @; '.' is rewritten to @). Defaults to origin/main.
 wtn() {
   local branch base
@@ -315,13 +315,13 @@ wtn() {
   rest=("$@")
   [[ "$base" == "." ]] && base="@"
   if [[ -n "$base" ]]; then
-    # 'new' alias takes base as a positional (args[1]) and adds --base itself;
+    # 'newtree' alias takes base as a positional (args[1]) and adds --base itself;
     # passing --base here would double up into `--base --base`.
-    wt new "$branch" "$base" "${rest[@]}"
+    wt newtree "$branch" "$base" "${rest[@]}"
   elif [[ -n "$branch" ]]; then
-    wt new "$branch" "${rest[@]}"
+    wt newtree "$branch" "${rest[@]}"
   else
-    wt new
+    wt newtree
   fi
 }
 # wti <issue#|url>... [<branch>] — worktree from GitHub issue(s).
@@ -344,7 +344,7 @@ wti() {
   # Fails (creating nothing) without push access, or if the branch already
   # exists — `wtn <branch>` is the way back into one of those.
   gh issue develop "${issues[1]}" --name "$branch" >/dev/null || return
-  wt new "$branch" || return
+  wt newtree "$branch" || return
   local desc; for i in $issues; do desc+="Closes #$i"$'\n'; done
   git config branch."$branch".description "$desc"
 }
