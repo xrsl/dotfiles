@@ -1,0 +1,97 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__codegraph__codegraph_explore",
+      "mcp__codegraph__codegraph_search",
+      "mcp__codegraph__codegraph_node",
+      "mcp__codegraph__codegraph_callers",
+      "mcp__codegraph__codegraph_callees",
+      "mcp__codegraph__codegraph_impact",
+      "mcp__codegraph__codegraph_files",
+      "mcp__codegraph__codegraph_status"
+    ]
+  },
+  "model": "sonnet",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact|fork)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '/Users/resulal/.claude/hooks/herdr-agent-state.sh' session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash \"$HOME/.claude/statusline-command.sh\""
+  },
+  "enabledPlugins": {
+    "code-simplifier@claude-plugins-official": true,
+    "gopls-lsp@claude-plugins-official": true,
+    "plannotator@plannotator": true,
+    "superpowers@claude-plugins-official": true,
+    "worktrunk@worktrunk": true,
+    "portal@portal": true,
+    "shunt@portal": true,
+    "ponytail@ponytail": true,
+    "recast@synced": false,
+    "liftroi@synced": false
+  },
+  "extraKnownMarketplaces": {
+    "plannotator": {
+      "source": {
+        "source": "github",
+        "repo": "backnotprop/plannotator"
+      },
+      "autoUpdate": true
+    },
+    "recast": {
+      "source": {
+        "source": "github",
+        "repo": "getrecast/recast-for-claude"
+      }
+    },
+    "understand-anything": {
+      "source": {
+        "source": "github",
+        "repo": "Egonex-AI/Understand-Anything"
+      }
+    },
+    "worktrunk": {
+      "source": {
+        "source": "github",
+        "repo": "max-sixty/worktrunk"
+      }
+    },
+    "liftroi": {
+      "source": {
+        "source": "github",
+        "repo": "blackwoodseven/liftroi-plugins"
+      }
+    },
+    "portal": {
+      "source": {
+        "source": "github",
+        "repo": "spotify/portal-ai-plugins"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    }
+  },
+  "effortLevel": "medium",
+  "tui": "default",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "dark",
+  "env": {
+    "CLAUDE_CODE_PLUGIN_DIRS": "/Users/resulal/.claude/mods/context-bar"
+  }
+}
