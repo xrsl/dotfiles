@@ -6,6 +6,7 @@ Host ubuntu
     HostName ubuntu
     HostKeyAlias tart-ubuntu
     ProxyCommand /bin/sh -c 'exec /usr/bin/nc "$(/Users/resulal/.local/share/mise/shims/tart ip ubuntu --wait 60)" %p'
+    LocalForward 8090 127.0.0.1:8090
 
 Host tahoe
     User admin
