@@ -1,4 +1,7 @@
 {
+  "env": {
+    "CLAUDE_CODE_PLUGIN_DIRS": "/Users/resulal/.claude/mods/context-bar"
+  },
   "permissions": {
     "allow": [
       "mcp__codegraph__codegraph_explore",
@@ -11,7 +14,7 @@
       "mcp__codegraph__codegraph_status"
     ]
   },
-  "model": "sonnet",
+  "model": "opus",
   "hooks": {
     "SessionStart": [
       {
@@ -90,8 +93,5 @@
   "effortLevel": "medium",
   "tui": "default",
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark",
-  "env": {
-    "CLAUDE_CODE_PLUGIN_DIRS": "/Users/resulal/.claude/mods/context-bar"
-  }
+  "theme": "dark"
 }
