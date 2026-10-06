@@ -993,10 +993,3 @@ command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
 
 
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
-fpath=(/Users/resulal/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
-# End of Docker CLI completions
-
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
