@@ -127,6 +127,7 @@ ori = "latest"
 fnox = "latest"
 usage = "latest"
 "npm:mint" = "latest"
+"github:westpoint-io/lazyrsync" = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
