@@ -1,0 +1,34 @@
+# Run from the Mac host; "ubuntu" is the ssh alias in ~/.ssh/config.
+[[profile]]
+name = "ubuntu"
+description = "Mac <-> ubuntu VM"
+
+# rsync -avP ubuntu:/home/admin/ghub/mcg-harness/jobs-*.zip ~/Downloads/
+[[profile.task]]
+label  = "mcg-harness job zips -> Downloads"
+source = "ubuntu:/home/admin/ghub/mcg-harness/"
+dest   = "~/Downloads/"
+id     = "mcgh-jobs-zip"
+action = "sync"
+
+[profile.task.flags]
+archive = true
+verbose = true
+progress = true
+partial = true
+
+[profile.task.filters]
+includes = ["jobs-*.zip"]
+excludes = ["*"]
+
+# rsync -av ~/.cache/mcgh/ ubuntu:.cache/mcgh/
+[[profile.task]]
+label  = "mcgh cache -> ubuntu"
+source = "~/.cache/mcgh/"
+dest   = "ubuntu:.cache/mcgh/"
+id     = "mcgh-cache-push"
+action = "sync"
+
+[profile.task.flags]
+archive = true
+verbose = true
