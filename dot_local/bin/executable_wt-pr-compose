@@ -89,7 +89,7 @@ fi
 
 prompt='/pr-composer Compose and apply the pull request for the current branch. Follow the repository skill exactly. Rewrite both the title and the body; the placeholder title and body must not survive. If the PR resolves an issue, the body must contain a `Closes #<n>` line for it. Finish only after the title and body are verified. Do not change repository files or commits. Your only job is the title and body: do not run, watch, wait for, or report on CI checks or workflow runs.'
 
-composer_log=$(mktemp -t wt-pr-compose)
+composer_log=$(mktemp -t wt-pr-compose.XXXXXX)
 composer_rc="$composer_log.rc"
 cleanup_log() { rm -f "$composer_log" "$composer_rc"; }
 
