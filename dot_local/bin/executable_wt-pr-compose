@@ -74,7 +74,8 @@ git push -u origin HEAD
 base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null | sed 's#^origin/##')
 base=${base:-main}
 
-if ! gh pr view --json number >/dev/null 2>&1; then
+# `gh pr view` also finds a closed PR for the branch; only an open one counts.
+if [ "$(gh pr view --json state --jq .state 2>/dev/null)" != OPEN ]; then
     if [ -z "$(git log --oneline "origin/$base..HEAD")" ]; then
         echo "wt pr: no commits ahead of origin/$base; nothing to open a PR for" >&2
         exit 1
@@ -87,7 +88,7 @@ if ! gh pr view --json number >/dev/null 2>&1; then
     created_pr=$(gh pr view --json number --jq .number)
 fi
 
-prompt='/pr-composer Compose and apply the pull request for the current branch. Follow the repository skill exactly. Rewrite both the title and the body; the placeholder title and body must not survive. If the PR resolves an issue, the body must contain a `Closes #<n>` line for it. Finish only after the title and body are verified. Do not change repository files or commits. Your only job is the title and body: do not run, watch, wait for, or report on CI checks or workflow runs.'
+prompt='/pr-composer Compose and apply the pull request for the current branch. Follow the repository skill exactly. Rewrite both the title and the body; the placeholder title and body must not survive. If the PR resolves an issue, the body must contain a `Closes #<n>` line for it. Finish only after the title and body are verified. Write the --body-file under /tmp. Do not change repository files or commits. Your only job is the title and body: do not run, watch, wait for, or report on CI checks or workflow runs.'
 
 composer_log=$(mktemp -t wt-pr-compose.XXXXXX)
 composer_rc="$composer_log.rc"
@@ -115,7 +116,8 @@ cleanup_log() { rm -f "$composer_log" "$composer_rc"; }
     'Bash(git diff *)' \
     'Bash(git log *)' \
     'Bash(git status *)' \
-    Read </dev/null 2>&1 || echo "$?" >"$composer_rc"; } | tee "$composer_log"
+    Read \
+    'Write(//tmp/**)' </dev/null 2>&1 || echo "$?" >"$composer_rc"; } | tee "$composer_log"
 
 if [ -f "$composer_rc" ]; then
     echo "wt pr: composer session exited $(cat "$composer_rc")" >&2
