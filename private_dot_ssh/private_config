@@ -1,7 +1,7 @@
 Include config.local
 Include /Users/resulal/.colima/ssh_config
 
-Host ubuntu
+Host ubuntu vm
     User admin
     HostName ubuntu
     HostKeyAlias tart-ubuntu
@@ -19,7 +19,7 @@ Host tart-*
     User admin
     ProxyCommand /bin/sh -c 'vm=${1#tart-}; exec /usr/bin/nc "$(/Users/resulal/.local/share/mise/shims/tart ip "$vm" --wait 60)" %p' -- %n
 
-Host ubuntu tahoe tart-*
+Host ubuntu vm tahoe tart-*
     ForwardAgent yes
 
 Match exec "test -S '%d/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock'"
