@@ -88,7 +88,7 @@ if [ "$(gh pr view --json state --jq .state 2>/dev/null)" != OPEN ]; then
     created_pr=$(gh pr view --json number --jq .number)
 fi
 
-prompt='/pr-composer Compose and apply the pull request for the current branch. Follow the repository skill exactly. Rewrite both the title and the body; the placeholder title and body must not survive. If the PR resolves an issue, the body must contain a `Closes #<n>` line for it. Finish only after the title and body are verified. Write the --body-file under /tmp. Do not change repository files or commits. Your only job is the title and body: do not run, watch, wait for, or report on CI checks or workflow runs.'
+prompt='/pr-composer Compose and apply the pull request for the current branch. Follow the repository skill exactly. Rewrite both the title and the body; the placeholder title and body must not survive. If the PR resolves an issue, the body must contain a `Closes #<n>` line for it. Finish only after the title and body are verified. Write the --body-file under /tmp. Run exactly one gh/git command per Bash call: no cd, pipes, ;, && or other tools such as sed/head/grep (use Read for files). Do not change repository files or commits. Your only job is the title and body: do not run, watch, wait for, or report on CI checks or workflow runs.'
 
 composer_log=$(mktemp -t wt-pr-compose.XXXXXX)
 composer_rc="$composer_log.rc"
@@ -111,13 +111,14 @@ cleanup_log() { rm -f "$composer_log" "$composer_rc"; }
     --allowedTools \
     'Bash(gh pr *)' \
     'Bash(gh issue list *)' \
+    'Bash(gh label list *)' \
     'Bash(gh issue view *)' \
     'Bash(git branch *)' \
     'Bash(git diff *)' \
     'Bash(git log *)' \
     'Bash(git status *)' \
     Read \
-    'Write(//tmp/**)' </dev/null 2>&1 || echo "$?" >"$composer_rc"; } | tee "$composer_log"
+    'Edit(//tmp/**)' </dev/null 2>&1 || echo "$?" >"$composer_rc"; } | tee "$composer_log"
 
 if [ -f "$composer_rc" ]; then
     echo "wt pr: composer session exited $(cat "$composer_rc")" >&2
