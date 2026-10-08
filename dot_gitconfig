@@ -55,7 +55,7 @@
 # these styles from here.
 [delta]
   features = catppuccin-mocha
-  syntax-theme = tokyonight_night
+	syntax-theme = Catppuccin Mocha
   dark = true
   tabs = 2
   line-numbers = false
