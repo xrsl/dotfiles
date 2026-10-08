@@ -136,6 +136,26 @@ vmh() {
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
 command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
 
+# fzf: styled like the snacks.nvim picker in Catppuccin Mocha. Previews use bat,
+# whose theme is set in ~/.config/bat/config.
+#   Ctrl-T  pick files and insert their paths    Alt-C  cd into a picked dir
+#   Ctrl-R  stays with atuin
+export FZF_DEFAULT_COMMAND='fd -t f -H -E .git'
+export FZF_DEFAULT_OPTS="--style=full --layout=reverse --height=90% --border=none \
+  --prompt=' ' --pointer='▌' --marker='┃' --info=inline-right \
+  --preview-window=right,65%,border-rounded --bind='ctrl-/:toggle-preview' \
+  --color=bg+:#313244,bg:#1e1e2e,fg:#cdd6f4,fg+:#cdd6f4,hl:#89b4fa,hl+:#89b4fa \
+  --color=selected-bg:#45475a,border:#89b4fa,label:#cdd6f4,prompt:#89b4fa \
+  --color=pointer:#f5e0dc,marker:#b4befe,spinner:#f5e0dc,info:#6c7086,header:#f38ba8 \
+  --color=input-border:#89b4fa,list-border:#45475a,preview-border:#45475a"
+export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
+export FZF_CTRL_T_OPTS="--multi --input-label ' Files ' \
+  --preview 'bat --color=always --style=numbers -r :500 {}'"
+export FZF_ALT_C_COMMAND='fd -t d -H -E .git'
+export FZF_ALT_C_OPTS="--input-label ' Dirs ' --preview 'eza -T -L2 --color=always {} 2>/dev/null || ls {}'"
+export FZF_CTRL_R_COMMAND=   # empty value: fzf leaves Ctrl-R to atuin
+command -v fzf >/dev/null && source <(fzf --zsh)
+
 _atuin_up_search_marked() {
   zle atuin-up-search
   [[ -n "$BUFFER" ]] && _ATUIN_SELECTED_BUFFER=1
