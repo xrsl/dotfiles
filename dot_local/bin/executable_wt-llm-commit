@@ -1,0 +1,41 @@
+#!/bin/sh
+set -eu
+
+# worktrunk [commit.generation] command: prompt on stdin, message on stdout.
+# WT_LLM picks the backend (default claude); every backend gets the same
+# Conventional Commit check, so a bad subject fails here, not at `wt pr`.
+
+case "${WT_LLM:-claude}" in
+    claude)
+        message=$(
+            CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p \
+                --no-session-persistence \
+                --model=claude-haiku-5-5 \
+                --tools='' \
+                --disable-slash-commands \
+                --setting-sources='' \
+                --system-prompt=''
+        ) ;;
+    cx)
+        message=$(
+            codex exec -m gpt-5.1-codex-mini -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - |
+                jq -sr '[.[] | select(.item.type? == "agent_message")] | last.item.text // empty'
+        ) ;;
+    oc) message=$(opencode run -m anthropic/claude-haiku-4.5 --variant fast) ;;
+    co) message=$(copilot --output-format text -p "$(cat)") ;;
+    pi) message=$(pi --print --no-prompt-templates --provider optiq --model qwen3.8:27b "$(cat)") ;;
+    *)
+        echo "wt commit: unknown WT_LLM=$WT_LLM (claude|cx|oc|co|pi)" >&2
+        exit 2 ;;
+esac
+
+# co/pi may lead with blank lines; drop them so line 1 is the subject.
+message=$(printf '%s\n' "$message" | sed '/./,$!d')
+
+subject=$(printf '%s\n' "$message" | sed -n '1p')
+if [ -z "$subject" ] || [ "$subject" = null ] || ! printf '%s\n' "$subject" | grep -Eq '^[[:alpha:]]+(\([^)]*\))?!?: .+'; then
+    echo "wt commit: ${WT_LLM:-claude} returned an invalid Conventional Commit message: $subject" >&2
+    exit 1
+fi
+
+printf '%s\n' "$message"

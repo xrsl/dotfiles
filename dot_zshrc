@@ -297,32 +297,22 @@ alias car="cursor-agent --yolo --resume"
 #alias pi='pi --provider ollama --model gemma4:31b'
 #alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
 
-# Worktrunk: s/l/r/c/pr live in ~/.config/worktrunk/config.toml [aliases]
-# (switch/remove cd propagates from aliases via shell integration).
-# wtcode stays a function: its `cd` back to the original dir can't persist from an alias.
-alias wtl='wt l'         # fast (~0.6s): local status only
-alias wtlf='wt l --full' # full (~11s cold): + CI status & LLM summaries (network/LLM, cached 30-60s)
-alias wtlr='wt l --remotes'
-alias wtd='wt d'         # 'wt step diff': all changes since branching (committed+staged+unstaged+untracked)
-alias wts='wt s'
-# wtn <branch> [<base>]: 'wt newtree' (not 'new': repos may define their own). Optional 2nd positional is the base ref
-# (main, origin/main, @; '.' is rewritten to @). Defaults to origin/main.
+# Worktrunk: multi-step aliases (newtree/sc/scp/pr/land/up/home/wip/rev) live in
+# ~/.config/worktrunk/config.toml; switch/remove cd propagates via shell integration.
+alias wts='wt switch'
+alias wtl='wt list'              # fast (~0.6s): local status only
+alias wtlf='wt list --full'      # + CI status & LLM summaries (~11s cold, cached)
+alias wtlr='wt list --remotes'
+alias wtd='wt step diff'         # all changes since branching (committed+staged+unstaged+untracked)
+alias wtrm='wt remove -D'        # removes worktree AND force-deletes the branch (even unmerged)
+alias wth='wt home'
+# wtn <branch> [<base>] — 'wt newtree' (not 'new': repos may define their own).
+# base defaults to origin/main; '.' means the current HEAD.
 wtn() {
-  local branch base
-  local -a rest
-  (( $# )) && { branch="$1"; shift; }
-  (( $# )) && [[ "$1" != -* ]] && { base="$1"; shift; }
-  rest=("$@")
-  [[ "$base" == "." ]] && base="@"
-  if [[ -n "$base" ]]; then
-    # 'newtree' alias takes base as a positional (args[1]) and adds --base itself;
-    # passing --base here would double up into `--base --base`.
-    wt newtree "$branch" "$base" "${rest[@]}"
-  elif [[ -n "$branch" ]]; then
-    wt newtree "$branch" "${rest[@]}"
-  else
-    wt newtree
-  fi
+  local base=$2
+  [[ $base == . ]] && base=@
+  [[ $base == -* ]] && base=
+  wt newtree ${1:+"$1"} ${base:+"$base"}
 }
 # wti <issue#|url>... [<branch>] — worktree from GitHub issue(s).
 #   wti 42            branch name slugged from the issue title
@@ -348,28 +338,11 @@ wti() {
   local desc; for i in $issues; do desc+="Closes #$i"$'\n'; done
   git config branch."$branch".description "$desc"
 }
-# wtc [cx|co|oc|pi] — commit with LLM-generated message.
-#   wtc          → claude (default backend, 'wt sc'); forwards extra args to step commit
-#   wtc cx       → codex     (wt sc-cx)
-#   wtc pi       → local qwen (wt sc-pi) — never rate-limited; use when claude is exhausted
-#   wtc oc / co  → opencode / copilot (wt sc-oc / sc-co)
-wtc() {
-  case "$1" in
-    cx|co|oc|pi) wt "sc-$1" ;;
-    *)           wt sc "$@" ;;
-  esac
-}
-# wtcp [cx|pi] — commit+push. Default = claude (wt scp); cx = codex, pi = local qwen.
-# Only cx/pi have push variants (scp-cx/scp-pi); oc/co are commit-only via wtc.
-wtcp() {
-  case "$1" in
-    cx|pi) wt "scp-$1" ;;
-    *)     wt scp "$@" ;;
-  esac
-}
-alias wtrm='wt rm'       # 'wt remove -D': removes worktree AND force-deletes the branch (even unmerged)
-alias wth='wt home'
-alias wtpr='wt pr'      # user alias -> ~/.local/bin/wt-pr-compose
+# wtc / wtcp [cx|oc|co|pi] [args] — commit (and push) with an LLM message.
+# Default claude; cx=codex, oc=opencode, co=copilot, pi=local qwen (never rate-limited).
+# Same switch for anything else: WT_LLM=cx wt pr / wt land.
+wtc()  { case $1 in cx|oc|co|pi) WT_LLM=$1 wt sc "${@:2}" ;;  *) wt sc "$@" ;;  esac }
+wtcp() { case $1 in cx|oc|co|pi) WT_LLM=$1 wt scp "${@:2}" ;; *) wt scp "$@" ;; esac }
 
 export EDITOR="$HOME/.local/bin/fresh-wait"
 
