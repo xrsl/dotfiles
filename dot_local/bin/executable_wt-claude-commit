@@ -4,7 +4,7 @@ set -eu
 message=$(
     CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p \
         --no-session-persistence \
-        --model=haiku \
+        --model=claude-haiku-5-5 \
         --tools='' \
         --disable-slash-commands \
         --setting-sources='' \

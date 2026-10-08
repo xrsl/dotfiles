@@ -101,7 +101,7 @@ cleanup_log() { rm -f "$composer_log" "$composer_rc"; }
 # Piping to tee hides claude's exit status from `set -e`, so stash it in a file.
 { claude -p "$prompt" \
     --no-session-persistence \
-    --model=sonnet \
+    --model=claude-haiku-5-5 \
     --permission-mode=dontAsk \
     --setting-sources=user,project \
     --disallowedTools \

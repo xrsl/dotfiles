@@ -76,7 +76,7 @@ draft = "{ git diff --quiet && git diff --cached --quiet || wt step commit || gi
 summary = true
 
 [commit.generation]
-# Generate commit messages with Claude Code (haiku, text-only, fast).
+# Generate commit messages with Claude Code (Haiku 5.5, text-only, fast).
 command = "~/.local/bin/wt-claude-commit"
 
 # Append the Conventional Commits rule to worktrunk's default prompt (keeps its
