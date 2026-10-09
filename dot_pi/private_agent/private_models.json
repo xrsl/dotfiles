@@ -24,23 +24,47 @@
       "apiKey": "ollama",
       "baseUrl": "http://127.0.0.1:11434/v1",
       "compat": {
-        "supportsDeveloperRole": false,
-        "supportsReasoningEffort": false
+        "supportsDeveloperRole": false
       },
       "models": [
         {
-          "id": "qwen3.8:27b",
-          "name": "Qwen 3.8 27B"
-        },
-        {
-          "_launch": true,
-          "contextWindow": 262144,
-          "id": "qwen3.8:27b",
+          "id": "qwen3.6:35b",
+          "name": "Qwen 3.6 35B-A3B (ollama, coding agent)",
+          "reasoning": true,
           "input": [
             "text",
             "image"
           ],
-          "reasoning": true
+          "contextWindow": 32768,
+          "thinkingLevelMap": {
+            "off": "none"
+          }
+        },
+        {
+          "id": "qwen3.5:4b",
+          "name": "Qwen 3.5 4B (ollama, fast)",
+          "reasoning": true,
+          "input": [
+            "text",
+            "image"
+          ],
+          "contextWindow": 32768,
+          "thinkingLevelMap": {
+            "off": "none"
+          }
+        },
+        {
+          "id": "qwen3.8:27b",
+          "name": "Qwen 3.8 27B (ollama)",
+          "reasoning": true,
+          "input": [
+            "text",
+            "image"
+          ],
+          "contextWindow": 32768,
+          "thinkingLevelMap": {
+            "off": "none"
+          }
         }
       ]
     },
