@@ -1,0 +1,15 @@
+#!/bin/sh
+# chezmoi modify_: the config is managed in .chezmoitemplates/opencode.json (edit that,
+# it is plain JSON). OptiQ models the llm repo's launcher adds at run time
+# (`.j oc optiq model <name>`, so opencode shows the model by name) are kept on top.
+# `local` was the generic entry before that, and is dropped.
+set -eu
+current=$(cat)
+[ -n "$current" ] || current='{}'
+managed=$(cat <<'JSON'
+{{ template "opencode.json" . }}
+JSON
+)
+printf '%s\n' "$current" | jq --indent 2 --argjson m "$managed" '
+  ((.provider.optiq.models // {}) | with_entries(select(.key != "local" and (.key as $k | $m.provider.optiq.models | has($k) | not)))) as $added
+  | $m | .provider.optiq.models += $added'

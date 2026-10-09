@@ -1,0 +1,17 @@
+#!/bin/sh
+# chezmoi modify_: the providers are managed in .chezmoitemplates/pi-models.json (edit
+# that, it is plain JSON). OptiQ model entries the llm repo's launcher adds at run time
+# (`.j pi optiq model <name>`, so pi shows the model by name) are kept on top of it:
+# OptiQ ignores the id, and a new OptiQ model should need no edit here. `local` was
+# the generic entry before that, and is dropped.
+set -eu
+current=$(cat)
+[ -n "$current" ] || current='{}'
+managed=$(cat <<'JSON'
+{{ template "pi-models.json" . }}
+JSON
+)
+printf '%s\n' "$current" | jq --indent 2 --argjson m "$managed" '
+  ($m.providers.optiq.models | map(.id)) as $known
+  | [(.providers.optiq.models // [])[] | select(.id != "local" and (.id as $i | $known | index($i) | not))] as $added
+  | $m | .providers.optiq.models += $added'
