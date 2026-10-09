@@ -13,6 +13,12 @@
     <string>ollama</string>
     <string>serve</string>
   </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <!-- all interfaces, so VMs can reach it at <mac-ip>:11434; ollama has no auth -->
+    <key>OLLAMA_HOST</key>
+    <string>0.0.0.0</string>
+  </dict>
   <key>WorkingDirectory</key>
   <string>{{ .chezmoi.homeDir }}</string>
   <key>RunAtLoad</key>
