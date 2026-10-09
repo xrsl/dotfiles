@@ -22,3 +22,7 @@ if [[ -r "$HOME/.env" ]]; then
     done
     unset _k _v
 fi
+
+# Ubuntu's /etc/zsh/zshrc runs its own compinit with a shorter fpath than ~/.zshrc's;
+# the two then fight over ~/.zcompdump and rebuild it on every start (~1.4s).
+skip_global_compinit=1

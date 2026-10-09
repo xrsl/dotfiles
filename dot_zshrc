@@ -269,12 +269,17 @@ fpath=(~/.zsh/completions $fpath)
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile pre source)"
 
 # One compinit; skip the security audit (compaudit) when the dump is < 24h old.
+# -C also skips the new-file check: after adding a completion, rm ~/.zcompdump.
+# (Array, not [[ -n … ]]: [[ ]] never globs, so that test was always true.)
 autoload -Uz compinit
-if [[ -n ~/.zcompdump(#qNmh+24) ]]; then
+_zcd=(~/.zcompdump(Nmh+24))
+if (( $#_zcd )) || [[ ! -s ~/.zcompdump ]]; then
   compinit
+  touch ~/.zcompdump  # compinit only rewrites the dump when files change; restart the 24h clock
 else
   compinit -C
 fi
+unset _zcd
 
 zstyle ':completion:*' menu select
 
