@@ -3,6 +3,10 @@
 # upgrade), so a plain copy would drift on each run. Only the keys below are managed;
 # chezmoi pipes the current file in and writes back the merge, keeping pi's own keys.
 # Arrays replace rather than merge, so `packages` here is the whole extension list.
+# theme "terminal" (pi-terminal-theme) draws with the terminal's ANSI palette, i.e.
+# Ghostty's Catppuccin Mocha. `skills` filters discovered skills too: every skill's
+# name and description rides along on each request, and the ce-* set from
+# ~/.agents/skills is 40 of them.
 set -eu
 current=$(cat)
 [ -n "$current" ] || current='{}'
@@ -10,7 +14,8 @@ printf '%s\n' "$current" | jq --indent 2 '. * {
   "defaultProvider": "ollama",
   "defaultModel": "qwen3.6:35b",
   "defaultThinkingLevel": "medium",
-  "theme": "dark",
+  "theme": "terminal",
+  "skills": ["!**/ce-*"],
   "packages": [
     "npm:@juanibiapina/pi-extension-settings",
     "npm:@plannotator/pi-extension",
