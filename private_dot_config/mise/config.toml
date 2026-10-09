@@ -129,6 +129,7 @@ usage = "latest"
 "npm:mint" = "latest"
 "github:westpoint-io/lazyrsync" = "latest"
 "cargo:cargo-deny" = "latest"
+"aqua:bootandy/dust" = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
