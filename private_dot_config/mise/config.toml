@@ -13,11 +13,10 @@ bottom = "latest"
 buf = "latest"
 bun = "latest"
 chezmoi = "latest"
-"github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true" }
+"github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true", os = ["macos"] }
 "npm:@kilocode/cli" = { version = "latest", os = ["macos"] }
 "npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"], os = ["macos"] }
 "npm:cline" = { version = "latest", os = ["macos"] }
-"npm:@colbymchenry/codegraph" = "latest"
 "npm:@openai/codex-security" = "latest"
 "npm:@z_ai/coding-helper" = { version = "latest", os = ["macos"] }
 colima = { version = "latest", os = ["macos"] }
@@ -26,7 +25,6 @@ copilot = { version = "latest", os = ["macos"] }
 crane = "latest"
 crush = { version = "latest", os = ["macos"] }
 "npm:ctx7" = "latest"
-dagger = "latest"
 delta = "latest"
 docker-cli = { version = "latest", os = ["macos"] }
 "aqua:Byron/dua-cli" = "latest"
@@ -42,7 +40,7 @@ glow = "latest"
 go = "latest"
 golangci-lint = "latest"
 "go:golang.org/x/tools/gopls" = "v0.23.0"
-goreleaser = "latest"
+goreleaser = { version = "latest", os = ["macos"] }
 "go:golang.org/x/vuln/cmd/govulncheck" = "latest"
 gum = "latest"
 helm = "latest"
@@ -67,7 +65,6 @@ minikube = { version = "latest", os = ["macos"] }
 "pipx:mlx-lm" = { version = "latest", os = ["macos"] }
 neovim = "latest"
 node = "lts"
-"aqua:nushell/nushell" = "latest"
 opencode = { version = "latest", os = ["macos"] }
 "npm:openskills" = "latest"
 pi = { version = "latest", os = ["macos"] }
@@ -91,7 +88,6 @@ superfile = "latest"
 "aqua:cirruslabs/tart" = { version = "latest", os = ["macos"] }
 tokei = "latest"
 "npm:tokscale" = "latest"
-"cargo:toppy" = "latest"
 trivy = "latest"
 typos = "latest"
 uv = "latest"
@@ -107,7 +103,7 @@ cue = "latest"
 "github:AlexsJones/llmfit" = { version = "latest", os = ["macos"] }
 "github:atanunq/viu" = { version = "latest", os = ["macos"] }
 "pipx:complexipy" = "latest"
-"npm:@sentry/cli" = "latest"
+"npm:@sentry/cli" = { version = "latest", os = ["macos"] }
 "cargo:plannotator/plannotator-tui" = "latest"
 "aqua:bahdotsh/wrkflw" = "latest"
 "aqua:jesseduffield/lazydocker" = "latest"
