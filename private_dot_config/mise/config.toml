@@ -1,34 +1,34 @@
 [tools]
-1password = "latest"
-"npm:9router" = "latest"
+1password = { version = "latest", os = ["macos"] }
+"npm:9router" = { version = "latest", os = ["macos"] }
 actionlint = "latest"
-"github:vercel-labs/agent-browser" = "latest"
-agy = "latest"
+"github:vercel-labs/agent-browser" = { version = "latest", os = ["macos"] }
+agy = { version = "latest", os = ["macos"] }
 argocd = "latest"
 atuin = "latest"
 aws = "latest"
-azure = { version = "latest", dependency_prereleases = "allow" }
+azure = { version = "latest", dependency_prereleases = "allow", os = ["macos"] }
 bat = "latest"
 bottom = "latest"
 buf = "latest"
 bun = "latest"
 chezmoi = "latest"
 "github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true" }
-"npm:@kilocode/cli" = "latest"
-"npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"] }
-"npm:cline" = "latest"
+"npm:@kilocode/cli" = { version = "latest", os = ["macos"] }
+"npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"], os = ["macos"] }
+"npm:cline" = { version = "latest", os = ["macos"] }
 "npm:@colbymchenry/codegraph" = "latest"
 "npm:@openai/codex-security" = "latest"
-"npm:@z_ai/coding-helper" = "latest"
-colima = "latest"
+"npm:@z_ai/coding-helper" = { version = "latest", os = ["macos"] }
+colima = { version = "latest", os = ["macos"] }
 "npm:@upstash/context7-mcp" = "latest"
-copilot = "latest"
+copilot = { version = "latest", os = ["macos"] }
 crane = "latest"
-crush = "latest"
+crush = { version = "latest", os = ["macos"] }
 "npm:ctx7" = "latest"
 dagger = "latest"
 delta = "latest"
-docker-cli = "latest"
+docker-cli = { version = "latest", os = ["macos"] }
 "aqua:Byron/dua-cli" = "latest"
 eza = "0.23.5"
 fd = "latest"
@@ -56,24 +56,24 @@ kubectl = "latest"
 kubectx = "latest"
 kubens = "latest"
 lazygit = "latest"
-"npm:@robzolkos/lazypi" = { version = "latest", trust_policy_excludes = ["@robzolkos/lazypi@0.6.4"] }
+"npm:@robzolkos/lazypi" = { version = "latest", trust_policy_excludes = ["@robzolkos/lazypi@0.6.4"], os = ["macos"] }
 "aqua:jorgerojas26/lazysql" = "latest"
-lazyssh = "latest"
-lima = "latest"
-"llama.cpp" = { version = "latest", version_prefix = "b" }
-"npm:@marp-team/marp-cli" = "latest"
-"npm:@mermaid-js/mermaid-cli" = "latest"
-minikube = "latest"
+lazyssh = { version = "latest", os = ["macos"] }
+lima = { version = "latest", os = ["macos"] }
+"llama.cpp" = { version = "latest", version_prefix = "b", os = ["macos"] }
+"npm:@marp-team/marp-cli" = { version = "latest", os = ["macos"] }
+"npm:@mermaid-js/mermaid-cli" = { version = "latest", os = ["macos"] }
+minikube = { version = "latest", os = ["macos"] }
 "pipx:mlx-lm" = { version = "latest", os = ["macos"] }
 neovim = "latest"
 node = "lts"
 "aqua:nushell/nushell" = "latest"
-opencode = "latest"
+opencode = { version = "latest", os = ["macos"] }
 "npm:openskills" = "latest"
-pi = "latest"
-"github:backnotprop/plannotator" = "latest"
+pi = { version = "latest", os = ["macos"] }
+"github:backnotprop/plannotator" = { version = "latest", os = ["macos"] }
 pnpm = "latest"
-"npm:postman-cli" = "latest"
+"npm:postman-cli" = { version = "latest", os = ["macos"] }
 prek = "latest"
 protobuf = "latest"
 python = "latest"
@@ -81,7 +81,7 @@ rclone = "latest"
 rg = "latest"
 rumdl = "latest"
 rust = "latest"
-saml2aws = "latest"
+saml2aws = { version = "latest", os = ["macos"] }
 "github:lusingander/serie" = "latest"
 sheldon = "latest"
 skate = "latest"
@@ -104,8 +104,8 @@ zoxide = "latest"
 "aqua:PaulJuliusMartinez/jless" = { version = "latest", os = ["macos", "linux/x64"] }
 cue = "latest"
 "aqua:duckdb/duckdb" = "latest"
-"github:AlexsJones/llmfit" = "latest"
-"github:atanunq/viu" = "latest"
+"github:AlexsJones/llmfit" = { version = "latest", os = ["macos"] }
+"github:atanunq/viu" = { version = "latest", os = ["macos"] }
 "pipx:complexipy" = "latest"
 "npm:@sentry/cli" = "latest"
 "cargo:plannotator/plannotator-tui" = "latest"
@@ -114,19 +114,19 @@ cue = "latest"
 "aqua:simeji/jid" = "latest"
 "cargo:matthart1983/syswatch" = "latest"
 "aqua:ducaale/xh" = "latest"
-"github:rezigned/upmd" = "latest"
+"github:rezigned/upmd" = { version = "latest", os = ["macos"] }
 "aqua:koalaman/shellcheck" = "latest"
 "cargo:https://github.com/block/buzz" = { version = "latest", crate = "buzz-cli" }
 "cargo:https://github.com/block/buzz.git" = { version = "latest", crate = "buzz-acp" }
-"npm:paperclipai" = "latest"
-cliamp = "latest"
-"pipx:huggingface_hub" = "latest"
-ori = "latest"
-"github:findyourexit/zonetimeline-tui" = "latest"
+"npm:paperclipai" = { version = "latest", os = ["macos"] }
+cliamp = { version = "latest", os = ["macos"] }
+"pipx:huggingface_hub" = { version = "latest", os = ["macos"] }
+ori = { version = "latest", os = ["macos"] }
+"github:findyourexit/zonetimeline-tui" = { version = "latest", os = ["macos"] }
 "github:findyourexit/excise" = "latest"
 fnox = "latest"
 usage = "latest"
-"npm:mint" = "latest"
+"npm:mint" = { version = "latest", os = ["macos"] }
 "github:westpoint-io/lazyrsync" = "latest"
 "cargo:cargo-deny" = "latest"
 "aqua:bootandy/dust" = "latest"
