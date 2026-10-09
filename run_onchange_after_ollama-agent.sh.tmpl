@@ -1,0 +1,13 @@
+#!/bin/sh
+# macOS: (re)load the ollama LaunchAgent whenever its plist changes. No-op on Linux.
+{{ if eq .chezmoi.os "darwin" -}}
+# plist hash: {{ include "Library/LaunchAgents/com.xrsl.ollama.plist.tmpl" | sha256sum }}
+set -e
+label=com.xrsl.ollama
+launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+# a server started by hand or left by the old Ollama.app would hold port 11434
+pkill -f 'ollama serve' 2>/dev/null || true
+sleep 1  # bootout is async; bootstrap right after can fail with EIO
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/$label.plist"
+echo "ollama agent loaded; logs: ~/Library/Logs/ollama.log"
+{{ end -}}

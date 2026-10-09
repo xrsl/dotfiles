@@ -2,3 +2,6 @@ README.md
 bootstrap.sh
 .config/mise/mise.lock
 .ssh/config.local
+{{ if ne .chezmoi.os "darwin" }}
+Library
+{{ end }}
