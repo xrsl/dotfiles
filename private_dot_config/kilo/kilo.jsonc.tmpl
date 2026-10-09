@@ -29,23 +29,5 @@
       "type": "remote",
       "url": "https://mcp.context7.com/mcp"
     }
-  },
-  // The Mac's ollama; in a Tart VM localhost:11434 is the same daemon via the SSH
-  // RemoteForward. Same block as opencode.json (Kilo is an opencode fork but reads
-  // only ~/.config/kilo). ollama thinks unless told reasoningEffort "none".
-  "provider": {
-    "ollama": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "Ollama (local)",
-      "options": {
-        "baseURL": "http://localhost:11434/v1",
-        "apiKey": "ollama"
-      },
-      "models": {
-        "qwen3.6:35b": { "name": "Qwen 3.6 35B-A3B (ollama, coding agent)" },
-        "qwen3.5:4b": { "name": "Qwen 3.5 4B (ollama, fast)", "options": { "reasoningEffort": "none" } },
-        "qwen3.8:27b": { "name": "Qwen 3.8 27B (ollama Q4_K_M)" }
-      }
-    }
   }
 }
