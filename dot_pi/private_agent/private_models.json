@@ -101,8 +101,8 @@
       },
       "models": [
         {
-          "id": "llamacpp",
-          "name": "llama.cpp :8081 (Gemma-4-E4B QAT by default)",
+          "id": "gemma-4-e4b-it-qat",
+          "name": "Gemma-4-E4B QAT (llama.cpp, MTP)",
           "contextWindow": 32768
         }
       ]
