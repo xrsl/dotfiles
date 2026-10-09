@@ -54,13 +54,39 @@
       },
       "models": {
         "qwen3.8:27b": {
-          "name": "Qwen 3.8 27B OptiQ 4bit"
+          "name": "Qwen 3.8 27B OptiQ 4bit",
+          "variants": {
+            "think": {
+              "chat_template_kwargs": {
+                "enable_thinking": true
+              }
+            },
+            "nothink": {
+              "chat_template_kwargs": {
+                "enable_thinking": false
+              }
+            }
+          }
         },
-        "nemotron:nothink": {
-          "name": "Nemotron 3.5 Lightning 30B (fast)"
-        },
-        "nemotron:think": {
-          "name": "Nemotron 3.5 Lightning 30B (reasoning)"
+        "nemotron": {
+          "name": "Nemotron 3.5 Lightning 30B-A3B OptiQ 4bit",
+          "options": {
+            "chat_template_kwargs": {
+              "enable_thinking": false
+            }
+          },
+          "variants": {
+            "think": {
+              "chat_template_kwargs": {
+                "enable_thinking": true
+              }
+            },
+            "nothink": {
+              "chat_template_kwargs": {
+                "enable_thinking": false
+              }
+            }
+          }
         }
       }
     },
