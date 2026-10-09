@@ -122,6 +122,7 @@ usage = "latest"
 "npm:mint" = { version = "latest", os = ["macos"] }
 cargo-deny = "latest"
 dust = "latest"
+ollama = { version = "latest", os = ["macos"] }
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
