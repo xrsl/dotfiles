@@ -14,7 +14,7 @@ buf = "latest"
 bun = "latest"
 chezmoi = "latest"
 circleci = { version = "latest", prerelease = "true", os = ["macos"] }
-"npm:@kilocode/cli" = { version = "latest", os = ["macos"] }
+"npm:@kilocode/cli" = "latest"
 "npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"], os = ["macos"] }
 "npm:cline" = { version = "latest", os = ["macos"] }
 "npm:@openai/codex-security" = "latest"
@@ -64,7 +64,7 @@ minikube = { version = "latest", os = ["macos"] }
 "pipx:mlx-lm" = { version = "latest", os = ["macos"] }
 neovim = "latest"
 node = "lts"
-opencode = { version = "latest", os = ["macos"] }
+opencode = "latest"
 "npm:openskills" = "latest"
 pi = "latest"
 "github:backnotprop/plannotator" = { version = "latest", os = ["macos"] }
