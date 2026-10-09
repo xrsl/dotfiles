@@ -23,7 +23,7 @@ case "${WT_LLM:-claude}" in
         ) ;;
     oc) message=$(opencode run -m anthropic/claude-haiku-4.5 --variant fast) ;;
     co) message=$(copilot --output-format text -p "$(cat)") ;;
-    pi) message=$(pi --print --no-prompt-templates --provider optiq --model qwen3.8:27b "$(cat)") ;;
+    pi) message=$(pi --print --no-prompt-templates --model ollama/qwen3.5:4b --thinking off "$(cat)") ;;
     *)
         echo "wt commit: unknown WT_LLM=$WT_LLM (claude|cx|oc|co|pi)" >&2
         exit 2 ;;
