@@ -299,6 +299,16 @@ alias j=just
 # able to see the positional as a recipe.
 alias .j='just -g'
 
+# mise: add/rm/clean go through the ~/.justfile recipe (chezmoi sync, no leftovers);
+# everything else hits mise's own shell function so `m shell` still evals.
+m() {
+  case ${1:-} in
+    add|rm|remove|unuse|clean) just -g mise "$@" ;;
+    *) mise "$@" ;;
+  esac
+}
+alias ml='mise ls'
+
 # Agents
 alias cc='claude --dangerously-skip-permissions'
 alias ccc='claude -c --dangerously-skip-permissions'
