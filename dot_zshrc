@@ -265,6 +265,16 @@ fi
 fpath+=~/.zfunc
 fpath=(~/.zsh/completions $fpath)
 
+# Generated completions, regenerated only when the binary is newer than the file (like wt below).
+# A new file needs a full compinit (-C skips the new-file check), so drop the dump.
+typeset -A _gen_comp=(mise 'mise completion zsh' uv 'uv generate-shell-completion zsh')
+for _c _cmd in ${(kv)_gen_comp}; do
+  (( $+commands[$_c] )) || continue
+  [[ ~/.zfunc/_$_c -nt =$_c ]] && continue
+  mkdir -p ~/.zfunc && eval $_cmd >| ~/.zfunc/_$_c && rm -f ~/.zcompdump
+done
+unset _gen_comp _c _cmd
+
 # fpath/completion plugins (e.g. zsh-completions) must reach fpath before compinit.
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile pre source)"
 
@@ -307,6 +317,7 @@ m() {
     *) mise "$@" ;;
   esac
 }
+compdef m=mise
 alias ml='mise ls'
 
 # Agents
