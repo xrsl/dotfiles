@@ -6,12 +6,12 @@ set script-interpreter := ['uv', 'run', '--script']
 export UV_SYSTEM_CERTS := "true"
 
 
-mod ado '~/ghub/ado/justfile'
-mod aws '~/ghub/aws/justfile'
-mod docker '~/ghub/docker/justfile'
-mod llm '~/ghub/llm/justfile'
-mod pi '~/ghub/llm/pi.just'
-mod oc '~/ghub/llm/oc.just'
+mod? ado '~/ghub/ado/justfile'
+mod? aws '~/ghub/aws/justfile'
+mod? docker '~/ghub/docker/justfile'
+mod? llm '~/ghub/llm/justfile'
+mod? pi '~/ghub/llm/pi.just'
+mod? oc '~/ghub/llm/oc.just'
 
 set shell := ["zsh", "-cu"]
 
@@ -24,6 +24,43 @@ uv *args:
 
 uvx *args:
     uvx {{ args }}
+
+# j mise add tool… [mac|linux|linux/x64…] → mise use -g, trailing OS args become os = [...]
+# j mise rm tool… → drop from global config, uninstall all versions, clear lock/cache/shims/leftover dirs
+# Both re-add the config to chezmoi (autoPush ships it everywhere); other subcommands pass through.
+[positional-arguments]
+mise *args:
+    #!/usr/bin/env zsh
+    set -euo pipefail
+    cmd=${1:-}; (( $# )) && shift
+    case $cmd in
+      add) ;;
+      rm|remove|unuse) ;;
+      *) exec mise $cmd "$@" ;;
+    esac
+    (( $# )) || { echo "usage: j mise $cmd tool…" >&2; exit 1; }
+    if [[ $cmd == add ]]; then
+      tools=() os=()
+      for a; do case $a in mac) os+=macos ;; macos|macos/*|linux|linux/*) os+=$a ;; *) tools+=$a ;; esac; done
+      opt=(); (( $#os )) && opt=(--tool-option "os=[\"${(j:",":)os}\"]")
+      mise use -g $opt $tools
+      chezmoi re-add ~/.config/mise/config.toml
+      exit
+    fi
+    data=${MISE_DATA_DIR:-$HOME/.local/share/mise}
+    for t in "$@"; do
+      [[ ${t##*/} != *@* ]] || { echo "$t: pass tool names only, no @version" >&2; exit 1; }
+      dirs=(${(f)"$(mise ls --json --installed $t 2>/dev/null | jq -r '.[].install_path' | xargs -rn1 dirname | sort -u)"})
+      mise unuse -g --no-prune $t 2>/dev/null || echo "$t: not in global config"
+      mise uninstall --all $t >/dev/null 2>&1 || true
+      mise cache clear $t >/dev/null 2>&1 || true
+      # uninstall leaves the tool dir behind with dangling `2 -> 2.0.0` links, plus an empty downloads dir
+      for d in $dirs; do real=($d/*(N/)); (( $#real )) || rm -rf $d $data/downloads/${d:t}; done
+      echo "removed $t"
+    done
+    mise lock -g >/dev/null 2>&1 || true
+    mise reshim
+    chezmoi re-add ~/.config/mise/config.toml
 	
 	
 buzz *args:
