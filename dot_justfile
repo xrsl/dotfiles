@@ -10,8 +10,8 @@ mod? ado '~/ghub/ado/justfile'
 mod? aws '~/ghub/aws/justfile'
 mod? docker '~/ghub/docker/justfile'
 mod? llm '~/ghub/llm/justfile'
-mod? pi '~/ghub/llm/pi.just'
-mod? oc '~/ghub/llm/oc.just'
+mod? pi '~/ghub/llm/.just/pi.just'
+mod? oc '~/ghub/llm/.just/oc.just'
 
 set shell := ["zsh", "-cu"]
 
