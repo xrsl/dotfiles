@@ -103,7 +103,7 @@ cue = "latest"
 "github:atanunq/viu" = { version = "latest", os = ["macos"] }
 "pipx:complexipy" = "latest"
 "npm:@sentry/cli" = { version = "latest", os = ["macos"] }
-"cargo:plannotator/plannotator-tui" = "latest"
+"github:plannotator/plannotator-tui" = "latest"
 "aqua:bahdotsh/wrkflw" = "latest"
 "aqua:jesseduffield/lazydocker" = "latest"
 "aqua:simeji/jid" = "latest"
@@ -123,7 +123,7 @@ fnox = "latest"
 usage = "latest"
 "npm:mint" = { version = "latest", os = ["macos"] }
 "github:westpoint-io/lazyrsync" = "latest"
-"cargo:cargo-deny" = "latest"
+"github:EmbarkStudios/cargo-deny" = "latest"
 "aqua:bootandy/dust" = "latest"
 
 [env]
