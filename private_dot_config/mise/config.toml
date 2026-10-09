@@ -2,7 +2,7 @@
 1password = { version = "latest", os = ["macos"] }
 "npm:9router" = { version = "latest", os = ["macos"] }
 actionlint = "latest"
-"github:vercel-labs/agent-browser" = { version = "latest", os = ["macos"] }
+agent-browser = { version = "latest", os = ["macos"] }
 agy = { version = "latest", os = ["macos"] }
 argocd = "latest"
 atuin = "latest"
@@ -13,7 +13,7 @@ bottom = "latest"
 buf = "latest"
 bun = "latest"
 chezmoi = "latest"
-"github:CircleCI-Public/circleci-cli" = { version = "latest", prerelease = "true", os = ["macos"] }
+circleci = { version = "latest", prerelease = "true", os = ["macos"] }
 "npm:@kilocode/cli" = { version = "latest", os = ["macos"] }
 "npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"], os = ["macos"] }
 "npm:cline" = { version = "latest", os = ["macos"] }
@@ -48,7 +48,7 @@ hunk = "latest"
 jq = "latest"
 just = "latest"
 "github:terror/just-lsp" = "latest"
-"github:jkfran/killport" = "latest"
+killport = "latest"
 kubectl = "latest"
 kubectx = "latest"
 kubens = "latest"
@@ -95,21 +95,21 @@ yq = "latest"
 zellij = "latest"
 zizmor = "latest"
 zoxide = "latest"
-"aqua:PaulJuliusMartinez/jless" = { version = "latest", os = ["macos", "linux/x64"] }
+jless = { version = "latest", os = ["macos", "linux/x64"] }
 cue = "latest"
-"aqua:duckdb/duckdb" = "latest"
-"github:AlexsJones/llmfit" = { version = "latest", os = ["macos"] }
+duckdb = "latest"
+llmfit = { version = "latest", os = ["macos"] }
 "github:atanunq/viu" = { version = "latest", os = ["macos"] }
 "pipx:complexipy" = "latest"
 "npm:@sentry/cli" = { version = "latest", os = ["macos"] }
 "github:plannotator/plannotator-tui" = "latest"
 "aqua:bahdotsh/wrkflw" = "latest"
-"aqua:jesseduffield/lazydocker" = "latest"
+lazydocker = "latest"
 "aqua:simeji/jid" = "latest"
 "github:matthart1983/syswatch" = "latest"
-"aqua:ducaale/xh" = "latest"
+xh = "latest"
 "github:rezigned/upmd" = { version = "latest", os = ["macos"] }
-"aqua:koalaman/shellcheck" = "latest"
+shellcheck = "latest"
 "cargo:https://github.com/block/buzz" = { version = "latest", crate = "buzz-cli", os = ["macos"] }
 "cargo:https://github.com/block/buzz.git" = { version = "latest", crate = "buzz-acp", os = ["macos"] }
 "npm:paperclipai" = { version = "latest", os = ["macos"] }
@@ -122,8 +122,8 @@ fnox = "latest"
 usage = "latest"
 "npm:mint" = { version = "latest", os = ["macos"] }
 "github:westpoint-io/lazyrsync" = "latest"
-"github:EmbarkStudios/cargo-deny" = "latest"
-"aqua:bootandy/dust" = "latest"
+cargo-deny = "latest"
+dust = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
