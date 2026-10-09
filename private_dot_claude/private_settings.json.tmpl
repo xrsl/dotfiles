@@ -14,7 +14,9 @@
       "mcp__codegraph__codegraph_status"
     ]
   },
-  "model": "haiku",
+{{- with dig "claudeModel" "haiku" . }}
+  "model": {{ . | quote }},
+{{- end }}
   "hooks": {
     "SessionStart": [
       {
