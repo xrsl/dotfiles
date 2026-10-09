@@ -19,7 +19,7 @@ printf '%s\n' "$current" | jq --indent 2 '. * {
     "npm:pi-prompt-template-model",
     "npm:@juanibiapina/pi-powerbar",
     "npm:@tmustier/pi-raw-paste",
-    "git:github.com/tintinweb/pi-manage-todo-list@b75c449aa85ce328e9a8b632f62bf642aed40359",
+    "git:github.com/tintinweb/pi-manage-todo-list",
     "npm:pi-btw",
     "git:github.com/davebcn87/pi-autoresearch",
     "npm:pi-terminal-theme",
