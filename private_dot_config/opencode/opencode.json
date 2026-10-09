@@ -1,0 +1,97 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "codegraph": {
+      "command": [
+        "codegraph",
+        "serve",
+        "--mcp"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true,
+      "headers": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      }
+    }
+  },
+  "model": "zai-coding-plan/glm-4.6",
+  "small_model": "zai-coding-plan/glm-4.5-air",
+  "provider": {
+    "clinepass": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "ClinePass",
+      "options": {
+        "baseURL": "https://api.cline.bot/api/v1"
+      },
+      "models": {
+        "cline-pass/glm-5.2": {
+          "name": "GLM-5.2"
+        },
+        "cline-pass/kimi-k2.7-code": {
+          "name": "Kimi K2.7 Code"
+        },
+        "cline-pass/deepseek-v4-pro": {
+          "name": "DeepSeek V4 Pro"
+        }
+      }
+    },
+    "zai-coding-plan": {
+      "options": {
+        "apiKey": "{env:ZAI_API_KEY}"
+      }
+    },
+    "optiq": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "OptiQ (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8080/v1",
+        "apiKey": "sk-optiq-local"
+      },
+      "models": {
+        "qwen3.8:27b": {
+          "name": "Qwen 3.8 27B OptiQ 4bit"
+        },
+        "nemotron:nothink": {
+          "name": "Nemotron 3.5 Lightning 30B (fast)"
+        },
+        "nemotron:think": {
+          "name": "Nemotron 3.5 Lightning 30B (reasoning)"
+        }
+      }
+    },
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1",
+        "apiKey": "ollama"
+      },
+      "models": {
+        "qwen3.8:27b": {
+          "name": "Qwen 3.8 27B (ollama Q4_K_M)"
+        }
+      }
+    },
+    "hetzner": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Hetzner Inference (free)",
+      "options": {
+        "baseURL": "https://inference.hetzner.com/api/v1",
+        "apiKey": "{env:HETZNER_API_KEY}"
+      },
+      "models": {
+        "Qwen3.8-27B": {
+          "name": "Qwen 3.8 27B (Hetzner)"
+        },
+        "Qwen/Qwen3.6-35B-A3B-FP8": {
+          "name": "Qwen 3.6 35B-A3B FP8 (Hetzner)"
+        }
+      }
+    }
+  }
+}

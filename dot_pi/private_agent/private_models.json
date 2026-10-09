@@ -1,0 +1,71 @@
+{
+  "providers": {
+    "hetzner": {
+      "api": "openai-completions",
+      "apiKey": "$HETZNER_API_KEY",
+      "baseUrl": "https://inference.hetzner.com/api/v1",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "Qwen3.8-27B",
+          "name": "Qwen 3.8 27B (Hetzner)"
+        },
+        {
+          "id": "Qwen/Qwen3.6-35B-A3B-FP8",
+          "name": "Qwen 3.6 35B-A3B FP8 (Hetzner)"
+        }
+      ]
+    },
+    "ollama": {
+      "api": "openai-completions",
+      "apiKey": "ollama",
+      "baseUrl": "http://127.0.0.1:11434/v1",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "qwen3.8:27b",
+          "name": "Qwen 3.8 27B"
+        },
+        {
+          "_launch": true,
+          "contextWindow": 262144,
+          "id": "qwen3.8:27b",
+          "input": [
+            "text",
+            "image"
+          ],
+          "reasoning": true
+        }
+      ]
+    },
+    "optiq": {
+      "api": "openai-completions",
+      "apiKey": "sk-optiq-local",
+      "baseUrl": "http://127.0.0.1:8080/v1",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "qwen3.8:27b",
+          "name": "Qwen 3.8 27B OptiQ 4bit"
+        },
+        {
+          "id": "nemotron:nothink",
+          "name": "Nemotron 3.5 Lightning 30B (fast)"
+        },
+        {
+          "id": "nemotron:think",
+          "name": "Nemotron 3.5 Lightning 30B (reasoning)"
+        }
+      ]
+    }
+  }
+}
