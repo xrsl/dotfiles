@@ -21,6 +21,10 @@ Host tart-*
 
 Host ubuntu vm tahoe tart-*
     ForwardAgent yes
+    # The Mac's managed firewall blocks all incoming connections, so a VM can't reach
+    # ollama on the host; this outgoing session carries it instead: localhost:11434 in
+    # the VM is the Mac's ollama. A second session to the same VM just warns.
+    RemoteForward 11434 127.0.0.1:11434
 
 Match exec "test -S '%d/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock'"
     IdentityAgent "%d/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
