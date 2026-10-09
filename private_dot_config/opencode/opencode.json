@@ -93,6 +93,21 @@
       "models": {
         "gemma-4-e4b-it-qat": {
           "name": "Gemma-4-E4B QAT (llama.cpp, MTP)"
+        },
+        "minicpm5-2b": {
+          "name": "MiniCPM5-2B (llama.cpp, DSpark)",
+          "variants": {
+            "think": {
+              "chat_template_kwargs": {
+                "enable_thinking": true
+              }
+            },
+            "nothink": {
+              "chat_template_kwargs": {
+                "enable_thinking": false
+              }
+            }
+          }
         }
       }
     }

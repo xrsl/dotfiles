@@ -74,13 +74,20 @@
       "baseUrl": "http://127.0.0.1:8081/v1",
       "compat": {
         "supportsDeveloperRole": false,
-        "supportsReasoningEffort": false
+        "supportsReasoningEffort": false,
+        "thinkingFormat": "qwen-chat-template"
       },
       "models": [
         {
           "id": "gemma-4-e4b-it-qat",
           "name": "Gemma-4-E4B QAT (llama.cpp, MTP)",
           "contextWindow": 32768
+        },
+        {
+          "id": "minicpm5-2b",
+          "name": "MiniCPM5-2B (llama.cpp, DSpark)",
+          "contextWindow": 32768,
+          "reasoning": true
         }
       ]
     }
