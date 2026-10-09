@@ -14,13 +14,9 @@ printf '%s\n' "$current" | jq --indent 2 '. * {
   "packages": [
     "npm:@juanibiapina/pi-extension-settings",
     "npm:@plannotator/pi-extension",
-    "npm:pi-subagents",
     "npm:pi-ask-user",
-    "npm:pi-web-access",
-    "git:github.com/VandeeFeng/pi-memory-md",
     "npm:pi-add-dir",
     "npm:pi-prompt-template-model",
-    "npm:pi-claude-cli",
     "npm:@juanibiapina/pi-powerbar",
     "npm:@tmustier/pi-raw-paste",
     "git:github.com/tintinweb/pi-manage-todo-list@b75c449aa85ce328e9a8b632f62bf642aed40359",
@@ -28,9 +24,5 @@ printf '%s\n' "$current" | jq --indent 2 '. * {
     "git:github.com/davebcn87/pi-autoresearch",
     "npm:pi-terminal-theme",
     "git:github.com/DietrichGebert/ponytail"
-  ],
-  "subagents": {"agentOverrides": {
-    "context-builder": {"model": ""}, "planner": {"model": ""}, "researcher": {"model": ""},
-    "reviewer": {"model": ""}, "scout": {"model": ""}, "worker": {"model": ""}
-  }}
-}'
+  ]
+} | del(.subagents)'
