@@ -43,7 +43,7 @@ goreleaser = { version = "latest", os = ["macos"] }
 "go:golang.org/x/vuln/cmd/govulncheck" = { version = "latest", os = ["macos"] }
 gum = "latest"
 helm = "latest"
-"github:ogulcancelik/herdr" = "latest"
+herdr = "latest"
 hunk = "latest"
 jq = "latest"
 just = "latest"
