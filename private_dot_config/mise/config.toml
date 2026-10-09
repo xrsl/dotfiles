@@ -27,7 +27,7 @@ crush = { version = "latest", os = ["macos"] }
 "npm:ctx7" = "latest"
 delta = "latest"
 docker-cli = { version = "latest", os = ["macos"] }
-eza = "0.23.5"
+eza = "latest"
 fd = "latest"
 "github:sinelaw/fresh" = "latest"
 fx = "latest"
