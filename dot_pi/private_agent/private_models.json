@@ -87,6 +87,11 @@
           "id": "nemotron",
           "name": "Nemotron 3.5 Lightning 30B-A3B OptiQ 4bit",
           "reasoning": true
+        },
+        {
+          "id": "local",
+          "name": "OptiQ — whatever :8080 holds",
+          "reasoning": true
         }
       ]
     },

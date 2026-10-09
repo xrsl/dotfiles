@@ -87,6 +87,21 @@
               }
             }
           }
+        },
+        "local": {
+          "name": "OptiQ — whatever :8080 holds",
+          "variants": {
+            "think": {
+              "chat_template_kwargs": {
+                "enable_thinking": true
+              }
+            },
+            "nothink": {
+              "chat_template_kwargs": {
+                "enable_thinking": false
+              }
+            }
+          }
         }
       }
     },
