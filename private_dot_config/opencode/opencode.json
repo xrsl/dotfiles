@@ -101,6 +101,19 @@
           "name": "Qwen 3.6 35B-A3B FP8 (Hetzner)"
         }
       }
+    },
+    "llamacpp": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "llama.cpp (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8081/v1",
+        "apiKey": "llamacpp"
+      },
+      "models": {
+        "llamacpp": {
+          "name": "llama.cpp :8081 (Gemma-4-E4B QAT by default)"
+        }
+      }
     }
   }
 }
