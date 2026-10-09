@@ -37,13 +37,18 @@ mise *args:
       *) exec mise $cmd "$@" ;;
     esac
     (( $# )) || { echo "usage: j mise $cmd tool…" >&2; exit 1; }
-    data=${MISE_DATA_DIR:-$HOME/.local/share/mise}
+    data=${MISE_DATA_DIR:-$HOME/.local/share/mise} lock=$HOME/.config/mise/mise.lock
     # uninstall all versions + cache; uninstall alone leaves the tool dir with dangling `2 -> 2.0.0` links and an empty downloads dir
     purge() {
       local dirs=(${(f)"$(mise ls --json --installed $1 2>/dev/null | jq -r '.[].install_path' | xargs -rn1 dirname | sort -u)"}) d real
       mise uninstall --all $1 >/dev/null 2>&1 || true
       mise cache clear $1 >/dev/null 2>&1 || true
       for d in $dirs; do real=($d/*(N/)); (( $#real )) || rm -rf $d $data/downloads/${d:t}; done
+    }
+    # drop the tool's [[tools."T"]] / [tools."T".…] blocks; `mise lock -g` would too but re-resolves every tool for every platform (~40s)
+    unlock() {
+      [[ -f $lock ]] || return 0
+      awk -v h="tools.\"$1\"" '/^\[/ { skip = index($0, h) > 0 } !skip' $lock > $lock.tmp && mv $lock.tmp $lock
     }
     if [[ $cmd == add ]]; then
       tools=() os=()
@@ -60,12 +65,12 @@ mise *args:
         [[ ${t##*/} != *@* ]] || { echo "$t: pass tool names only, no @version" >&2; exit 1; }
         mise unuse -g --no-prune $t 2>/dev/null || echo "$t: not in global config"
         purge $t
+        unlock $t
         echo "removed $t"
       done
-      mise lock -g >/dev/null 2>&1 || true
     fi
-    mise reshim
     chezmoi re-add ~/.config/mise/config.toml
+    mise reshim || true  # panics on some mise versions; harmless to skip
 	
 	
 buzz *args:
