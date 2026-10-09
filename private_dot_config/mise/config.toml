@@ -66,7 +66,7 @@ neovim = "latest"
 node = "lts"
 opencode = { version = "latest", os = ["macos"] }
 "npm:openskills" = "latest"
-pi = { version = "latest", os = ["macos"] }
+pi = "latest"
 "github:backnotprop/plannotator" = { version = "latest", os = ["macos"] }
 pnpm = "latest"
 "npm:postman-cli" = { version = "latest", os = ["macos"] }
