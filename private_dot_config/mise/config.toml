@@ -27,7 +27,6 @@ crush = { version = "latest", os = ["macos"] }
 "npm:ctx7" = "latest"
 delta = "latest"
 docker-cli = { version = "latest", os = ["macos"] }
-"aqua:Byron/dua-cli" = "latest"
 eza = "0.23.5"
 fd = "latest"
 "github:sinelaw/fresh" = "latest"
