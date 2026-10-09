@@ -111,8 +111,8 @@ cue = "latest"
 "aqua:ducaale/xh" = "latest"
 "github:rezigned/upmd" = { version = "latest", os = ["macos"] }
 "aqua:koalaman/shellcheck" = "latest"
-"cargo:https://github.com/block/buzz" = { version = "latest", crate = "buzz-cli" }
-"cargo:https://github.com/block/buzz.git" = { version = "latest", crate = "buzz-acp" }
+"cargo:https://github.com/block/buzz" = { version = "latest", crate = "buzz-cli", os = ["macos"] }
+"cargo:https://github.com/block/buzz.git" = { version = "latest", crate = "buzz-acp", os = ["macos"] }
 "npm:paperclipai" = { version = "latest", os = ["macos"] }
 cliamp = { version = "latest", os = ["macos"] }
 "pipx:huggingface_hub" = { version = "latest", os = ["macos"] }
