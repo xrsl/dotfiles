@@ -337,7 +337,6 @@ export COPILOT_OTEL_FILE_EXPORTER_PATH="$HOME/.copilot/otel/usage.jsonl"
 alias co='copilot --autopilot --allow-all-tools'
 alias coc='copilot --autopilot --allow-all-tools --resume'
 alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
-alias pq='pi --provider optiq --model qwen3.8:27b'
 alias cr="crush --yolo"
 alias crc="crush --yolo --continue"
 alias kl="kilo --auto"

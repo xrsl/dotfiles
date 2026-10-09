@@ -68,28 +68,6 @@
         }
       ]
     },
-    "optiq": {
-      "api": "openai-completions",
-      "apiKey": "sk-optiq-local",
-      "baseUrl": "http://127.0.0.1:8080/v1",
-      "compat": {
-        "supportsDeveloperRole": false,
-        "supportsReasoningEffort": false,
-        "thinkingFormat": "qwen-chat-template"
-      },
-      "models": [
-        {
-          "id": "qwen3.8:27b",
-          "name": "Qwen 3.8 27B OptiQ 4bit",
-          "reasoning": true
-        },
-        {
-          "id": "nemotron",
-          "name": "Nemotron 3.5 Lightning 30B-A3B OptiQ 4bit",
-          "reasoning": true
-        }
-      ]
-    },
     "llamacpp": {
       "api": "openai-completions",
       "apiKey": "llamacpp",

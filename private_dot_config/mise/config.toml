@@ -61,10 +61,6 @@ lima = { version = "latest", os = ["macos"] }
 "npm:@marp-team/marp-cli" = { version = "latest", os = ["macos"] }
 "npm:@mermaid-js/mermaid-cli" = { version = "latest", os = ["macos"] }
 minikube = { version = "latest", os = ["macos"] }
-# mlx-lm pinned: optiq 0.5.19 patches mlx_lm.server and calls _make_state_machine with
-# the `initial_state` that mlx-lm 0.32.0 removed (generation thread dies, every request
-# hangs). Drop the --with once a newer optiq supports 0.32.
-"pipx:mlx-optiq" = { version = "latest", os = ["macos"], uvx_args = "--python 3.12 --with mlx-lm==0.31.3" }  # pygame ships no cp314 wheel
 "pipx:mlx-lm" = { version = "latest", os = ["macos"] }
 neovim = "latest"
 node = "lts"
