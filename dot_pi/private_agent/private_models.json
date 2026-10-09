@@ -90,6 +90,22 @@
           "name": "Nemotron 3.5 Lightning 30B (reasoning)"
         }
       ]
+    },
+    "llamacpp": {
+      "api": "openai-completions",
+      "apiKey": "llamacpp",
+      "baseUrl": "http://127.0.0.1:8081/v1",
+      "compat": {
+        "supportsDeveloperRole": false,
+        "supportsReasoningEffort": false
+      },
+      "models": [
+        {
+          "id": "llamacpp",
+          "name": "llama.cpp :8081 (Gemma-4-E4B QAT by default)",
+          "contextWindow": 32768
+        }
+      ]
     }
   }
 }
