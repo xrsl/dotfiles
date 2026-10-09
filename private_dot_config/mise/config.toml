@@ -80,7 +80,6 @@ rust = "latest"
 saml2aws = { version = "latest", os = ["macos"] }
 "github:lusingander/serie" = "latest"
 sheldon = "latest"
-skate = "latest"
 "npm:slop-scan" = "latest"
 starship = "latest"
 superfile = "latest"
