@@ -26,31 +26,42 @@ uvx *args:
     uvx {{ args }}
 
 # add/rm re-add the config to chezmoi, whose autoPush ships it to every machine.
-[doc("add tool… [mac|linux|linux/x64] → global use (OS args → os=[…]) · rm tool… → remove everywhere, no leftovers · else passthrough")]
+[doc("add tool… [mac|linux|linux/x64] → global use (OS args → os=[…]) · rm tool… → remove everywhere, no leftovers · clean → prune + dedup + dead dirs · else passthrough")]
 [positional-arguments]
 [script('zsh')]
 mise *args:
     set -euo pipefail
     cmd=${1:-}; (( $# )) && shift
     case $cmd in
-      add|rm|remove|unuse) ;;
+      add|rm|remove|unuse|clean) ;;
       *) exec mise $cmd "$@" ;;
     esac
-    (( $# )) || { echo "usage: j mise $cmd tool…" >&2; exit 1; }
+    [[ $cmd == clean ]] || (( $# )) || { echo "usage: j mise $cmd tool…" >&2; exit 1; }
     data=${MISE_DATA_DIR:-$HOME/.local/share/mise} lock=$HOME/.config/mise/mise.lock
     # uninstall all versions + cache; uninstall alone leaves the tool dir with dangling `2 -> 2.0.0` links and an empty downloads dir
     purge() {
       local dirs=(${(f)"$(mise ls --json --installed $1 2>/dev/null | jq -r '.[].install_path' | xargs -rn1 dirname | sort -u)"}) d real
       mise uninstall --all $1 >/dev/null 2>&1 || true
       mise cache clear $1 >/dev/null 2>&1 || true
-      for d in $dirs; do real=($d/*(N/)); (( $#real )) || rm -rf $d $data/downloads/${d:t}; done
+      for d in $dirs; do real=($d/*(N-/)); (( $#real )) || rm -rf $d $data/downloads/${d:t}; done
     }
     # drop the tool's [[tools."T"]] / [tools."T".…] blocks; `mise lock -g` would too but re-resolves every tool for every platform (~40s)
     unlock() {
       [[ -f $lock ]] || return 0
       awk -v h="tools.\"$1\"" '/^\[/ { skip = index($0, h) > 0 } !skip' $lock > $lock.tmp && mv $lock.tmp $lock
     }
-    if [[ $cmd == add ]]; then
+    if [[ $cmd == clean ]]; then
+      mise prune -y
+      # same version installed twice (e.g. 8.0.1 and 8.0.1~uv~<hash> after an installer switch): keep the active path.
+      # Only tools with an active entry here, so os-gated and project-only tools are untouched.
+      mise ls --json | jq -r '.[] | (map(select(.source)) | map(.install_path)) as $keep
+        | select($keep | length > 0) | map(select(.installed and .source == null) | .install_path) - $keep | .[]' |
+        while read -r p; do echo "dedup ${p#$data/installs/}"; rm -rf $p; done
+      for d in $data/installs/*(N/); do real=($d/*(N-/)); (( $#real )) || { echo "dead ${d:t}"; rm -rf $d $data/downloads/${d:t}; }; done
+      rm -rf $data/downloads/*(N/^F)
+      mise reshim || true
+      exit
+    elif [[ $cmd == add ]]; then
       tools=() os=()
       for a; do case $a in mac) os+=macos ;; macos|macos/*|linux|linux/*) os+=$a ;; *) tools+=$a ;; esac; done
       opt=(); (( $#os )) && opt=(--tool-option "os=[\"${(j:",":)os}\"]")
