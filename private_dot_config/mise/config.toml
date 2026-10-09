@@ -105,7 +105,6 @@ llmfit = { version = "latest", os = ["macos"] }
 "github:plannotator/plannotator-tui" = "latest"
 "aqua:bahdotsh/wrkflw" = "latest"
 lazydocker = "latest"
-"aqua:simeji/jid" = "latest"
 "github:matthart1983/syswatch" = "latest"
 xh = "latest"
 "github:rezigned/upmd" = { version = "latest", os = ["macos"] }
