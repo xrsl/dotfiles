@@ -96,13 +96,13 @@ vmn() {
 
 # Tab color for a separate Herdr client. Herdr reads accent from the client, so
 # each target gets its own config file instead of a machine registered in this one.
-#   dev, vps        peach
+#   dev, vps        mauve
 #   *tahoe*         pink
 #   ubuntu, tart-*  green
 #   anything else   red
 _herdr_accent() {
   case "$1" in
-    dev|vps)       print -r -- '#fab387' ;;
+    dev|vps)       print -r -- '#cba6f7' ;;
     *tahoe*)       print -r -- '#f5c2e7' ;;
     ubuntu|tart-*) print -r -- '#a6e3a1' ;;
     *)             print -r -- '#f38ba8' ;;
@@ -210,12 +210,19 @@ fi
 precmd_cursor() { printf '\e[6 q'; }
 precmd_functions+=(precmd_cursor)
 
-# herdr: rename the current tab to the current git branch (repo name if on the default branch)
+# herdr: rename the current tab to the current git branch (repo name if on the default branch);
+# outside a repo, the dir name (~ for home) instead of herdr's numeric default
 _herdr_last_tab_label=""
 precmd_herdr_tab_branch() {
   [[ -n "$HERDR_TAB_ID" ]] || return
-  local branch
-  branch=$(git branch --show-current 2>/dev/null) || return
+  local branch label
+  if ! branch=$(git branch --show-current 2>/dev/null); then
+    label=${${(D)PWD}:t}
+    [[ "$label" != "$_herdr_last_tab_label" ]] || return
+    herdr tab rename "$HERDR_TAB_ID" "$label" &>/dev/null
+    _herdr_last_tab_label="$label"
+    return
+  fi
   [[ -n "$branch" ]] || return
 
   local default_branch
@@ -227,7 +234,6 @@ precmd_herdr_tab_branch() {
     done
   fi
 
-  local label
   if [[ -n "$default_branch" && "$branch" == "$default_branch" ]]; then
     local common_dir
     common_dir=$(git rev-parse --path-format=absolute --git-common-dir 2>/dev/null)
