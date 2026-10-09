@@ -13,6 +13,14 @@
     <string>ollama</string>
     <string>serve</string>
   </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <!-- 64k context for every model. Measured cost: +0.8 GB for qwen3.6:35b, +1.5 GB
+         for qwen3.5:4b, ~0 for qwen3.8:27b (hybrid attention keeps the KV cache small).
+         pi's models.json contextWindow must match, or pi compacts at the old size. -->
+    <key>OLLAMA_CONTEXT_LENGTH</key>
+    <string>65536</string>
+  </dict>
   <key>WorkingDirectory</key>
   <string>{{ .chezmoi.homeDir }}</string>
   <key>RunAtLoad</key>
