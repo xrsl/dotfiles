@@ -121,7 +121,6 @@ ori = { version = "latest", os = ["macos"] }
 fnox = "latest"
 usage = "latest"
 "npm:mint" = { version = "latest", os = ["macos"] }
-"github:westpoint-io/lazyrsync" = "latest"
 cargo-deny = "latest"
 dust = "latest"
 
