@@ -59,7 +59,7 @@ mise *args:
       chezmoi update  # config.toml as the other machines left it
       # the lock is per machine (chezmoiignore'd): tools removed elsewhere stay pinned in it, and `mise prune` then keeps them
       keep=(${(f)"$(yq -p toml -o tsv '.tools | keys | .[]' $cfg)"})
-      stale=(${(f)"$([[ -f $lock ]] && sed -nE 's/^\[\[tools\."?([^]"]+).*/\1/p' $lock | sort -u)"})
+      stale=(${(f)"$([[ ! -f $lock ]] || sed -nE 's/^\[\[tools\."?([^]"]+).*/\1/p' $lock | sort -u)"})
       stale=(${stale:|keep})
       (( $#stale )) && { echo "unlock $stale"; unlock $stale; }
       # os-gated tools installed here anyway (`mise use` ignores os); `mise prune` counts them as used. Keep what a project config pins.
