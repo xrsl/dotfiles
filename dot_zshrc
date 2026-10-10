@@ -413,6 +413,18 @@ wtc()  { case $1 in cx|oc|co|pi) WT_LLM=$1 wt sc "${@:2}" ;;  *) wt sc "$@" ;;  
 wtcp() { case $1 in cx|oc|co|pi) WT_LLM=$1 wt scp "${@:2}" ;; *) wt scp "$@" ;; esac }
 
 export EDITOR=fresh
+alias e='fresh'
+# eh [ref|A..B] -- `h` in fresh's review view (FRESH_REVIEW is read by ~/.config/fresh/init.ts).
+# No arg = uncommitted changes; ref = ref..HEAD. fresh can't diff the working tree against a
+# ref, so unlike `h main`, `eh main` shows committed changes only.
+eh() {
+  local r=${1:-worktree}
+  if [[ -n $1 && $1 != *..* ]]; then
+    git rev-parse --verify --quiet "$1^{commit}" >/dev/null || { echo "eh: unknown ref: $1" >&2; return 1; }
+    r="$1..HEAD"
+  fi
+  FRESH_REVIEW=$r fresh --no-restore  # any flag skips orchestrator mode: a plain editor here
+}
 
 # VSCode
 vsc() { code "${@:-.}" }
