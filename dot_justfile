@@ -26,18 +26,21 @@ uvx *args:
     uvx {{ args }}
 
 # add/rm re-add the config to chezmoi, whose autoPush ships it to every machine.
-[doc("add tool… [mac|linux|linux/x64] → global use (OS args → os=[…]) · rm tool… → remove everywhere, no leftovers · clean → prune + dedup + dead dirs · else passthrough")]
+[doc("add tool… [mac|linux|linux/x64] → global use (OS args → os=[…]) · rm tool… → remove everywhere, no leftovers · clean → prune + dedup + dead dirs · sync → pull dotfiles, install, then strip what config no longer wants (stale lock, os-gated installs) + clean · else passthrough")]
 [positional-arguments]
 [script('zsh')]
 mise *args:
     set -euo pipefail
     cmd=${1:-}; (( $# )) && shift
     case $cmd in
-      add|rm|remove|unuse|clean) ;;
+      add|rm|remove|unuse|clean|sync) ;;
       *) exec mise $cmd "$@" ;;
     esac
-    [[ $cmd == clean ]] || (( $# )) || { echo "usage: j mise $cmd tool…" >&2; exit 1; }
-    data=${MISE_DATA_DIR:-$HOME/.local/share/mise} lock=$HOME/.config/mise/mise.lock
+    [[ $cmd == (clean|sync) ]] || (( $# )) || { echo "usage: j mise $cmd tool…" >&2; exit 1; }
+    data=${MISE_DATA_DIR:-$HOME/.local/share/mise} cfg=$HOME/.config/mise/config.toml lock=$HOME/.config/mise/mise.lock
+    here=${${(L)$(uname -s)}/darwin/macos} arch=$(uname -m); arch=${${arch/x86_64/x64}/aarch64/arm64}
+    # os list ($@) leaves this machine out
+    skips() { (( ${argv[(Ie)$here]} + ${argv[(Ie)$here/$arch]} == 0 )) }
     # uninstall all versions + cache; uninstall alone leaves the tool dir with dangling `2 -> 2.0.0` links and an empty downloads dir
     purge() {
       local dirs=(${(f)"$(mise ls --json --installed $1 2>/dev/null | jq -r '.[].install_path' | xargs -rn1 dirname | sort -u)"}) d real
@@ -45,11 +48,32 @@ mise *args:
       mise cache clear $1 >/dev/null 2>&1 || true
       for d in $dirs; do real=($d/*(N-/)); (( $#real )) || rm -rf $d $data/downloads/${d:t}; done
     }
-    # drop the tool's [[tools."T"]] / [tools."T".…] blocks; `mise lock -g` would too but re-resolves every tool for every platform (~40s)
+    # drop the tools' [[tools."T"]] / [[tools.T]] / [tools.T.…] blocks; `mise lock -g` would too but re-resolves every tool for every platform (~40s)
     unlock() {
       [[ -f $lock ]] || return 0
-      awk -v h="tools.\"$1\"" '/^\[/ { skip = index($0, h) > 0 } !skip' $lock > $lock.tmp && mv $lock.tmp $lock
+      awk -v t="$*" 'BEGIN { split(t, a, " "); for (i in a) drop[a[i]] }
+        /^\[/ { n = $0; sub(/^\[+tools\./, "", n); if (sub(/^"/, "", n)) sub(/".*/, "", n); else sub(/[].].*/, "", n); skip = n in drop }
+        !skip' $lock > $lock.tmp && mv $lock.tmp $lock
     }
+    if [[ $cmd == sync ]]; then
+      chezmoi update  # config.toml as the other machines left it
+      # the lock is per machine (chezmoiignore'd): tools removed elsewhere stay pinned in it, and `mise prune` then keeps them
+      keep=(${(f)"$(yq -p toml -o tsv '.tools | keys | .[]' $cfg)"})
+      stale=(${(f)"$([[ -f $lock ]] && sed -nE 's/^\[\[tools\."?([^]"]+).*/\1/p' $lock | sort -u)"})
+      stale=(${stale:|keep})
+      (( $#stale )) && { echo "unlock $stale"; unlock $stale; }
+      # os-gated tools installed here anyway (`mise use` ignores os); `mise prune` counts them as used. Keep what a project config pins.
+      installed=(${(f)"$(mise ls --installed --json | jq -r 'keys[]')"})
+      projects=(${${(f)"$(print -l ~/.local/state/mise/tracked-configs/*(N@:A))"}:#$cfg})
+      for e in ${(f)"$(yq -p toml -o tsv '.tools | to_entries | .[] | select(.value.os) | .key + " " + (.value.os | join(" "))' $cfg)"}; do
+        t=${e%% *}
+        (( ${installed[(Ie)$t]} )) && skips ${=e#* } || continue
+        grep -qsE "^\"?$t\"?[[:space:]]*=|^$t " $projects && continue
+        purge $t; echo "purged $t (os-gated)"
+      done
+      mise install
+      cmd=clean
+    fi
     if [[ $cmd == clean ]]; then
       mise prune -y
       # same version installed twice (e.g. 8.0.1 and 8.0.1~uv~<hash> after an installer switch): keep the active path.
@@ -67,8 +91,7 @@ mise *args:
       opt=(); (( $#os )) && opt=(--tool-option "os=[\"${(j:",":)os}\"]")
       mise use -g $opt $tools
       # mise use installs even when os excludes this machine
-      here=${${(L)$(uname -s)}/darwin/macos} arch=$(uname -m); arch=${${arch/x86_64/x64}/aarch64/arm64}
-      if (( $#os )) && (( ${os[(Ie)$here]} + ${os[(Ie)$here/$arch]} == 0 )); then
+      if (( $#os )) && skips $os; then
         for t in $tools; do purge $t; done
       fi
     else
