@@ -236,7 +236,7 @@ autoload -Uz ~/.config/zsh/functions/*(.:t)
 
 # Shell & files
 alias cls='clear'
-alias ls='eza --icons '
+alias ls='eza --icons=auto'  # =auto: a bare --icons swallows the next arg (ls <dir> broke)
 alias lz='eza -TL 1 --icons -a'
 alias b='bat'
 alias f="spf"
