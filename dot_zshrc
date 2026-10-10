@@ -413,7 +413,7 @@ wtc()  { case $1 in cx|oc|co|pi) WT_LLM=$1 wt sc "${@:2}" ;;  *) wt sc "$@" ;;  
 wtcp() { case $1 in cx|oc|co|pi) WT_LLM=$1 wt scp "${@:2}" ;; *) wt scp "$@" ;; esac }
 
 export EDITOR=fresh
-alias e='fresh'
+alias e='fresh --no-restore'  # just the named file(s): any flag skips orchestrator mode
 # eh [ref|A..B] -- `h` in fresh's review view (FRESH_REVIEW is read by ~/.config/fresh/init.ts).
 # No arg = uncommitted changes; ref = ref..HEAD. fresh can't diff the working tree against a
 # ref, so unlike `h main`, `eh main` shows committed changes only.

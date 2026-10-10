@@ -11,5 +11,15 @@
     "show_gitignored": true,
     "width": "15%"
   },
-  "active_keybinding_map": "vscode"
+  "active_keybinding_map": "vscode",
+  "plugins": {
+    "orchestrator": {
+      "settings": {
+        "autoOpenDock": false
+      }
+    },
+    "welcome_screen": {
+      "enabled": false
+    }
+  }
 }
