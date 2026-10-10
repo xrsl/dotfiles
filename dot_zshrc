@@ -327,6 +327,15 @@ compdef m=mise
 alias ml='mise ls'
 alias kp='killport --no-fail'
 
+# mx tool[@ver] args… → mise x tool@latest -- tool args… (uvx for mise: runs without touching config; m sync prunes it)
+# binary = last segment of the tool name (github:jkfran/killport → killport); when it differs, use mise x directly
+mx() {
+  local t=${1:?usage: mx tool[@version] [args…]}; shift
+  local name=${t##*[:/]}
+  [[ $name == *@* ]] || t+=@latest
+  mise x $t -- ${name%@*} "$@"
+}
+
 # Agents
 alias cc='claude --dangerously-skip-permissions'
 alias ccc='claude -c --dangerously-skip-permissions'
