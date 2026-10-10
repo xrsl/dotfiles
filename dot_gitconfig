@@ -8,7 +8,6 @@
 [core]
 	excludesfile = ~/.gitignore_global
 	pager = hunk pager
-	editor = fresh --cmd session open-file . --wait
 
 [interactive]
     diffFilter = delta --color-only

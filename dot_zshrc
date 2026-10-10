@@ -412,51 +412,10 @@ wti() {
 wtc()  { case $1 in cx|oc|co|pi) WT_LLM=$1 wt sc "${@:2}" ;;  *) wt sc "$@" ;;  esac }
 wtcp() { case $1 in cx|oc|co|pi) WT_LLM=$1 wt scp "${@:2}" ;; *) wt scp "$@" ;; esac }
 
-export EDITOR="$HOME/.local/bin/fresh-wait"
+export EDITOR=fresh
 
 # VSCode
 vsc() { code "${@:-.}" }
-
-# freshdiff — open the fresh editor straight into a git diff view
-#   freshdiff [file...]        working-tree review (uncommitted changes, magit-style)
-#   freshdiff -p               PR review: changed files vs base/main (base..HEAD),
-#                              changed-files list + Enter = side-by-side
-#   freshdiff -s <file>        side-by-side diff of <file>
-#   freshdiff -H <file>        live diff vs HEAD     (-D vs disk, -b vs default branch)
-freshdiff() {
-  local mode=1
-  case "$1" in
-    -s) mode=side;   shift ;;
-    -H) mode=head;   shift ;;
-    -D) mode=disk;   shift ;;
-    -b) mode=branch; shift ;;
-    -p) mode=range;  shift ;;
-  esac
-  if [[ "$mode" == range ]]; then
-    # Detect the repo's default branch: origin/HEAD, else local main/master.
-    local base
-    base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
-    if [[ -z "$base" ]]; then
-      for c in main master; do
-        git show-ref --quiet --verify "refs/heads/$c" 2>/dev/null && { base=$c; break; }
-      done
-    fi
-    [[ -z "$base" ]] && base=main
-    # Compare against the default branch tip — readable label (e.g. origin/main..HEAD).
-    # Note: origin/main is the LOCAL remote-tracking ref (as current as your last
-    # fetch); freshdiff does not fetch. Two-dot, so if main advances after you
-    # branched you may see a little extra noise vs a merge-base diff.
-    FRESH_DIFF="${FRESH_DIFF:-$mode}" FRESH_REVIEW_RANGE="${base}..HEAD" fresh --no-restore "$@"
-  else
-    FRESH_DIFF="${FRESH_DIFF:-$mode}" fresh --no-restore "$@"
-  fi
-}
-
-# fresh editor shortcuts
-alias e='fresh'              # open a file in fresh
-alias ec='freshdiff'         # review changes (working tree); Enter on a file = side-by-side
-alias epr='freshdiff -p'     # PR review: branch vs base/main (base..HEAD)
-# niche single-file diffs still available unaliased: freshdiff -s|-H|-D|-b <file>
 
 alias v="nvim"
 export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/catppuccin-mocha.yml"
