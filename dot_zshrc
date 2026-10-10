@@ -325,6 +325,7 @@ m() {
 }
 compdef m=mise
 alias ml='mise ls'
+alias kp=killport
 
 # Agents
 alias cc='claude --dangerously-skip-permissions'
