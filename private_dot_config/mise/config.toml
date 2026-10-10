@@ -7,7 +7,6 @@ agy = { version = "latest", os = ["macos"] }
 argocd = "latest"
 atuin = "latest"
 aws = "latest"
-azure = { version = "latest", dependency_prereleases = "allow", os = ["macos"] }
 bat = "latest"
 bottom = "latest"
 buf = "latest"
