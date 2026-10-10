@@ -937,7 +937,7 @@ opid() {
 alias f="spf"
 
 # terminal browser (mise: github:zenbu-labs/terminal-browser)
-alias tb="terminal-browser"
+alias tb="terminal-browser open"
 
 # tokens today
 alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
