@@ -100,7 +100,6 @@ cue = "latest"
 duckdb = "latest"
 llmfit = { version = "latest", os = ["macos"] }
 "github:atanunq/viu" = { version = "latest", os = ["macos"] }
-"pipx:complexipy" = "latest"
 "npm:@sentry/cli" = { version = "latest", os = ["macos"] }
 "github:plannotator/plannotator-tui" = "latest"
 "aqua:bahdotsh/wrkflw" = "latest"
