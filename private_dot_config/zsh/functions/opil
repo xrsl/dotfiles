@@ -1,7 +1,9 @@
 # 1Password CLI
-# opil [op item list flags] — list Employee vault items, newest saved first
+# opil [-p] [op item list flags] — list Employee (-p: Private) vault items, newest saved first
+local label=Employee loc=(--account blackwoodseven.1password.eu --vault Employee)  # work
+[[ "$1" == -p ]] && { label=Private loc=(--account my.1password.eu --vault Private); shift; }  # personal
 local json
-json=$(op item list --vault Employee --format json "$@") || return
+json=$(op item list "${loc[@]}" --format json "$@") || return
 print -r -- "$json" | python3 -c '
 import json, sys
 from datetime import datetime

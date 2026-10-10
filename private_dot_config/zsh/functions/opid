@@ -1,14 +1,17 @@
-# opid <ITEM|ID> [-f] — permanently delete an item by key or ID.
+# opid [-p] <ITEM|ID> [-f] — permanently delete an item by key or ID
+# (Employee vault; -p for Private).
 # Confirms first unless -f is given; there is no undo.
-if [ -z "$1" ]; then echo "usage: opid <item|id> [-f]" >&2; return 1; fi
+local label=Employee loc=(--account blackwoodseven.1password.eu --vault Employee)  # work
+[[ "$1" == -p ]] && { label=Private loc=(--account my.1password.eu --vault Private); shift; }  # personal
+if [ -z "$1" ]; then echo "usage: opid [-p] <item|id> [-f]" >&2; return 1; fi
 local item="$1" force="$2" title reply
-title=$(op item get "$item" --vault Employee --format json 2>/dev/null \
+title=$(op item get "$item" "${loc[@]}" --format json 2>/dev/null \
   | python3 -c 'import json,sys; print(json.load(sys.stdin)["title"])' 2>/dev/null) || {
   echo "opid: no such item: $item" >&2; return 1
 }
 if [ "$force" != "-f" ]; then
-  read -r "reply?delete '$title' from Employee? [y/N] "
+  read -r "reply?delete '$title' from $label? [y/N] "
   case "$reply" in [yY]*) ;; *) echo "opid: aborted" >&2; return 1 ;; esac
 fi
-op item delete "$item" --vault Employee || return
+op item delete "$item" "${loc[@]}" || return
 echo "opid: deleted $title"
