@@ -335,8 +335,9 @@ mx() {
   local name=${t##*[:/]}
   [[ $name == *@* ]] || t+=@latest
   name=${name%@*}
-  mise install -q $t || return
-  local bins=(${(f)"$(mise bin-paths --bin-names $t)"})
+  local bins=(${(f)"$(mise bin-paths --bin-names $t 2>/dev/null)"})
+  # bin-paths is empty until installed; install only then (mise install checks remote latest, ~1.5s)
+  (( $#bins )) || { mise install -q $t && bins=(${(f)"$(mise bin-paths --bin-names $t)"}) } || return
   (( ${bins[(Ie)$name]} || $#bins != 1 )) || name=$bins[1]
   mise x $t -- $name "$@"
 }
