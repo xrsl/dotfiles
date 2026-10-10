@@ -450,6 +450,8 @@ alias gp="git pull --ff-only"
 alias gP="git push"
 # discard everything since the last commit
 alias gd='git reset --hard HEAD && git clean -fd'
+# discard staged + unstaged changes for given paths (file or dir/), back to HEAD
+alias gr='git restore --source=HEAD --staged --worktree --'
 # list tags newest-first by creation date, with date + annotation subject
 alias gtl="git tag --sort=-creatordate --format='%(color:yellow)%(refname:short)%(color:reset)  %(color:green)%(creatordate:short)%(color:reset)  %(contents:subject)'"
 # list branches (local + remote) newest-first, with date, upstream and subject
