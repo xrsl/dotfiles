@@ -1,0 +1,2 @@
+# pr [number|branch] — open a PR in the browser (default: current branch's)
+gh pr view "$1" --web

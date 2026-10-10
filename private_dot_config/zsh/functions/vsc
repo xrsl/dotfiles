@@ -1,0 +1,2 @@
+# vsc [path…] — open in VS Code (default: current directory)
+code "${@:-.}"

@@ -1,0 +1,3 @@
+# opig <ITEM> — reveal an item's credential field, e.g. `opig MP_STG_API_KEY`
+if [ -z "$1" ]; then echo "usage: opig <item>" >&2; return 1; fi
+op item get "$1" --vault Employee --reveal --fields label=credential

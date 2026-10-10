@@ -1,0 +1,31 @@
+# hl -- the files in `h`'s review, so you can narrow to one without guessing its path.
+# Same set `h` shows (staged + unstaged + untracked, ignored files excluded), in `gs`'s
+# two-letter status shorthand. Renames print their new path and `-uall` lists untracked
+# directories file by file, because those are the names a pathspec has to match.
+# On a terminal it prints `XY path`; piped, bare paths -- so `h $(hl | fzf)` just works.
+# The columns carry `gs`'s colours: X (index) green, Y (worktree) red, `??` both red, so
+# a file staged and since re-edited reads as MM at a glance. NO_COLOR drops the escapes.
+git rev-parse --git-dir >/dev/null 2>&1 || { print -u2 "hl: not a git repository"; return 1 }
+# NB: never `local path` -- zsh ties it to PATH, and a local one empties PATH for the
+# whole function body, so even `git` stops resolving.
+local line xy file old x y tty= g='' r='' z=''
+[[ -t 1 ]] && tty=1
+[[ -n $tty && -z $NO_COLOR ]] && { g=$'\e[32m' r=$'\e[31m' z=$'\e[0m' }
+# -z: NUL-delimited and unquoted, so a path with a space or an accent stays verbatim
+# and can be pasted straight back into `h`. It also splits a rename into two records --
+# "R  <new>" followed by a bare "<old>" -- so the old name is read off and dropped.
+git status --porcelain=v1 -z --untracked-files=all "$@" |
+while IFS= read -r -d '' line; do
+  xy=${line[1,2]}
+  file=${line[4,-1]}
+  [[ $xy == [RC]* ]] && IFS= read -r -d '' old
+  [[ -z $tty ]] && { print -r -- "$file"; continue }
+  if [[ $xy == "??" ]]; then
+    print -r -- "${r}??${z} $file"          # untracked: git paints both columns red
+  else
+    x=${xy[1]} y=${xy[2]}                   # a blank column stays a plain space
+    [[ $x != " " ]] && x="${g}${x}${z}"
+    [[ $y != " " ]] && y="${r}${y}${z}"
+    print -r -- "${x}${y} $file"
+  fi
+done

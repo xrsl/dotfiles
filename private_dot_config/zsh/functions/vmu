@@ -1,0 +1,7 @@
+if (( $# != 1 )); then
+  print -u2 "usage: vmu <name>"
+  return 2
+fi
+local vm=$(_tart_vm_name "$1")
+print "Starting $1..."
+tart run "$vm" --no-graphics >"${TMPDIR:-/tmp}/tart-${vm}.log" 2>&1 &!

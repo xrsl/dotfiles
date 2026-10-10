@@ -1,4 +1,8 @@
-# ── PATH ──────────────────────────────────────────────────────────────────────
+# Order matters: environment → tools → completions (one compinit) → keys & hooks →
+# functions → aliases → sheldon widget plugins last.
+# Multi-line functions live one per file in ~/.config/zsh/functions (autoloaded below).
+
+# ── ENVIRONMENT & PATH ────────────────────────────────────────────────────────
 
 # Keep optional Nix environment setup here so Zsh has a single profile entrypoint.
 if [[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]]; then
@@ -9,133 +13,15 @@ fi
 typeset -U path PATH
 path=(
   "$HOME/.local/bin"
-  "$HOME/.antigravity/antigravity/bin"
   "$HOME/go/bin"
   $path
 )
 export CDPATH=".:$HOME/ghub"
 
-# mise owns developer runtimes and CLI tools.
-# Stub so mise's `$+functions[compdef]` guard skips its early compinit; the real compinit below redefines it.
-compdef() { :; }
-command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
-
-# Nested shells may inherit paths from installers that mise replaced.
-for stale_path in \
-  "$HOME/.opencode/bin" \
-  "$HOME/.bun/bin" \
-  "$HOME/.atuin/bin" \
-  /Library/Frameworks/Python.framework/Versions/3.12/bin; do
-  path=("${(@)path:#${stale_path}}")
-done
-unset stale_path
-
-# ── STARSHIP ──────────────────────────────────────────────────────────────────
-# Config: ~/.config/starship.toml — see https://starship.rs/presets/
-command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
-
-# ── AUTOSUGGESTIONS ───────────────────────────────────────────────────────────
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
-ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
-ZSH_AUTOSUGGEST_USE_ASYNC=1
-# (the plugin itself is loaded later, via sheldon — see end of file)
-
-# ── ALIASES ───────────────────────────────────────────────────────────────────
-alias cls='clear'
-alias ls='eza --icons '
-alias lz='eza -TL 1 --icons -a'
-alias b='bat'
-alias zshconfig='chezmoi edit ~/.zshrc'
-
-jd() { JUST_JUSTFILE=$HOME/ghub/data/justfile JUST_WORKING_DIRECTORY="$PWD" just "$@"; }
-
-_tart_vm_name() {
-  case "$1" in
-    tahoe) print -r -- tahoe-base ;;
-    *)     print -r -- "$1" ;;
-  esac
-}
-
-vml() {
-  tart list --source local
-}
-
-vmu() {
-  if (( $# != 1 )); then
-    print -u2 "usage: vmu <name>"
-    return 2
-  fi
-  local vm=$(_tart_vm_name "$1")
-  print "Starting $1..."
-  tart run "$vm" --no-graphics >"${TMPDIR:-/tmp}/tart-${vm}.log" 2>&1 &!
-}
-
-vmd() {
-  if (( $# != 1 )); then
-    print -u2 "usage: vmd <name>"
-    return 2
-  fi
-  tart stop "$(_tart_vm_name "$1")"
-}
-
-vmD() {
-  if (( $# != 1 )); then
-    print -u2 "usage: vmD <name>"
-    return 2
-  fi
-  tart delete "$(_tart_vm_name "$1")"
-}
-
-vmn() {
-  if (( $# != 2 )); then
-    print -u2 "usage: vmn <name> <clone-link>"
-    return 2
-  fi
-  tart clone "$2" "$1"
-}
-
-# Tab color for a separate Herdr client. Herdr reads accent from the client, so
-# each target gets its own config file instead of a machine registered in this one.
-#   dev, vps        mauve
-#   *tahoe*         pink
-#   ubuntu, tart-*  green
-#   anything else   red
-_herdr_accent() {
-  case "$1" in
-    dev|vps)       print -r -- '#cba6f7' ;;
-    *tahoe*)       print -r -- '#f5c2e7' ;;
-    ubuntu|tart-*) print -r -- '#a6e3a1' ;;
-    *)             print -r -- '#f38ba8' ;;
-  esac
-}
-
-hr() {
-  if (( $# != 1 )); then
-    print -u2 "usage: hr <ssh-target>"
-    return 2
-  fi
-  local accent=$(_herdr_accent "$1")
-  local cfg="${XDG_CACHE_HOME:-$HOME/.cache}/herdr/client-${${1}//[^A-Za-z0-9._-]/_}.toml"
-  mkdir -p "${cfg:h}"
-  sed "s|^accent = .*|accent = \"$accent\"|" ~/.config/herdr/config.toml > "$cfg"
-  HERDR_CONFIG_PATH="$cfg" herdr --remote "$1"
-}
-
-vmh() {
-  if (( $# != 1 )); then
-    print -u2 "usage: vmh <name>"
-    return 2
-  fi
-  local vm="$(_tart_vm_name "$1")"
-  if ! tart ip "$vm" --wait 30 >/dev/null; then
-    print -u2 "vmh: $vm did not come up (no IP after 30s)"
-    return 1
-  fi
-  hr "tart-$vm"
-}
-
-# ── TOOLS ─────────────────────────────────────────────────────────────────────
-command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
+export EDITOR=fresh
+export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/catppuccin-mocha.yml"
+# Copilot CLI only emits token usage via OTel file export; tokscale reads ~/.copilot/otel
+export COPILOT_OTEL_FILE_EXPORTER_PATH="$HOME/.copilot/otel/usage.jsonl"
 
 # fzf: styled like the snacks.nvim picker in Catppuccin Mocha. Previews use bat,
 # whose theme is set in ~/.config/bat/config.
@@ -155,8 +41,85 @@ export FZF_CTRL_T_OPTS="--multi --input-label ' Files ' \
 export FZF_ALT_C_COMMAND='fd -t d -H -E .git'
 export FZF_ALT_C_OPTS="--input-label ' Dirs ' --preview 'eza -T -L2 --color=always {} 2>/dev/null || ls {}'"
 export FZF_CTRL_R_COMMAND=   # empty value: fzf leaves Ctrl-R to atuin
+
+# Autosuggestions (the plugin itself is loaded last, via sheldon)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#663399,standout"
+ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE="20"
+ZSH_AUTOSUGGEST_USE_ASYNC=1
+
+# ── TOOLS ─────────────────────────────────────────────────────────────────────
+
+# mise owns developer runtimes and CLI tools.
+# Stub so mise's `$+functions[compdef]` guard skips its early compinit; the real compinit below redefines it.
+compdef() { :; }
+command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
+
+# Nested shells may inherit paths from installers that mise replaced.
+for stale_path in \
+  "$HOME/.opencode/bin" \
+  "$HOME/.bun/bin" \
+  "$HOME/.atuin/bin" \
+  /Library/Frameworks/Python.framework/Versions/3.12/bin; do
+  path=("${(@)path:#${stale_path}}")
+done
+unset stale_path
+
+# Config: ~/.config/starship.toml — see https://starship.rs/presets/
+command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
+command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
 command -v fzf >/dev/null && source <(fzf --zsh)
 
+# ── COMPLETIONS ───────────────────────────────────────────────────────────────
+# All fpath additions must happen before the single compinit below.
+if [[ -d "$HOME/.docker/completions" ]]; then
+  fpath=("$HOME/.docker/completions" $fpath)
+fi
+fpath+=~/.zfunc
+fpath=(~/.zsh/completions $fpath)
+
+# Generated completions, regenerated only when the binary is newer than the file (like wt below).
+# A new file needs a full compinit (-C skips the new-file check), so drop the dump.
+typeset -A _gen_comp=(mise 'mise completion zsh' uv 'uv generate-shell-completion zsh')
+for _c _cmd in ${(kv)_gen_comp}; do
+  (( $+commands[$_c] )) || continue
+  [[ ~/.zfunc/_$_c -nt =$_c ]] && continue
+  mkdir -p ~/.zfunc && eval $_cmd >| ~/.zfunc/_$_c && rm -f ~/.zcompdump
+done
+unset _gen_comp _c _cmd
+
+# fpath/completion plugins (e.g. zsh-completions) must reach fpath before compinit.
+command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile pre source)"
+
+# One compinit; skip the security audit (compaudit) when the dump is < 24h old.
+# -C also skips the new-file check: after adding a completion, rm ~/.zcompdump.
+# (Array, not [[ -n … ]]: [[ ]] never globs, so that test was always true.)
+autoload -Uz compinit
+_zcd=(~/.zcompdump(Nmh+24))
+if (( $#_zcd )) || [[ ! -s ~/.zcompdump ]]; then
+  compinit
+  touch ~/.zcompdump  # compinit only rewrites the dump when files change; restart the 24h clock
+else
+  compinit -C
+fi
+unset _zcd
+
+zstyle ':completion:*' menu select
+
+# worktrunk (uses compdef, so must run after compinit)
+if command -v wt >/dev/null 2>&1; then
+  # Cached: regenerated only when the wt binary is newer than the cache.
+  _wt_init=${XDG_CACHE_HOME:-$HOME/.cache}/wt-init.zsh
+  [[ $_wt_init -nt =wt ]] || command wt config shell init zsh >| $_wt_init
+  source $_wt_init
+  unset _wt_init
+fi
+
+# zoxide (smarter cd) — after atuin so keybindings stay intact, after compinit for its compdef
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+
+# ── KEYS & HOOKS ──────────────────────────────────────────────────────────────
+
+# atuin: Up searches history; Down clears a line Up filled instead of stepping history.
 _atuin_up_search_marked() {
   zle atuin-up-search
   [[ -n "$BUFFER" ]] && _ATUIN_SELECTED_BUFFER=1
@@ -201,11 +164,18 @@ bindkey -M viins '^[OB' atuin-down-clear-selected
 bindkey -M vicmd '^[[B' atuin-down-clear-selected
 bindkey -M vicmd '^[OB' atuin-down-clear-selected
 
-if [[ -d "$HOME/.docker/completions" ]]; then
-  fpath=("$HOME/.docker/completions" $fpath)
-fi
+# Fix delete/backspace for remote terminals
+bindkey "^[[3~" delete-char
+bindkey "^?" backward-delete-char
+bindkey "^U" backward-kill-line
 
-# ── TERMINAL ──────────────────────────────────────────────────────────────────
+copy-current-line() {
+  print -rn -- "$BUFFER" | pbcopy
+}
+zle -N copy-current-line
+bindkey "^G" copy-current-line
+bindkey "^X^C" copy-current-line
+
 # Reset cursor to steady bar before every prompt (counteracts vim/nvim block cursor)
 precmd_cursor() { printf '\e[6 q'; }
 precmd_functions+=(precmd_cursor)
@@ -248,189 +218,40 @@ precmd_herdr_tab_branch() {
 }
 precmd_functions+=(precmd_herdr_tab_branch)
 
-# Fix delete/backspace for remote terminals
-bindkey "^[[3~" delete-char
-bindkey "^?" backward-delete-char
-bindkey "^U" backward-kill-line
+# ── FUNCTIONS ─────────────────────────────────────────────────────────────────
+# One file per function, loaded on first call; each file starts with its usage notes.
+#   VMs & hosts   vmu vmd vmh rh
+#   git & review  h hl hpr eh
+#   editors       vsc
+#   GitHub        pr
+#   worktrunk     wtn wtc wtcp
+#   mise & just   m mx
+#   1Password     opil opig opic opis opid
+#   work API      org_id org_slug
+#   misc          nvimtheme
+fpath=(~/.config/zsh/functions $fpath)
+autoload -Uz ~/.config/zsh/functions/*(.:t)
 
-copy-current-line() {
-  print -rn -- "$BUFFER" | pbcopy
-}
-zle -N copy-current-line
-bindkey "^G" copy-current-line
-bindkey "^X^C" copy-current-line
+# ── ALIASES ─────────────────────────────────────────────────────────────────
 
-# Kiro IDE shell integration
-if [[ "$TERM_PROGRAM" == "kiro" ]] && command -v kiro >/dev/null 2>&1; then
-  . "$(kiro --locate-shell-integration-path zsh)"
-fi
+# Shell & files
+alias cls='clear'
+alias ls='eza --icons '
+alias lz='eza -TL 1 --icons -a'
+alias b='bat'
+alias f="spf"
+alias y=yazi
+alias tb="terminal-browser open"
+alias vml="tart list --source local"  # tart VMs (macOS); vmu/vmd/vmh are functions
+# tokens today / this week
+alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
+alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --week"
 
- 
-# ── COMPLETIONS ─────────────────────────────────────────────────────────────
-# All fpath additions must happen before the single compinit below.
-fpath+=~/.zfunc
-fpath=(~/.zsh/completions $fpath)
-
-# Generated completions, regenerated only when the binary is newer than the file (like wt below).
-# A new file needs a full compinit (-C skips the new-file check), so drop the dump.
-typeset -A _gen_comp=(mise 'mise completion zsh' uv 'uv generate-shell-completion zsh')
-for _c _cmd in ${(kv)_gen_comp}; do
-  (( $+commands[$_c] )) || continue
-  [[ ~/.zfunc/_$_c -nt =$_c ]] && continue
-  mkdir -p ~/.zfunc && eval $_cmd >| ~/.zfunc/_$_c && rm -f ~/.zcompdump
-done
-unset _gen_comp _c _cmd
-
-# fpath/completion plugins (e.g. zsh-completions) must reach fpath before compinit.
-command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile pre source)"
-
-# One compinit; skip the security audit (compaudit) when the dump is < 24h old.
-# -C also skips the new-file check: after adding a completion, rm ~/.zcompdump.
-# (Array, not [[ -n … ]]: [[ ]] never globs, so that test was always true.)
-autoload -Uz compinit
-_zcd=(~/.zcompdump(Nmh+24))
-if (( $#_zcd )) || [[ ! -s ~/.zcompdump ]]; then
-  compinit
-  touch ~/.zcompdump  # compinit only rewrites the dump when files change; restart the 24h clock
-else
-  compinit -C
-fi
-unset _zcd
-
-zstyle ':completion:*' menu select
-
-# worktrunk (uses compdef, so must run after compinit)
-if command -v wt >/dev/null 2>&1; then
-  # Cached: regenerated only when the wt binary is newer than the cache.
-  _wt_init=${XDG_CACHE_HOME:-$HOME/.cache}/wt-init.zsh
-  [[ $_wt_init -nt =wt ]] || command wt config shell init zsh >| $_wt_init
-  source $_wt_init
-  unset _wt_init
-fi
-
-# Just
-alias j=just
-# -g is just's own global-justfile flag: it resolves ~/.justfile, runs recipes in
-# the invocation directory, and unlike an explicit --justfile leaves the completer
-# able to see the positional as a recipe.
-alias .j='just -g'
-
-# mise: add/rm/clean/sync go through the ~/.justfile recipe (chezmoi sync, no leftovers);
-# everything else hits mise's own shell function so `m shell` still evals.
-m() {
-  case ${1:-} in
-    add|rm|remove|unuse|clean|sync) just -g mise "$@" ;;
-    *) mise "$@" ;;
-  esac
-}
-compdef m=mise
-alias ml='mise ls'
-alias kp='killport --no-fail'
-
-# mx tool[@ver] args… → mise x tool@latest -- tool args… (uvx for mise: runs without touching config; m sync prunes it)
-# binary = last segment of the tool name (github:jkfran/killport → killport), else the tool's only binary
-# (npm:@mcpjam/cli → mcpjam); with several binaries and no match, use mise x directly
-mx() {
-  local t=${1:?usage: mx tool[@version] [args…]}; shift
-  local name=${t##*[:/]}
-  [[ $name == *@* ]] || t+=@latest
-  name=${name%@*}
-  local bins=(${(f)"$(mise bin-paths --bin-names $t 2>/dev/null)"})
-  # bin-paths is empty until installed; install only then (mise install checks remote latest, ~1.5s)
-  (( $#bins )) || { mise install -q $t && bins=(${(f)"$(mise bin-paths --bin-names $t)"}) } || return
-  (( ${bins[(Ie)$name]} || $#bins != 1 )) || name=$bins[1]
-  mise x $t -- $name "$@"
-}
-
-# Agents
-alias cc='claude --dangerously-skip-permissions'
-alias ccc='claude -c --dangerously-skip-permissions'
-alias ccr='claude -r --dangerously-skip-permissions'
-alias cx='codex --yolo'
-alias cxc='codex --yolo resume'
-# Copilot CLI only emits token usage via OTel file export; tokscale reads ~/.copilot/otel
-export COPILOT_OTEL_FILE_EXPORTER_PATH="$HOME/.copilot/otel/usage.jsonl"
-alias co='copilot --autopilot --allow-all-tools'
-alias coc='copilot --autopilot --allow-all-tools --resume'
-alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
-alias cr="crush --yolo"
-alias crc="crush --yolo --continue"
-alias kl="kilo --auto"
-alias klc="kilo --auto --continue"
-alias klm="kilo --auto --mini"
-alias ca="cursor-agent --yolo"
-alias cac="cursor-agent --yolo --continue"
-alias car="cursor-agent --yolo --resume"
-
-#alias pi='pi --provider ollama --model gemma4:31b'
-#alias pi-qw='pi --provider ollama --model qwen3.5:9b-mlxb'
-
-# Worktrunk: multi-step aliases (newtree/sc/scp/pr/land/up/home/wip/rev) live in
-# ~/.config/worktrunk/config.toml; switch/remove cd propagates via shell integration.
-alias wts='wt switch'
-alias wtl='wt list'              # fast (~0.6s): local status only
-alias wtlf='wt list --full'      # + CI status & LLM summaries (~11s cold, cached)
-alias wtlr='wt list --remotes'
-alias wtd='wt step diff'         # all changes since branching (committed+staged+unstaged+untracked)
-alias wtrm='wt remove -D'        # removes worktree AND force-deletes the branch (even unmerged)
-alias wth='wt home'
-# wtn <branch> [<base>] — 'wt newtree' (not 'new': repos may define their own).
-# base defaults to origin/main; '.' means the current HEAD.
-wtn() {
-  local base=$2
-  [[ $base == . ]] && base=@
-  [[ $base == -* ]] && base=
-  wt newtree ${1:+"$1"} ${base:+"$base"}
-}
-# wti <issue#|url>... [<branch>] — worktree from GitHub issue(s).
-#   wti 42            branch name slugged from the issue title
-#   wti 42 66         two issues; name from the first
-#   wti 42 feat/authz explicit name
-# `gh issue develop` creates the branch on origin and links it to the FIRST
-# issue, so GitHub closes that one on merge with no body keyword at all.
-# gh cannot link a second issue to an existing branch, so every issue is also
-# written to the branch description as a Closes line for pr-composer to pick up.
-wti() {
-  local -a issues=()
-  # ##*/ turns an issue URL into its trailing number; a bare 42 or #42 is unchanged.
-  while [[ ${1#\#} == <-> || "$1" == https://*/issues/<-> ]]; do issues+=("${${1#\#}##*/}"); shift; done
-  (( ${#issues} )) || { print -u2 "usage: wti <issue#|url>... [branch]"; return 2; }
-  # Title → branch name: lowercase, non-alphanumerics to -, trimmed, 40 chars.
-  local branch="${1:-$(gh issue view "${issues[1]}" --json title -q .title |
-    tr '[:upper:]' '[:lower:]' | tr -cs 'a-z0-9' '-' | sed 's/^-*//;s/-*$//' | cut -c1-40)}"
-  [[ -n "$branch" ]] || { print -u2 "wti: could not derive a branch name from issue #${issues[1]}"; return 1; }
-  # Fails (creating nothing) without push access, or if the branch already
-  # exists — `wtn <branch>` is the way back into one of those.
-  gh issue develop "${issues[1]}" --name "$branch" >/dev/null || return
-  wt newtree "$branch" || return
-  local desc; for i in $issues; do desc+="Closes #$i"$'\n'; done
-  git config branch."$branch".description "$desc"
-}
-# wtc / wtcp [cx|oc|co|pi] [args] — commit (and push) with an LLM message.
-# Default claude; cx=codex, oc=opencode, co=copilot, pi=local qwen (never rate-limited).
-# Same switch for anything else: WT_LLM=cx wt pr / wt land.
-wtc()  { case $1 in cx|oc|co|pi) WT_LLM=$1 wt sc "${@:2}" ;;  *) wt sc "$@" ;;  esac }
-wtcp() { case $1 in cx|oc|co|pi) WT_LLM=$1 wt scp "${@:2}" ;; *) wt scp "$@" ;; esac }
-
-export EDITOR=fresh
+# Editors
 alias e='fresh --no-restore'  # just the named file(s): any flag skips orchestrator mode
-# eh [ref|A..B] -- `h` in fresh's review view (FRESH_REVIEW is read by ~/.config/fresh/init.ts).
-# No arg = uncommitted changes; ref = ref..HEAD. fresh can't diff the working tree against a
-# ref, so unlike `h main`, `eh main` shows committed changes only.
-eh() {
-  local r=${1:-worktree}
-  if [[ -n $1 && $1 != *..* ]]; then
-    git rev-parse --verify --quiet "$1^{commit}" >/dev/null || { echo "eh: unknown ref: $1" >&2; return 1; }
-    r="$1..HEAD"
-  fi
-  FRESH_REVIEW=$r fresh --no-restore  # any flag skips orchestrator mode: a plain editor here
-}
-
-# VSCode
-vsc() { code "${@:-.}" }
-
 alias v="nvim"
-export LG_CONFIG_FILE="$HOME/.config/lazygit/config.yml,$HOME/.config/lazygit/catppuccin-mocha.yml"
+
+# Git
 alias g="lazygit"
 alias gs="git status -sb"
 alias p="git pull --ff-only" gp="git pull --ff-only"
@@ -445,568 +266,52 @@ alias gtl="git tag --sort=-creatordate --format='%(color:yellow)%(refname:short)
 alias gbl="git for-each-ref --exclude='refs/remotes/*/HEAD' --sort=-committerdate refs/heads refs/remotes --format='%(color:red)%(HEAD)%(color:reset) %(color:yellow)%(align:width=40,position=left)%(refname:short)%(end)%(color:reset) %(color:green)%(committerdate:short)%(color:reset)  %(color:blue)%(align:width=14,position=left)%(upstream:short)%(end)%(color:reset) %(contents:subject)'"
 # lazygit-style commit list: graph, sha, author, relative time, refs, subject
 alias gcl="git log --graph --decorate --format='%C(yellow)%h %C(blue)%<(14,trunc)%an %C(magenta)%<(12,trunc)%ar%C(auto)%d %C(reset)%s'"
-# HUNK — review-first TUI for agent-authored changesets (github.com/modem-dev/hunk).
-# `hunk diff` reads the repo directly (untracked included);
-# `hunk patch -` reads a precomputed diff from stdin (hunk has no git revset for ranges).
-#   h        every uncommitted change: staged + unstaged + untracked
-#   hw       the same, --watch (stays open beside a running agent)
-#   hpr      branch changes vs the merge-base with the default branch (what `gh pr diff` shows)
-#   hls      the files `h` is reviewing, each one usable as an `h` pathspec
-#   hpick    pick from `hls` with fzf, then review only the picked files
-#
-# Bare `hunk diff` reviews the unstaged working tree, and `--staged` swaps to the index
-# *instead of* it -- so neither one alone shows a changeset an agent has partly staged.
-# Passing HEAD as the target diffs the working tree against the last commit, which spans
-# both, and untracked files still come along (drop them with --exclude-untracked).
-#
-# hunk's grammar is `diff [target] [-- <pathspec...>]`, so a bare path is read as a *ref*,
-# not a filter: `hunk diff .gitignore` finds no such ref and shows an empty review. These
-# wrappers sort the first argument out instead of making you remember the `--`:
-#   h                 -> diff HEAD                    (everything uncommitted)
-#   h .gitignore      -> diff HEAD -- .gitignore      (path on disk => pathspec)
-#   h HEAD~3 / h main -> diff HEAD~3                  (resolves as a rev => target)
-#   h old.txt new.txt -> diff old.txt new.txt         (two files => compare mode)
-#   h -- a b          -> diff HEAD -- a b             (force pathspec for the two-file case)
-_hunk_argv() {  # sets `reply` to the argv to hand hunk; caller declares it local
-  if (( $# == 0 )) || [[ $1 == -* ]]; then
-    reply=(HEAD "$@")
-  elif (( $# == 2 )) && [[ -f $1 && -f $2 ]]; then
-    reply=("$@")                           # two concrete files: hunk's compare mode
-  elif [[ -e $1 ]]; then
-    reply=(HEAD -- "$@")                   # a path that exists is a filter, never a ref
-  elif git rev-parse --verify --quiet "$1" >/dev/null 2>&1; then
-    reply=("$@")                           # a real rev: use it as the target
-  else
-    reply=(HEAD -- "$@")                   # neither: assume pathspec (glob, deleted file)
-  fi
-}
-h() {
-  local -a reply; _hunk_argv "$@"
-  # --mode has to sit with the target, ahead of any `--`, same as --watch below.
-  command hunk diff "${reply[1]}" --mode unified "${reply[@]:1}"
-}
-hw() {
-  # --watch has to sit with the target, ahead of any `--`, or hunk reads it as a pathspec.
-  local -a reply; _hunk_argv "$@"
-  command hunk diff "${reply[1]}" --watch --mode unified "${reply[@]:1}"
-}
-# hls -- the files in `h`'s review, so you can narrow to one without guessing its path.
-# Same set `h` shows (staged + unstaged + untracked, ignored files excluded), in `gs`'s
-# two-letter status shorthand. Renames print their new path and `-uall` lists untracked
-# directories file by file, because those are the names a pathspec has to match.
-# On a terminal it prints `XY path`; piped, bare paths -- so `h $(hls | fzf)` just works.
-# The columns carry `gs`'s colours: X (index) green, Y (worktree) red, `??` both red, so
-# a file staged and since re-edited reads as MM at a glance. NO_COLOR drops the escapes.
-hls() {
-  git rev-parse --git-dir >/dev/null 2>&1 || { print -u2 "hls: not a git repository"; return 1 }
-  # NB: never `local path` -- zsh ties it to PATH, and a local one empties PATH for the
-  # whole function body, so even `git` stops resolving.
-  local line xy file old x y tty= g='' r='' z=''
-  [[ -t 1 ]] && tty=1
-  [[ -n $tty && -z $NO_COLOR ]] && { g=$'\e[32m' r=$'\e[31m' z=$'\e[0m' }
-  # -z: NUL-delimited and unquoted, so a path with a space or an accent stays verbatim
-  # and can be pasted straight back into `h`. It also splits a rename into two records --
-  # "R  <new>" followed by a bare "<old>" -- so the old name is read off and dropped.
-  git status --porcelain=v1 -z --untracked-files=all "$@" |
-  while IFS= read -r -d '' line; do
-    xy=${line[1,2]}
-    file=${line[4,-1]}
-    [[ $xy == [RC]* ]] && IFS= read -r -d '' old
-    [[ -z $tty ]] && { print -r -- "$file"; continue }
-    if [[ $xy == "??" ]]; then
-      print -r -- "${r}??${z} $file"          # untracked: git paints both columns red
-    else
-      x=${xy[1]} y=${xy[2]}                   # a blank column stays a plain space
-      [[ $x != " " ]] && x="${g}${x}${z}"
-      [[ $y != " " ]] && y="${r}${y}${z}"
-      print -r -- "${x}${y} $file"
-    fi
-  done
-}
-alias hl="hls"
-# hpick — pick from the files `h` would review with fzf, then review only those.
-# Tab multi-selects, Enter opens, Esc picks nothing. Two traps this handles:
-#   * `hls` prints repo-root-relative paths (that is what `git status` emits) but
-#     git pathspecs resolve against the CWD, so running this from a subdirectory
-#     would silently match nothing. Everything happens at the root.
-#   * `h a b` with two existing files is hunk's two-file COMPARE mode, not a
-#     filter. The leading `--` forces pathspec for any number of picks.
-hpick() {
-  local root
-  root=$(git rev-parse --show-toplevel) || return
-  local -a files
-  files=("${(@f)$(builtin cd -q $root && hls "$@" |
-    fzf --multi --layout=reverse --prompt='hunk ' \
-        --preview='d=$(git diff HEAD --color=always -- {}); [ -n "$d" ] && printf "%s\n" "$d" || cat {}')}")
-  [[ -n ${files[1]} ]] && (builtin cd -q $root && h -- "${files[@]}")
-}
 
-hpr() {
-  local base
+# GitHub
+alias ghr="gh repo view --web"  # open current repo in browser
 
-  base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
-  if [[ -z "$base" ]]; then
-    for c in main master; do
-      git show-ref --quiet --verify "refs/heads/$c" 2>/dev/null && { base=$c; break; }
-    done
-  fi
-  [[ -z "$base" ]] && base=main
+# Agents
+alias cc='claude --dangerously-skip-permissions'
+alias ccc='claude -c --dangerously-skip-permissions'
+alias ccr='claude -r --dangerously-skip-permissions'
+alias cx='codex --yolo'
+alias cxc='codex --yolo resume'
+alias co='copilot --autopilot --allow-all-tools'
+alias coc='copilot --autopilot --allow-all-tools --resume'
+alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
+alias cr="crush --yolo"
+alias crc="crush --yolo --continue"
+alias kl="kilo --auto"
+alias klc="kilo --auto --continue"
+alias klm="kilo --auto --mini"
+alias ca="cursor-agent --yolo"
+alias cac="cursor-agent --yolo --continue"
+alias car="cursor-agent --yolo --resume"
 
-  # Three-dot: diff against the merge-base, so commits that landed on the default
-  # branch after we forked don't show up inverted. Matches `gh pr diff` / the GitHub UI.
-  git diff "${base}...HEAD" --no-color | command hunk patch --mode unified -
-}
+# Worktrunk: multi-step aliases (newtree/sc/scp/pr/land/up/home/wip/rev) live in
+# ~/.config/worktrunk/config.toml; switch/remove cd propagates via shell integration.
+alias wts='wt switch'
+alias wtl='wt list'              # fast (~0.6s): local status only
+alias wtlf='wt list --full'      # + CI status & LLM summaries (~11s cold, cached)
+alias wtlr='wt list --remotes'
+alias wtd='wt step diff'         # all changes since branching (committed+staged+unstaged+untracked)
+alias wtrm='wt remove -D'        # removes worktree AND force-deletes the branch (even unmerged)
+alias wth='wt home'
 
-alias da="gh dash"
-pr() { gh pr view "$1" --web }
-# ci — review CI in gh-enhance. Auto-resolves the target:
-#   ci                          PR for current branch → else latest run on branch
-#   ci 1234                     review PR #1234 explicitly
-#   ci --run 28715063843        review a workflow run by ID
-#   ci <url> / other gh-enhance args are passed through verbatim
-ci() {
-  if (( $# > 0 )); then
-    ENHANCE_THEME=catppuccin_mocha gh enhance "$@"
-    return $?
-  fi
-  local branch pr run
-  branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
-  # 1. PR for the current branch (feature branches)
-  pr=$(gh pr view --json number -q .number 2>/dev/null)
-  if [[ -n "$pr" ]]; then
-    ENHANCE_THEME=catppuccin_mocha gh enhance "$pr"
-    return $?
-  fi
-  # 2. No PR → latest workflow run on this branch (e.g. main, worktrees)
-  run=$(gh run list --branch "$branch" --limit 1 --json databaseId -q '.[0].databaseId' 2>/dev/null)
-  if [[ -n "$run" ]]; then
-    echo "ci: no PR for '$branch'; opening latest run #$run" >&2
-    ENHANCE_THEME=catppuccin_mocha gh enhance --run "$run"
-    return $?
-  fi
-  echo "ci: no PR and no workflow runs found for branch '$branch'" >&2
-  return 1
-}
+# mise & just
+alias j=just
+# -g is just's own global-justfile flag: it resolves ~/.justfile, runs recipes in
+# the invocation directory, and unlike an explicit --justfile leaves the completer
+# able to see the positional as a recipe.
+alias .j='just -g'
+compdef m=mise  # m is in functions/
+alias ml='mise ls'
+alias kp='killport --no-fail'
 
-# cir — pick a recent workflow run on the current branch via fzf, open it in gh-enhance.
-#   cir              list recent runs on the current branch (fzf picker)
-#   cir main         list recent runs on a specific branch
-#   cir --all        list recent runs across all branches
-cir() {
-  local branch
-  if [[ "$1" == "--all" ]]; then
-    branch=""
-  else
-    branch="${1:-$(git rev-parse --abbrev-ref HEAD 2>/dev/null)}"
-  fi
-  local runs header
-  if [[ -n "$branch" ]]; then
-    runs=$(gh run list --branch "$branch" --limit 30 \
-      --json databaseId,status,conclusion,event,displayTitle,createdAt \
-      -q '.[] | [.databaseId,.status,(.conclusion // "—"),.event,.createdAt[:10],.displayTitle] | @tsv')
-    header=$(printf 'ID\tSTATUS\tRESULT\tEVENT\tDATE\tTITLE')
-  else
-    runs=$(gh run list --limit 30 \
-      --json databaseId,status,conclusion,event,displayTitle,createdAt,headBranch \
-      -q '.[] | [.databaseId,.status,(.conclusion // "—"),.event,.headBranch,.displayTitle] | @tsv')
-    header=$(printf 'ID\tSTATUS\tRESULT\tEVENT\tBRANCH\tTITLE')
-  fi
-  if [[ -z "$runs" ]]; then
-    echo "cir: no workflow runs found${branch:+ on branch '$branch'}" >&2
-    return 1
-  fi
-  local pick
-  pick=$(printf '%s\n%s\n' "$header" "$(printf '%s\n' "$runs" | tail -r)" \
-    | fzf --header-lines=1 \
-          --header="Recent runs${branch:+ on $branch} — Enter to open in enhance" \
-          --header-first \
-          --tabstop=12 --delimiter='\t' \
-          --with-nth=2,3,4,5,6 \
-          --preview='gh run view {1} --log 2>/dev/null | tail -40' \
-          --preview-window='down:60%:wrap' \
-          --bind='enter:execute(ENHANCE_THEME=catppuccin_mocha gh enhance --run {1})+abort')
-  if [[ -n "$pick" ]]; then
-    local run_id
-    run_id=$(printf '%s' "$pick" | cut -f1)
-    ENHANCE_THEME=catppuccin_mocha gh enhance --run "$run_id"
-  fi
-}
-
-# Open current repo in browser
-alias ghr="gh repo view --web"
-
-# ghrn <repo>|<owner>/<repo> [gh flags] — new private repo in ~/ghub, cloned, cd'd into.
-# Bare name assumes owner xrsl. Extra args are forwarded to `gh repo new`.
-ghrn() {
-  local slug="$1"
-  if [[ -z "$slug" ]]; then
-    print -u2 "ghrn: usage: ghrn <repo>|<owner>/<repo> [gh repo new flags...]"
-    return 2
-  fi
-  shift
-  [[ "$slug" == */* ]] || slug="xrsl/$slug"
-  local name="${slug##*/}"
-  local dest="$HOME/ghub/$name"
-  if [[ -e "$dest" ]]; then
-    print -u2 "ghrn: $dest already exists"
-    return 1
-  fi
-  ( cd "$HOME/ghub" && gh repo new "$slug" --private --clone --add-readme "$@" ) || return
-  cd "$dest"
-}
-
-# ghrD <repo>|<owner>/<repo> [-r] [-f] [-y] [gh flags] — remove a repo clone from ~/ghub.
-# Local dir goes to the Trash (recoverable). -r|--remote ALSO deletes the GitHub repo (permanent).
-# The owner is READ from the clone's git origin, never assumed, so -r cannot target the wrong
-# repo; naming an owner that disagrees with origin is an error. With no local clone, -r requires
-# <owner>/<repo>. Refuses on uncommitted/unpushed/stashed work or sibling worktrees unless -f.
-ghrD() {
-  emulate -L zsh
-  local arg="" remote=0 force=0 yes=0
-  local -a ghargs
-  while (( $# )); do
-    case "$1" in
-      -r|--remote) remote=1 ;;
-      -f|--force)  force=1 ;;
-      -y|--yes)    yes=1 ;;
-      -h|--help)
-        print "usage: ghrD <repo>|<owner>/<repo> [-r|--remote] [-f|--force] [-y|--yes] [gh flags]"
-        return 0 ;;
-      --) shift; ghargs+=("$@"); break ;;
-      -*) ghargs+=("$1") ;;
-      *)  if [[ -z "$arg" ]]; then arg="$1"; else ghargs+=("$1"); fi ;;
-    esac
-    shift
-  done
-
-  if [[ -z "$arg" ]]; then
-    print -u2 "ghrD: usage: ghrD <repo>|<owner>/<repo> [-r|--remote] [-f|--force] [-y|--yes]"
-    return 2
-  fi
-
-  arg="${arg%.git}"
-  if [[ "$arg" == *github.com[:/]* ]]; then
-    arg="${arg##*github.com}"
-    arg="${arg#[:/]}"
-  fi
-  local name="${arg##*/}" given_owner=""
-  [[ "$arg" == */* ]] && given_owner="${arg%/*}"
-  local dest="$HOME/ghub/$name"
-
-  # The GitHub owner is READ from the clone's origin, never assumed. A delete must
-  # know exactly what it is pointed at.
-  local slug="" origin=""
-  if [[ -d "$dest" ]] && git -C "$dest" rev-parse --git-dir >/dev/null 2>&1; then
-    origin=$(git -C "$dest" remote get-url origin 2>/dev/null)
-    origin="${origin%.git}"
-    origin="${origin##*github.com}"
-    origin="${origin#[:/]}"
-    [[ "$origin" == */* ]] && slug="$origin"
-  fi
-  if [[ -n "$given_owner" && -n "$slug" && "${given_owner:l}" != "${${slug%/*}:l}" ]]; then
-    print -u2 "ghrD: you named '$given_owner/$name' but $dest has origin '$slug'"
-    print -u2 "  refusing rather than guessing which you meant"
-    return 1
-  fi
-  [[ -z "$slug" && -n "$given_owner" ]] && slug="$given_owner/$name"
-
-  if [[ ! -d "$dest" ]]; then
-    if (( remote )); then
-      print "ghrD: no local clone at $dest — remote only"
-    else
-      print -u2 "ghrD: $dest does not exist (pass -r with <owner>/$name for the GitHub repo)"
-      return 1
-    fi
-  fi
-  if (( remote )) && [[ -z "$slug" ]]; then
-    print -u2 "ghrD: can't determine the GitHub owner of '$name' (no local clone, or no github origin)"
-    print -u2 "  name it explicitly: ghrD <owner>/$name -r"
-    return 2
-  fi
-
-  # Sibling worktrees are ~/ghub/<repo>.<branch> — deleting the main clone orphans them.
-  local -a worktrees=( "$HOME/ghub/$name".*(N/) )
-  local -a risks=()
-
-  if [[ -d "$dest" ]]; then
-    if git -C "$dest" rev-parse --git-dir >/dev/null 2>&1; then
-      [[ -n "$(git -C "$dest" status --porcelain 2>/dev/null)" ]] && risks+=("uncommitted or untracked changes")
-      local n
-      n=$(git -C "$dest" log --branches --not --remotes --oneline 2>/dev/null | wc -l | tr -d ' ')
-      (( n )) && risks+=("$n unpushed commit(s)")
-      n=$(git -C "$dest" stash list 2>/dev/null | wc -l | tr -d ' ')
-      (( n )) && risks+=("$n stash entry(ies)")
-    else
-      risks+=("not a git repo — nothing is backed up remotely")
-    fi
-  fi
-  (( ${#worktrees} )) && risks+=("${#worktrees} sibling worktree(s): ${(j:, :)${worktrees[@]:t}}")
-
-  if (( ${#risks} )) && (( ! force )); then
-    print -u2 "ghrD: refusing to delete '$name' —"
-    printf '  - %s\n' "${risks[@]}" >&2
-    print -u2 "  re-run with -f to override (worktrees are never removed for you; use 'wt rm')"
-    return 1
-  fi
-
-  if (( ! yes )); then
-    print "About to delete:"
-    [[ -d "$dest" ]] && print "  local   $dest  -> Trash (recoverable)"
-    (( remote ))     && print "  remote  github.com/$slug  -> PERMANENT, not recoverable"
-    (( ${#risks} ))  && printf '  !! %s\n' "${risks[@]}"
-    local reply
-    read "reply?Type the repo name to confirm ($name): "
-    if [[ "$reply" != "$name" ]]; then
-      print "aborted"
-      return 1
-    fi
-  fi
-
-  # Don't leave the shell sitting inside a directory we just removed.
-  [[ "$PWD" == "$dest" || "$PWD" == "$dest"/* ]] && cd "$HOME/ghub"
-
-  if [[ -d "$dest" ]]; then
-    trash "$dest" || return
-    print "trashed $dest"
-  fi
-  if (( remote )); then
-    gh repo delete "$slug" --yes "${ghargs[@]}" || return
-    print "deleted github.com/$slug"
-  fi
-}
-
-# ghrc <repo>|<owner>/<repo>|<url> [dir] [gh flags] — clone into ~/ghub and cd in.
-# Always lands in ~/ghub regardless of where you run it from. Bare name assumes owner
-# xrsl. Already-cloned is a no-op that just cds in (if the origin matches); a name
-# collision from a different owner is an error, not an overwrite.
-ghrc() {
-  emulate -L zsh
-  local slug="$1"
-  if [[ -z "$slug" ]]; then
-    print -u2 "ghrc: usage: ghrc <repo>|<owner>/<repo>|<url> [dir] [gh repo clone flags...]"
-    return 2
-  fi
-  shift
-
-  # Accept a pasted URL (https://github.com/o/r.git, git@github.com:o/r.git) as well as o/r.
-  slug="${slug%.git}"
-  if [[ "$slug" == *github.com[:/]* ]]; then
-    slug="${slug##*github.com}"
-    slug="${slug#[:/]}"
-  fi
-  [[ "$slug" == */* ]] || slug="xrsl/$slug"
-
-  # `gh repo clone <repo> [<dir>]` — an optional dir renames the checkout. Keep it a
-  # plain name so the clone can never land outside ~/ghub.
-  local dirarg=""
-  if [[ -n "$1" && "$1" != -* ]]; then
-    dirarg="$1"; shift
-    if [[ "$dirarg" == */* || "$dirarg" == ".." || "$dirarg" == "." ]]; then
-      print -u2 "ghrc: dir must be a plain name inside ~/ghub, got '$dirarg'"
-      return 2
-    fi
-  fi
-  local name="${dirarg:-${slug##*/}}"
-  local dest="$HOME/ghub/$name"
-
-  if [[ -d "$dest" ]]; then
-    local origin cur
-    origin=$(git -C "$dest" remote get-url origin 2>/dev/null)
-    cur="${origin%.git}"
-    cur="${cur##*github.com}"
-    cur="${cur#[:/]}"
-    if [[ -n "$cur" && "${cur:l}" == "${slug:l}" ]]; then
-      print "ghrc: already cloned at $dest"
-      cd "$dest"
-      return 0
-    fi
-    print -u2 "ghrc: $dest already exists but its origin is '${cur:-none}', not '$slug'"
-    print -u2 "  pass a different target dir: ghrc $slug <dir>"
-    return 1
-  fi
-
-  ( cd "$HOME/ghub" && gh repo clone "$slug" ${dirarg:+"$dirarg"} "$@" ) || return
-  cd "$dest"
-}
-
-# 1Password CLI
-# opil [op item list flags] — list Employee vault items, newest saved first
-opil() {
-  local json
-  json=$(op item list --vault Employee --format json "$@") || return
-  print -r -- "$json" | python3 -c '
-import json, sys
-from datetime import datetime
-items = json.load(sys.stdin)
-items.sort(key=lambda i: i.get("updated_at", ""), reverse=True)
-if not items:
-    sys.exit(0)
-rows = []
-for n, i in enumerate(items, 1):
-    ts = datetime.fromisoformat(i["updated_at"]).astimezone().strftime("%Y-%m-%d %H:%M")
-    rows.append((str(n), i["title"], ts, i["id"]))
-head = ("#", "KEY", "UPDATED", "ID")
-w = [max(len(r[c]) for r in (head, *rows)) for c in range(4)]
-def line(r):
-    return f"{r[0]:>{w[0]}}  {r[1]:<{w[1]}}  {r[2]:<{w[2]}}  {r[3]}".rstrip()
-gray, reset = ("\033[90m", "\033[0m") if sys.stdout.isatty() else ("", "")
-print(gray + line(head) + reset)
-for r in rows:
-    print(line(r))
-'
-}
-# opig <ITEM> — reveal an item's credential field, e.g. `opig MP_STG_API_KEY`
-opig() {
-  if [ -z "$1" ]; then echo "usage: opig <item>" >&2; return 1; fi
-  op item get "$1" --vault Employee --reveal --fields label=credential
-}
-# opic <ITEM> — copy an item's credential to the clipboard, printing nothing
-opic() {
-  if [ -z "$1" ]; then echo "usage: opic <item>" >&2; return 1; fi
-  op item get "$1" --vault Employee --reveal --fields label=credential \
-    | tr -d '\n' | pbcopy
-}
-# opis <ITEM> [VALUE] — save a key in the same shape as MP_STG_API_KEY
-# (Employee vault, API Credential, username=<ITEM>, credential=<VALUE>, type=bearer).
-# Omit VALUE to be prompted without echoing it (keeps the secret out of history).
-# Updates the credential in place if the item already exists.
-opis() {
-  if [ -z "$1" ]; then echo "usage: opis <item> [value]" >&2; return 1; fi
-  local item="$1" val="$2"
-  if [ -z "$val" ]; then
-    read -rs "val?value for $item: "
-    echo
-  fi
-  if [ -z "$val" ]; then echo "opis: empty value" >&2; return 1; fi
-  if op item get "$item" --vault Employee >/dev/null 2>&1; then
-    op item edit "$item" --vault Employee "credential=$val" >/dev/null || return
-    echo "opis: updated $item"
-  else
-    op item create --category "API Credential" --title "$item" --vault Employee \
-      "username=$item" "credential=$val" "type=bearer" >/dev/null || return
-    echo "opis: created $item"
-  fi
-}
-# opid <ITEM|ID> [-f] — permanently delete an item by key or ID.
-# Confirms first unless -f is given; there is no undo.
-opid() {
-  if [ -z "$1" ]; then echo "usage: opid <item|id> [-f]" >&2; return 1; fi
-  local item="$1" force="$2" title reply
-  title=$(op item get "$item" --vault Employee --format json 2>/dev/null \
-    | python3 -c 'import json,sys; print(json.load(sys.stdin)["title"])' 2>/dev/null) || {
-    echo "opid: no such item: $item" >&2; return 1
-  }
-  if [ "$force" != "-f" ]; then
-    read -r "reply?delete '$title' from Employee? [y/N] "
-    case "$reply" in [yY]*) ;; *) echo "opid: aborted" >&2; return 1 ;; esac
-  fi
-  op item delete "$item" --vault Employee || return
-  echo "opid: deleted $title"
-}
-
-# files
-alias f="spf"
-
-# terminal browser (mise: github:zenbu-labs/terminal-browser)
-alias tb="terminal-browser open"
-
-# tokens today
-alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
-alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --week"
-# zoxide (smarter cd) — must load after atuin so keybindings stay intact
-command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
-
-# mmv (mermaid view) — render a .mmd to a temp PNG and show it inline in the terminal.
-# Dark theme + transparent bg so it reads on a dark terminal; needs `mmdc` and `chafa`.
-mmv() {
-  if [ -z "$1" ]; then echo "usage: mmv <file.mmd>" >&2; return 1; fi
-  local out="${TMPDIR:-/tmp}/_mmv.png"
-  mmdc -i "$1" -o "$out" -t dark -b '#1e1e2e' -s 3 && viu "$out"
-}
-
-function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	command yazi "$@" --cwd-file="$tmp"
-	IFS= read -r -d '' cwd < "$tmp"
-	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
-	command rm -f -- "$tmp"
-}
-
-# org_id / org_slug — translate between Modeling Platform (staging) org slugs and IDs.
-#   org_id acme-corp   -> 42
-#   org_slug 42        -> acme-corp
-# Token is read from ~/.config/mpcli/.env (MP_API_STG_TOKEN) so it is never stored here.
-_mp_stg_token() {
-  local tok=${MP_API_STG_TOKEN:-$(grep -m1 '^MP_API_STG_TOKEN=' ~/.config/mpcli/.env 2>/dev/null | cut -d= -f2-)}
-  if [ -z "$tok" ]; then
-    echo "${funcstack[2]:-mp}: no MP_API_STG_TOKEN (env or ~/.config/mpcli/.env)" >&2
-    return 1
-  fi
-  print -r -- "$tok"
-}
-
-# org_id <slug> — the API has GET /organizations/:organization-slug, so this is one call.
-org_id() {
-  if [ -z "$1" ]; then echo "usage: org_id <org-slug>" >&2; return 1; fi
-  local tok; tok=$(_mp_stg_token) || return 1
-  curl -fsS -H "APIApplicationUser: $tok" \
-    "https://api.modeling.staging.bw7.io/api/organizations/$1" | jq -e '.ID'
-}
-
-# org_slug <id> — the reverse has no endpoint: routes/main.go only exposes GetBySlug,
-# never GetByID. So list every org the token can see and match on ID client-side.
-# An ID outside the token's visibility reads as "not found", not as an error.
-org_slug() {
-  if [ -z "$1" ]; then echo "usage: org_slug <org-id>" >&2; return 1; fi
-  if [[ $1 != <-> ]]; then echo "org_slug: <org-id> must be a number, got '$1'" >&2; return 1; fi
-  local tok; tok=$(_mp_stg_token) || return 1
-  curl -fsS -H "APIApplicationUser: $tok" \
-    "https://api.modeling.staging.bw7.io/api/organizations" \
-    | jq -re --argjson id "$1" 'map(select(.ID == $id)) | .[0].Slug // empty' \
-    || { echo "org_slug: no organization with ID $1 visible to this token" >&2; return 1; }
-}
-
-# nvimtheme — install and pin a Neovim colorscheme (themes from vimcolorschemes.com).
-#   nvimtheme rebelot/kanagawa.nvim        install, pin "kanagawa"
-#   nvimtheme rose-pine/neovim rose-pine   when the repo name != the colorscheme name
-#   nvimtheme tokyonight-moon              pin something already installed
-#   nvimtheme                              print what is pinned
-# Edits the chezmoi source of lua/plugins/colorscheme.lua via its nvimtheme: markers.
-nvimtheme() {
-  local src=~/.local/share/chezmoi/private_dot_config/nvim/lua/plugins/colorscheme.lua
-  local dst=~/.config/nvim/lua/plugins/colorscheme.lua
-  local arg=$1 name=$2
-
-  if [ -z "$arg" ]; then
-    perl -ne 'print "$1\n" if /^local theme = "(.*?)"/' $src
-    return
-  fi
-
-  if [[ $arg == */* ]]; then
-    : ${name:=${${arg:t}%%.*}}
-    grep -q "\"$arg\"" $src ||
-      perl -pi -e "s|^( *)(-- nvimtheme:end)|\${1}{ \"$arg\", lazy = true },\n\${1}\$2|" $src
-    chezmoi apply $dst && nvim --headless '+Lazy! sync' +qa
-  else
-    : ${name:=$arg}
-  fi
-
-  # verify before pinning: a bad name means every launch falls back to habamax with an error
-  if ! nvim --headless "+lua os.exit(pcall(vim.cmd.colorscheme, '$name') and 0 or 1)" >/dev/null 2>&1; then
-    echo "nvimtheme: '$name' did not load. Plugin is installed; pass the colorscheme name as arg 2, or browse with <leader>uC." >&2
-    return 1
-  fi
-
-  perl -pi -e "s/^local theme = \".*?\"/local theme = \"$name\"/" $src
-  chezmoi apply $dst && echo "pinned $name"
-}
-
+# ── PLUGINS ───────────────────────────────────────────────────────────────────
 # Widget plugins (profile "post"): fzf-tab, autosuggestions, you-should-use, then
 # syntax-highlighting LAST — all load after compinit and all widgets/bindings.
 # (fpath plugins like zsh-completions load earlier via `--profile pre`.)
 # sheldon is installed by mise, so this is identical on macOS and Linux.
 # Config: ~/.config/sheldon/plugins.toml
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
-
-
-case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac

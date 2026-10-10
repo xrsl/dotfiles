@@ -1,0 +1,4 @@
+# opic <ITEM> — copy an item's credential to the clipboard, printing nothing
+if [ -z "$1" ]; then echo "usage: opic <item>" >&2; return 1; fi
+op item get "$1" --vault Employee --reveal --fields label=credential \
+  | tr -d '\n' | pbcopy

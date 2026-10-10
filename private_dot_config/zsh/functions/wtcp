@@ -1,0 +1,2 @@
+# wtcp [cx|oc|co|pi] [args] — commit and push with an LLM message (agents as in wtc).
+case $1 in cx|oc|co|pi) WT_LLM=$1 wt scp "${@:2}" ;; *) wt scp "$@" ;; esac

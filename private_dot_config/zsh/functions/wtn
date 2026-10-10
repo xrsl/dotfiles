@@ -1,0 +1,6 @@
+# wtn <branch> [<base>] — 'wt newtree' (not 'new': repos may define their own).
+# base defaults to origin/main; '.' means the current HEAD.
+local base=$2
+[[ $base == . ]] && base=@
+[[ $base == -* ]] && base=
+wt newtree ${1:+"$1"} ${base:+"$base"}

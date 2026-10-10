@@ -1,0 +1,10 @@
+# org_slug <id> — the reverse has no endpoint: routes/main.go only exposes GetBySlug,
+# never GetByID. So list every org the token can see and match on ID client-side.
+# An ID outside the token's visibility reads as "not found", not as an error.
+if [ -z "$1" ]; then echo "usage: org_slug <org-id>" >&2; return 1; fi
+if [[ $1 != <-> ]]; then echo "org_slug: <org-id> must be a number, got '$1'" >&2; return 1; fi
+local tok; tok=$(_mp_stg_token) || return 1
+curl -fsS -H "APIApplicationUser: $tok" \
+  "https://api.modeling.staging.bw7.io/api/organizations" \
+  | jq -re --argjson id "$1" 'map(select(.ID == $id)) | .[0].Slug // empty' \
+  || { echo "org_slug: no organization with ID $1 visible to this token" >&2; return 1; }

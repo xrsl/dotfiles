@@ -1,0 +1,6 @@
+# m — mise, except add/rm/clean/sync go through the ~/.justfile recipe (chezmoi sync,
+# no leftovers); everything else hits mise's own shell function so `m shell` still evals.
+case ${1:-} in
+  add|rm|remove|unuse|clean|sync) just -g mise "$@" ;;
+  *) mise "$@" ;;
+esac

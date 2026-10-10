@@ -1,0 +1,23 @@
+# HUNK — review-first TUI for agent-authored changesets (github.com/modem-dev/hunk).
+# `hunk diff` reads the repo directly (untracked included);
+# `hunk patch -` reads a precomputed diff from stdin (hunk has no git revset for ranges).
+#   h        every uncommitted change: staged + unstaged + untracked
+#   hpr      branch changes vs the merge-base with the default branch (what `gh pr diff` shows)
+#   hl       the files `h` is reviewing, each one usable as an `h` pathspec
+#
+# Bare `hunk diff` reviews the unstaged working tree, and `--staged` swaps to the index
+# *instead of* it -- so neither one alone shows a changeset an agent has partly staged.
+# Passing HEAD as the target diffs the working tree against the last commit, which spans
+# both, and untracked files still come along (drop them with --exclude-untracked).
+#
+# hunk's grammar is `diff [target] [-- <pathspec...>]`, so a bare path is read as a *ref*,
+# not a filter: `hunk diff .gitignore` finds no such ref and shows an empty review. These
+# wrappers sort the first argument out instead of making you remember the `--`:
+#   h                 -> diff HEAD                    (everything uncommitted)
+#   h .gitignore      -> diff HEAD -- .gitignore      (path on disk => pathspec)
+#   h HEAD~3 / h main -> diff HEAD~3                  (resolves as a rev => target)
+#   h old.txt new.txt -> diff old.txt new.txt         (two files => compare mode)
+#   h -- a b          -> diff HEAD -- a b             (force pathspec for the two-file case)
+local -a reply; _hunk_argv "$@"
+# --mode has to sit with the target, ahead of any `--`, or hunk reads it as a pathspec.
+command hunk diff "${reply[1]}" --mode unified "${reply[@]:1}"

@@ -1,0 +1,12 @@
+# sets `reply` to the argv to hand hunk; caller declares it local
+if (( $# == 0 )) || [[ $1 == -* ]]; then
+  reply=(HEAD "$@")
+elif (( $# == 2 )) && [[ -f $1 && -f $2 ]]; then
+  reply=("$@")                           # two concrete files: hunk's compare mode
+elif [[ -e $1 ]]; then
+  reply=(HEAD -- "$@")                   # a path that exists is a filter, never a ref
+elif git rev-parse --verify --quiet "$1" >/dev/null 2>&1; then
+  reply=("$@")                           # a real rev: use it as the target
+else
+  reply=(HEAD -- "$@")                   # neither: assume pathspec (glob, deleted file)
+fi

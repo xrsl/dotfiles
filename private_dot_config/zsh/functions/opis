@@ -1,0 +1,19 @@
+# opis <ITEM> [VALUE] — save a key in the same shape as MP_STG_API_KEY
+# (Employee vault, API Credential, username=<ITEM>, credential=<VALUE>, type=bearer).
+# Omit VALUE to be prompted without echoing it (keeps the secret out of history).
+# Updates the credential in place if the item already exists.
+if [ -z "$1" ]; then echo "usage: opis <item> [value]" >&2; return 1; fi
+local item="$1" val="$2"
+if [ -z "$val" ]; then
+  read -rs "val?value for $item: "
+  echo
+fi
+if [ -z "$val" ]; then echo "opis: empty value" >&2; return 1; fi
+if op item get "$item" --vault Employee >/dev/null 2>&1; then
+  op item edit "$item" --vault Employee "credential=$val" >/dev/null || return
+  echo "opis: updated $item"
+else
+  op item create --category "API Credential" --title "$item" --vault Employee \
+    "username=$item" "credential=$val" "type=bearer" >/dev/null || return
+  echo "opis: created $item"
+fi

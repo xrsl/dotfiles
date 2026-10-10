@@ -1,0 +1,7 @@
+# Token is read from ~/.config/mpcli/.env (MP_API_STG_TOKEN) so it is never stored here.
+local tok=${MP_API_STG_TOKEN:-$(grep -m1 '^MP_API_STG_TOKEN=' ~/.config/mpcli/.env 2>/dev/null | cut -d= -f2-)}
+if [ -z "$tok" ]; then
+  echo "${funcstack[2]:-mp}: no MP_API_STG_TOKEN (env or ~/.config/mpcli/.env)" >&2
+  return 1
+fi
+print -r -- "$tok"

@@ -1,0 +1,9 @@
+if (( $# != 1 )); then
+  print -u2 "usage: rh <ssh-target>"
+  return 2
+fi
+local accent=$(_herdr_accent "$1")
+local cfg="${XDG_CACHE_HOME:-$HOME/.cache}/herdr/client-${${1}//[^A-Za-z0-9._-]/_}.toml"
+mkdir -p "${cfg:h}"
+sed "s|^accent = .*|accent = \"$accent\"|" ~/.config/herdr/config.toml > "$cfg"
+HERDR_CONFIG_PATH="$cfg" herdr --remote "$1"

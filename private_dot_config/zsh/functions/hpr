@@ -1,0 +1,13 @@
+local base
+
+base=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null)
+if [[ -z "$base" ]]; then
+  for c in main master; do
+    git show-ref --quiet --verify "refs/heads/$c" 2>/dev/null && { base=$c; break; }
+  done
+fi
+[[ -z "$base" ]] && base=main
+
+# Three-dot: diff against the merge-base, so commits that landed on the default
+# branch after we forked don't show up inverted. Matches `gh pr diff` / the GitHub UI.
+git diff "${base}...HEAD" --no-color | command hunk patch --mode unified -

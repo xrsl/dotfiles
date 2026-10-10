@@ -1,0 +1,4 @@
+# wtc [cx|oc|co|pi] [args] — commit with an LLM message.
+# Default claude; cx=codex, oc=opencode, co=copilot, pi=local qwen (never rate-limited).
+# Same switch for anything else: WT_LLM=cx wt pr / wt land.
+case $1 in cx|oc|co|pi) WT_LLM=$1 wt sc "${@:2}" ;; *) wt sc "$@" ;; esac

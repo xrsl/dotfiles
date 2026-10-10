@@ -1,0 +1,8 @@
+# org_id / org_slug — translate between Modeling Platform (staging) org slugs and IDs.
+#   org_id acme-corp   -> 42
+#   org_slug 42        -> acme-corp
+# org_id <slug> — the API has GET /organizations/:organization-slug, so this is one call.
+if [ -z "$1" ]; then echo "usage: org_id <org-slug>" >&2; return 1; fi
+local tok; tok=$(_mp_stg_token) || return 1
+curl -fsS -H "APIApplicationUser: $tok" \
+  "https://api.modeling.staging.bw7.io/api/organizations/$1" | jq -e '.ID'

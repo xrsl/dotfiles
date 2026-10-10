@@ -1,4 +1,4 @@
-// `eh` (.zshrc): FRESH_REVIEW=worktree opens the uncommitted-changes review,
+// `eh` (~/.config/zsh/functions/eh): FRESH_REVIEW=worktree opens the uncommitted-changes review,
 // any other value is a git range (A..B) for the range review.
 editor.on("plugins_loaded", () => {
   const review = editor.getEnv("FRESH_REVIEW");

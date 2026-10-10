@@ -1,0 +1,12 @@
+# mx tool[@ver] args… → mise x tool@latest -- tool args… (uvx for mise: runs without touching config; m sync prunes it)
+# binary = last segment of the tool name (github:jkfran/killport → killport), else the tool's only binary
+# (npm:@mcpjam/cli → mcpjam); with several binaries and no match, use mise x directly
+local t=${1:?usage: mx tool[@version] [args…]}; shift
+local name=${t##*[:/]}
+[[ $name == *@* ]] || t+=@latest
+name=${name%@*}
+local bins=(${(f)"$(mise bin-paths --bin-names $t 2>/dev/null)"})
+# bin-paths is empty until installed; install only then (mise install checks remote latest, ~1.5s)
+(( $#bins )) || { mise install -q $t && bins=(${(f)"$(mise bin-paths --bin-names $t)"}) } || return
+(( ${bins[(Ie)$name]} || $#bins != 1 )) || name=$bins[1]
+mise x $t -- $name "$@"
