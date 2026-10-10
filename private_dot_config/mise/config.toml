@@ -93,7 +93,6 @@ worktrunk = "latest"
 yazi = "latest"
 yq = "latest"
 zellij = "latest"
-zizmor = "latest"
 zoxide = "latest"
 jless = { version = "latest", os = ["macos", "linux/x64"] }
 cue = "latest"
