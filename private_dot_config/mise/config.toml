@@ -71,7 +71,7 @@ pnpm = "latest"
 "npm:postman-cli" = { version = "latest", os = ["macos"] }
 prek = "latest"
 protobuf = "latest"
-python = "latest"
+python = "3.14"  # pipx tools install against this; 3.15 lacks wheels (pyyaml, mlx) and mise passes uv --no-build
 rclone = "latest"
 rg = "latest"
 rumdl = "latest"
