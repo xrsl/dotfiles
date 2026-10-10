@@ -1,4 +1,0 @@
-# fresh shortcuts removed 2026-10-10; drop these lines once every machine has synced
-.local/bin/fresh-wait
-.config/fresh/tsconfig.json
-.config/fresh/types
