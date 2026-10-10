@@ -77,9 +77,10 @@ mise *args:
     if [[ $cmd == clean ]]; then
       mise prune -y
       # same version installed twice (e.g. 8.0.1 and 8.0.1~uv~<hash> after an installer switch): keep the active path.
-      # Only tools with an active entry here, so os-gated and project-only tools are untouched.
-      mise ls --json | jq -r '.[] | (map(select(.source)) | map(.install_path)) as $keep
-        | select($keep | length > 0) | map(select(.installed and .source == null) | .install_path) - $keep | .[]' |
+      # Only the active version's own twins, so project pins of other versions (node 26 beside global lts) are untouched.
+      mise ls --json | jq -r '.[] | map(select(.source)) as $a | ($a | map(.version | split("~")[0])) as $v
+        | map(select(.installed and .source == null and ((.version | split("~")[0]) as $x | $v | index($x))) | .install_path)
+        - ($a | map(.install_path)) | .[]' |
         while read -r p; do echo "dedup ${p#$data/installs/}"; rm -rf $p; done
       for d in $data/installs/*(N/); do real=($d/*(N-/)); (( $#real )) || { echo "dead ${d:t}"; rm -rf $d $data/downloads/${d:t}; }; done
       rm -rf $data/downloads/*(N/^F)
