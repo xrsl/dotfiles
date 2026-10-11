@@ -225,7 +225,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 #   editors       vsc
 #   GitHub        pr
 #   worktrunk     wtn wtc wtcp
-#   mise & just   m mx
+#   mise & just   m mx mq
 #   1Password     opil opig opic opis opid
 #   work API      org_id org_slug
 #   misc          nvimtheme

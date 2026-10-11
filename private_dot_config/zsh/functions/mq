@@ -1,0 +1,2 @@
+# mq query… — mise ls rows whose tool name fuzzy-matches the query (mq plann → plannotator, plannotator-tui)
+mise ls --no-truncate | fzf --filter "${*:?usage: mq query…}" --nth 1 --no-sort
