@@ -6,6 +6,7 @@ Host vm
     HostKeyAlias tart-ubuntu
     LocalForward 8090 127.0.0.1:8090   # harbor in the VM
     LocalForward 8092 127.0.0.1:8092
+    LocalForward 19432 127.0.0.1:19432 # plannotator (remote mode over ssh uses this port)
 
 # Any Tart VM: `ssh tart-<vm>`; `vm` is tart-ubuntu. %h is the HostName, minus tart-.
 Host vm tart-*
