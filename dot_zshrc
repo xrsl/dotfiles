@@ -243,6 +243,7 @@ alias f="spf"
 alias y=yazi
 alias tb="terminal-browser open"
 alias vml="tart list --source local"  # tart VMs (macOS); vmu/vmd are functions
+alias sshkill='pkill -u $USER sshd'  # on a VM/server: drop your ssh connections (herdr keeps running); then rh <host>
 # tokens today / this week
 alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
 alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --week"
