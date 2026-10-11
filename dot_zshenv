@@ -1,6 +1,12 @@
 # XDG-aware macOS tools use ~/.config instead of ~/Library/Application Support.
 export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 
+# `ssh host cmd` runs a non-login, non-interactive zsh that reads only this file;
+# put mise's shims on its PATH so chezmoi & co. resolve there too. .zprofile still
+# re-adds them for login shells, after macOS's path_helper has reordered PATH.
+typeset -U path PATH
+path=("$HOME/.local/bin" "${XDG_DATA_HOME:-$HOME/.local/share}/mise/shims" $path)
+
 # Prefer the 1Password SSH agent on the macOS host. Inside a VM / ssh session,
 # leave the forwarded agent socket ($SSH_AUTH_SOCK) untouched. Keying on
 # SSH_CONNECTION rather than socket-exists means a host pane started before
