@@ -220,7 +220,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 
 # ── FUNCTIONS ─────────────────────────────────────────────────────────────────
 # One file per function, loaded on first call; each file starts with its usage notes.
-#   VMs & hosts   vmu vmd vmh rh
+#   VMs & hosts   vmu vmd rh
 #   git & review  h hl hpr eh
 #   editors       vsc
 #   GitHub        pr
@@ -242,7 +242,7 @@ alias b='bat'
 alias f="spf"
 alias y=yazi
 alias tb="terminal-browser open"
-alias vml="tart list --source local"  # tart VMs (macOS); vmu/vmd/vmh are functions
+alias vml="tart list --source local"  # tart VMs (macOS); vmu/vmd are functions
 # tokens today / this week
 alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
 alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --week"
