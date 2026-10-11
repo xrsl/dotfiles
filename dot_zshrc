@@ -220,7 +220,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 
 # ── FUNCTIONS ─────────────────────────────────────────────────────────────────
 # One file per function, loaded on first call; each file starts with its usage notes.
-#   VMs & hosts   vmu vmd rh
+#   VMs & hosts   vmu vmd rh (alias: kill-ssh-in)
 #   git & review  h hl hpr eh
 #   editors       vsc
 #   GitHub        pr
@@ -243,7 +243,7 @@ alias f="spf"
 alias y=yazi
 alias tb="terminal-browser open"
 alias vml="tart list --source local"  # tart VMs (macOS); vmu/vmd are functions
-alias sshkill='pkill -u $USER sshd'  # on a VM/server: drop your ssh connections (herdr keeps running); then rh <host>
+alias kill-ssh-in='pkill -u $USER sshd'  # drop your ssh connections INTO this machine (herdr keeps running); then rh <host>
 # tokens today / this week
 alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
 alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --week"
