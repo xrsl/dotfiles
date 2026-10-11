@@ -1,6 +1,0 @@
-# mq [mise-ls-flags…] query… — installed mise tools whose name contains every query word (case-insensitive)
-# (mq plann → plannotator, plannotator-tui). Words starting with - go to mise ls (mq -g plan); give flag
-# values joined (-baqua, --backend=aqua). fzf picks the names, then mise ls lists them so header and colours stay.
-local flags=(${(M)@:#-*}) words=(${@:#-*})
-local tools=(${(f)"$(mise ls -i --no-truncate | awk '{print $1}' | uniq | fzf --exact --filter "${words:?usage: mq [flags…] query…}")"})
-(( $#tools )) && mise ls -i $flags $tools
