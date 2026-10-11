@@ -1,0 +1,84 @@
+# mq [-i] query — find installable mise tools, laid out like ml:
+#   registry rows whose name, alias, binary, backend or description contains the query (mq rg → ripgrep),
+#   then GitHub repos with releases that the registry lacks (install as github:owner/repo).
+# mq [-i] owner/repo — also tries aqua:/github:/ubi: for that repo and shows the latest version each would install.
+# -i: pick a row with fzf; enter → m add, ctrl-x → mx (run once without installing).
+local pick=0
+[[ $1 == -i ]] && { pick=1; shift }
+local q=${*:?usage: mq [-i] query|owner/repo}
+local -a tables
+
+# installed versions keyed by lowercase tool id, from both ml and registry naming
+local inst=$(mise ls -i --json | jq -c 'with_entries(.key |= ascii_downcase | .value |= (map(.version) | join(" ")))')
+local reg=$(mise registry --json --hide-aliased)
+
+# ranked: exact name/alias/bin, then prefix, then substring in names or backend repos, then whole word in description
+tables+=("$(jq -r --arg q ${q:l} --argjson inst $inst '
+  ($q | gsub("(?<c>[.*+?^${}()|\\[\\]\\\\])"; "\\\(.c)")) as $re
+  | [ .[] | ([.short, .aliases[]?, .bins[]?] | map(ascii_downcase)) as $names
+    | (.backends | map(ascii_downcase | sub("^[^:]+:"; ""))) as $repos
+    | (if any($names[]; . == $q) then 0 elif any($names[]; startswith($q)) then 1
+       elif any($names[], $repos[]; contains($q)) then 2
+       elif (.description // "" | test("\\b\($re)\\b"; "i")) then 3 else empty end) as $rank
+    | ([.short, .backends[]] | map($inst[ascii_downcase] // empty) | first // "-") as $v
+    | [$rank, .short, $v,
+       (.bins // [] | if length > 3 then .[:3] + ["+\(length - 3)"] else . end | join(" ") | select(. != "") // "-"),
+       (.backends | join(" ")), .description // "-"] ]
+  | sort_by(.[0], .[1])[] | @tsv
+' <<<$reg)")
+local strong=$(( ${#${(M)${(f)tables[1]}:#[01]$'\t'*}} ))  # exact or prefix name/alias/bin hits
+tables[1]=$(cut -f2- <<<$tables[1] | sed '/^$/d; 1i\
+Tool	Installed	Bins	Backends	Description')
+
+# GitHub: the one repo for owner/repo, else a search when the registry has no strong hit;
+# keep repos with a release that the registry doesn't already cover
+local gql='fragment r on Repository { nameWithOwner description stargazerCount latestRelease { tagName publishedAt } }'
+local -a ghq
+if [[ $q == */* ]]; then
+  ghq=(-f owner=${q%%/*} -f name=${q#*/} -f query="$gql"' query($owner:String!,$name:String!){ repository(owner:$owner,name:$name){ ...r } }')
+elif (( ! strong )); then
+  ghq=(-f q=$q -f query="$gql"' query($q:String!){ search(query:$q,type:REPOSITORY,first:20){ nodes{ ...r } } }')
+fi
+(( $#ghq )) && tables+=("$(gh api graphql $ghq 2>/dev/null | jq -r --argjson inst $inst --slurpfile reg <(print -r -- $reg) '
+  ([$reg[0][].backends[] | ascii_downcase | sub("^[^:]+:"; "")]) as $known
+  | (.data.repository // empty), (.data.search.nodes[]? // empty)
+  | select(.latestRelease and (.nameWithOwner | ascii_downcase | IN($known[]) | not))
+  | (.nameWithOwner | ascii_downcase) as $n
+  | ([$inst["github:" + $n], $inst["ubi:" + $n], $inst["aqua:" + $n]] | map(select(.)) | first // "-") as $v
+  | ["github:" + .nameWithOwner, $v, "★ \(.stargazerCount)", "\(.latestRelease.tagName) \(.latestRelease.publishedAt[:10])", .description // "-"]
+  | @tsv
+' | sed '1i\
+Repo	Installed	Stars	Release	Description')")
+
+# owner/repo: ask each backend what it would install (in parallel; ls-remote errors when the backend can't resolve the repo)
+if [[ $q == */* ]]; then
+  tables+=("$(print -l aqua github ubi | xargs -P3 -I{} sh -c '
+    v=$(mise ls-remote "{}:$1" 2>/dev/null | tail -1); printf "%s\t%s\n" "{}:$1" "${v:-✗}"' _ $q |
+    jq -Rr --argjson inst $inst 'split("\t") | . + [$inst[.[0] | ascii_downcase] // "-"] | @tsv' |
+    sort | sed '1i\
+Backend	Latest	Installed')")
+fi
+
+tables=(${tables:#})  # sed adds no header to empty output, so empty = no rows
+(( $#tables )) || { print -u2 "mq: nothing found for $q"; return 1 }
+
+if (( pick )); then
+  local sel=("${(@f)$(print -l $tables | grep -vE '^(Tool|Repo|Backend)	' | column -t -s $'\t' |
+    fzf --ansi --expect=ctrl-x --header 'enter: m add · ctrl-x: mx (run once)')}")
+  local id=${sel[2]%% *}
+  [[ -n $id ]] || return 1
+  if [[ $sel[1] == ctrl-x ]]; then mx $id; else m add $id; fi
+  return
+fi
+
+local t l
+for t in $tables; do
+  [[ $t == $tables[1] ]] || print
+  column -t -s $'\t' <<<$t | while IFS= read -r l; do
+    if [[ -t 1 ]]; then
+      l=${l[1,COLUMNS]}
+      [[ $l == (Tool|Repo|Backend)\ * ]] && l=$'\e[38;5;13;3m'$l$'\e[0m' || l=$'\e[38;5;12m'${l%% *}$'\e[39m '${l#* }
+    fi
+    print -r -- $l
+  done
+done
