@@ -1,0 +1,7 @@
+# ml [mise-ls-flags…] [query…] — mise ls; query words filter tool names by case-insensitive substring
+# (ml plann → plannotator, plannotator-tui; ml -i plan → installed only). Words starting with - go to mise ls;
+# give flag values joined (-baqua, --backend=aqua). fzf picks the names, then mise ls lists them so header and colours stay.
+local flags=(${(M)@:#-*}) words=(${@:#-*})
+(( $#words )) || { mise ls "$@"; return }
+local tools=(${(f)"$(mise ls --no-truncate | awk '{print $1}' | uniq | fzf --exact --filter "$words")"})
+(( $#tools )) && mise ls $flags $tools

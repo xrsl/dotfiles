@@ -225,7 +225,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 #   editors       vsc
 #   GitHub        pr
 #   worktrunk     wtn wtc wtcp
-#   mise & just   m mx mq
+#   mise & just   m mx ml
 #   1Password     opil opig opic opis opid
 #   work API      org_id org_slug
 #   misc          nvimtheme
@@ -305,7 +305,6 @@ alias j=just
 # able to see the positional as a recipe.
 alias .j='just -g'
 compdef m=mise  # m is in functions/
-alias ml='mise ls'
 alias kp='killport --no-fail'
 
 # ── PLUGINS ───────────────────────────────────────────────────────────────────
