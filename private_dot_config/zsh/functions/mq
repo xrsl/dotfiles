@@ -1,4 +1,4 @@
-# mq query… — installed mise tools whose name fuzzy-matches the query (mq plann → plannotator, plannotator-tui)
+# mq query… — installed mise tools whose name contains every query word (case-insensitive) (mq plann → plannotator, plannotator-tui)
 # fzf picks the names, then mise ls lists them itself so the header and colours stay
-local tools=(${(f)"$(mise ls -i --no-truncate | awk '{print $1}' | uniq | fzf --filter "${*:?usage: mq query…}")"})
+local tools=(${(f)"$(mise ls -i --no-truncate | awk '{print $1}' | uniq | fzf --exact --filter "${*:?usage: mq query…}")"})
 (( $#tools )) && mise ls -i $tools
