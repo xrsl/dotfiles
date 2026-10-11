@@ -29,13 +29,11 @@ show_agent_labels_on_pane_borders = true
 right_click_passthrough_modifier = "alt"  # Alt/Option+right-click reaches the pane app (fresh menus); plain right-click = herdr pane menu
 # Accent paints the focused pane/tab highlight. This file is the host client.
 # `rh` / `vmh` launch a separate client per machine and swap this color there
-# (`_herdr_accent` in .zshrc): dev/vps = mauve, tahoe = pink, other VMs = green.
+# (`_herdr_accent` in .zshrc): dev/vps = mauve, VMs = green.
 # These branches apply only when herdr is started on that machine itself.
 
 {{- if ne .chezmoi.os "darwin" }}
 accent = "#a6e3a1"   # catppuccin Green (soft green) — Linux VM guest (ubuntu)
-{{- else if hasPrefix "VirtualMac" (output "sysctl" "-n" "hw.model" | trim) }}
-accent = "#f5c2e7"   # catppuccin Pink (soft magenta) — macOS VM guest (tahoe)
 {{- else }}
 accent = "#89b4fa"   # catppuccin Blue — real hardware (host)
 {{- end }}

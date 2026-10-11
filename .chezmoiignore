@@ -4,4 +4,6 @@ bootstrap.sh
 .ssh/config.local
 {{ if ne .chezmoi.os "darwin" }}
 Library
+# VMs are ssh targets, not clients
+.ssh/config
 {{ end }}

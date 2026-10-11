@@ -2,7 +2,7 @@ if (( $# != 1 )); then
   print -u2 "usage: vmh <name>"
   return 2
 fi
-local vm="$(_tart_vm_name "$1")"
+local vm=$1
 if ! tart ip "$vm" --wait 30 >/dev/null; then
   print -u2 "vmh: $vm did not come up (no IP after 30s)"
   return 1

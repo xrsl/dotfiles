@@ -1,4 +1,0 @@
-case "$1" in
-  tahoe) print -r -- tahoe-base ;;
-  *)     print -r -- "$1" ;;
-esac

@@ -1,12 +1,10 @@
 # Tab color for a separate Herdr client. Herdr reads accent from the client, so
 # each target gets its own config file instead of a machine registered in this one.
 #   dev, vps        mauve
-#   *tahoe*         pink
-#   ubuntu, tart-*  green
+#   vm, tart-*      green
 #   anything else   red
 case "$1" in
   dev|vps)       print -r -- '#cba6f7' ;;
-  *tahoe*)       print -r -- '#f5c2e7' ;;
-  ubuntu|tart-*) print -r -- '#a6e3a1' ;;
+  vm|tart-*)     print -r -- '#a6e3a1' ;;
   *)             print -r -- '#f38ba8' ;;
 esac

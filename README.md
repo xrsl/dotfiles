@@ -32,7 +32,7 @@ Start and enter the VM from macOS:
 
 ```bash
 vmu ubuntu
-ssh ubuntu
+ssh vm
 ```
 
 Inside Ubuntu, bootstrap the chezmoi- and mise-managed development environment
@@ -49,7 +49,7 @@ chsh -s "$(command -v zsh)"
 exec zsh -l
 ```
 
-After the first setup, start and enter it with `vmu ubuntu && ssh ubuntu`.
+After the first setup, start and enter it with `vmu ubuntu && ssh vm`.
 
 ## Fedora Tart VM
 
