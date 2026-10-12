@@ -286,6 +286,7 @@ alias kl="kilo --auto"
 alias klc="kilo --auto --continue"
 alias klm="kilo --auto --mini"
 alias ca="cursor-agent --yolo"
+alias qw="qwen --yolo"
 alias cac="cursor-agent --yolo --continue"
 alias car="cursor-agent --yolo --resume"
 
