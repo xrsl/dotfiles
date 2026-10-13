@@ -5,7 +5,7 @@ import type { Seg } from '../types'
 
 const segs = atom({ plugin: 'context-bar', key: 'segs' } as const, null)
 const max = atom({ plugin: 'context-bar', key: 'max' } as const, 0)
-const isOn = atom({ plugin: 'context-bar', key: 'isOn' } as const, true)
+const isOn = atom({ plugin: 'context-bar', key: 'isOn' } as const, false)  // off until /context-bar
 
 // theme keys, so the bar follows light and dark themes; used rows take them in order
 const PALETTE = ['suggestion', 'success', 'claude', 'remember', 'ide', 'permission', 'merged', 'planMode']
