@@ -277,11 +277,26 @@ alias ccc='claude -c --dangerously-skip-permissions'
 alias ccr='claude -r --dangerously-skip-permissions'
 # ccp: one-shot Claude call, like a raw API request. No tools, system prompt, settings,
 # skills or saved transcript; about 540 tokens of fixed overhead remain.
-#   ccp "question"    git diff | ccp "explain this"    ccp -m sonnet "question"
+#   ccp "question"    git diff | ccp "explain this"    ccp "question" -m opus
+# -m/--model takes haiku|sonnet|opus (all 5.5) or a full model id, anywhere in the args.
 ccp() {
-  local model=claude-haiku-5-5 input=""
-  [[ $1 == -m ]] && { model=$2; shift 2; }
-  local prompt="$*"
+  local model=claude-haiku-5-5 input="" prompt
+  local -a words=()
+  while (( $# )); do
+    case $1 in
+      -m|--model) (( $# >= 2 )) || { print -u2 "ccp: $1 needs a model"; return 2; }
+                  model=$2; shift 2 ;;
+      --model=*)  model=${1#--model=}; shift ;;
+      *)          words+=("$1"); shift ;;
+    esac
+  done
+  # Pin aliases to 5.5; bare "opus"/"sonnet" would track whatever is newest.
+  case $model in
+    haiku)  model=claude-haiku-5-5 ;;
+    sonnet) model=claude-sonnet-5-5 ;;
+    opus)   model=claude-opus-5-5 ;;
+  esac
+  prompt="${words[*]}"
   [[ -t 0 ]] || input=$(cat)
   [[ -n $input ]] && prompt+=$'\n\n'"$input"
   CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p "$prompt" \
