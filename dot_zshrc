@@ -247,6 +247,12 @@ alias kill-ssh-in='pkill -u $USER sshd'  # drop your ssh connections INTO this m
 # tokens today / this week
 alias tt="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --today"
 alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; tokscale --week"
+# tts: tt, but opens on the Sessions tab. tokscale has no startup-tab flag, so expect
+# presses Tab 6 times (Overview, Usage, Models, Daily, Hourly, Monthly -> Sessions).
+tts() {
+  python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1
+  expect -c 'spawn tokscale --today; expect -re {Overview}; sleep 1; for {set i 0} {$i < 6} {incr i} { send "\t"; sleep 0.3 }; interact'
+}
 
 # Editors
 alias e='fresh --no-restore'  # just the named file(s): any flag skips orchestrator mode
