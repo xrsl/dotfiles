@@ -275,6 +275,19 @@ alias ghr="gh repo view --web"  # open current repo in browser
 alias cc='claude --dangerously-skip-permissions'
 alias ccc='claude -c --dangerously-skip-permissions'
 alias ccr='claude -r --dangerously-skip-permissions'
+# ccp: one-shot Claude call, like a raw API request. No tools, system prompt, settings,
+# skills or saved transcript; about 540 tokens of fixed overhead remain.
+#   ccp "question"    git diff | ccp "explain this"    ccp -m sonnet "question"
+ccp() {
+  local model=claude-haiku-5-5 input=""
+  [[ $1 == -m ]] && { model=$2; shift 2; }
+  local prompt="$*"
+  [[ -t 0 ]] || input=$(cat)
+  [[ -n $input ]] && prompt+=$'\n\n'"$input"
+  CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p "$prompt" \
+    --no-session-persistence --model="$model" --tools='' \
+    --disable-slash-commands --setting-sources='' --system-prompt='' </dev/null
+}
 alias cx='codex --yolo'
 alias cxc='codex --yolo resume'
 alias co='copilot --autopilot --allow-all-tools'
