@@ -327,6 +327,7 @@ alias wtlr='wt list --remotes'
 alias wtd='wt step diff'         # all changes since branching (committed+staged+unstaged+untracked)
 alias wtrm='wt remove -D'        # removes worktree AND force-deletes the branch (even unmerged)
 alias wth='wt home'
+alias wtpr='wt pr'      # user alias -> ~/.local/bin/wt-pr-compose
 
 # mise & just
 alias j=just
