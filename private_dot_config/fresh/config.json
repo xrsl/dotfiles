@@ -15,7 +15,7 @@
   "plugins": {
     "orchestrator": {
       "settings": {
-        "autoOpenDock": false
+        "autoOpenDock": "never"
       }
     },
     "welcome_screen": {
