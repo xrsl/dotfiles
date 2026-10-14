@@ -12,3 +12,6 @@ keybind = super+shift+d=new_split:down
 keybind = super+ctrl+right_bracket=goto_split:next
 keybind = super+ctrl+left_bracket=goto_split:previous
 keybind = super+ctrl+shift+equal=equalize_splits
+# pass cmd+shift+[ / ] through to herdr (tab switching) instead of ghostty tabs
+keybind = super+shift+left_bracket=unbind
+keybind = super+shift+right_bracket=unbind
