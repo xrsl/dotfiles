@@ -182,8 +182,24 @@ if [[ -n "$git_status_str" ]]; then
   out+=$(printf ' \033[33m%s\033[0m' "$git_status_str")
 fi
 
-# Lines Claude added / removed this session (hidden while both are 0)
-read -r lines_add lines_del < <(jq -r '"\(.cost.total_lines_added // 0) \(.cost.total_lines_removed // 0)"' <<< "$input")
+# Lines Claude added / removed since this claude process started, main + subagents (hidden while both are 0).
+# Not .cost.total_lines_*: --continue/--resume restores those from the previous run.
+p=$$ claude_age=""
+while [[ -n "$p" && "$p" -gt 1 ]]; do
+  read -r ppid age comm < <(ps -o ppid=,etimes=,comm= -p "$p")
+  [[ "$comm" == claude ]] && { claude_age=$age; break; }
+  p=$ppid
+done
+lines_add=0 lines_del=0
+if [[ -f "$transcript" && -n "$claude_age" ]]; then
+  sub_dir="${transcript%.jsonl}/subagents"
+  read -r lines_add lines_del < <(cat "$transcript" "$sub_dir"/*.jsonl 2>/dev/null | jq -rn --argjson since "$(( $(date +%s) - claude_age ))" '
+    [inputs | select((.toolUseResult | type) == "object" and (.timestamp // "" | .[0:19] + "Z" | fromdateiso8601? // 0) >= $since)
+      | .toolUseResult
+      | if .type == "create" then {a: (.content | split("\n") | length), d: 0}
+        else (.structuredPatch // [] | map(.lines[]) | {a: map(select(startswith("+"))) | length, d: map(select(startswith("-"))) | length}) end]
+    | "\(map(.a) | add // 0) \(map(.d) | add // 0)"')
+fi
 if (( lines_add > 0 || lines_del > 0 )); then
   out+=$(printf ' \033[32m+%d\033[0m \033[31m−%d\033[0m' "$lines_add" "$lines_del")
 fi
