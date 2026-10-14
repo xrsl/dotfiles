@@ -189,4 +189,4 @@ if (( lines_add > 0 || lines_del > 0 )); then
 fi
 
 printf '%s' "$out"
-[[ -n "$cache_part" ]] && printf '\n%s%s' "$cache_part" "${session_part:+$sep$session_part}"
+if [[ -n "$cache_part" ]]; then printf '\n%s%s' "$cache_part" "${session_part:+$sep$session_part}"; fi   # exit 0: Claude Code hides the line on non-zero
