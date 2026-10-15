@@ -1,7 +1,8 @@
 {
   "env": {
     "CLAUDE_CODE_PLUGIN_DIRS": "{{ .chezmoi.homeDir }}/.claude/mods/context-bar"{{ if stat (joinPath .chezmoi.homeDir ".aws/ca-bundle.pem") }},
-    "NODE_EXTRA_CA_CERTS": "{{ .chezmoi.homeDir }}/.aws/ca-bundle.pem"{{ end }}
+    "NODE_EXTRA_CA_CERTS": "{{ .chezmoi.homeDir }}/.aws/ca-bundle.pem",
+    "SSL_CERT_FILE": "{{ .chezmoi.homeDir }}/.aws/ca-bundle.pem"{{ end }}
   },
   "permissions": {
     "allow": [
@@ -15,9 +16,6 @@
       "mcp__codegraph__codegraph_status"
     ]
   },
-{{- with dig "claudeModel" "haiku" . }}
-  "model": {{ . | quote }},
-{{- end }}
   "hooks": {
     "SessionStart": [
       {
@@ -47,7 +45,8 @@
     "shunt@portal": true,
     "ponytail@ponytail": true,
     "recast@synced": false,
-    "liftroi@synced": false
+    "liftroi@synced": false,
+    "mattpocock-skills@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "plannotator": {
@@ -101,6 +100,9 @@
     },
     "claude-haiku-5-5": {
       "effortLevel": "high"
+    },
+    "claude-sonnet-5-5": {
+      "effortLevel": "low"
     }
   },
   "tui": "default",

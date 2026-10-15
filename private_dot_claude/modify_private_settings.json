@@ -1,0 +1,6 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- /* Claude Code rewrites settings.json itself (/model, plugin installs), so chezmoi merges only
+       the keys in .chezmoitemplates/claude-settings.json and leaves the rest, e.g. "model", to the app. */ -}}
+{{- $live := dict -}}
+{{- with .chezmoi.stdin }}{{ $live = fromJson . }}{{ end -}}
+{{- mergeOverwrite $live (includeTemplate "claude-settings.json" . | fromJson) | toPrettyJson "  " }}
