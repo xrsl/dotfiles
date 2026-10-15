@@ -1,6 +1,7 @@
 {
   "env": {
-    "CLAUDE_CODE_PLUGIN_DIRS": "{{ .chezmoi.homeDir }}/.claude/mods/context-bar"
+    "CLAUDE_CODE_PLUGIN_DIRS": "{{ .chezmoi.homeDir }}/.claude/mods/context-bar"{{ if stat (joinPath .chezmoi.homeDir ".aws/ca-bundle.pem") }},
+    "NODE_EXTRA_CA_CERTS": "{{ .chezmoi.homeDir }}/.aws/ca-bundle.pem"{{ end }}
   },
   "permissions": {
     "allow": [
