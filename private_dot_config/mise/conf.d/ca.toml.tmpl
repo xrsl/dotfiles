@@ -1,0 +1,6 @@
+{{- /* Only where the TLS-inspection CA bundle exists: an empty or missing GIT_SSL_CAINFO breaks git. */ -}}
+{{- if stat (joinPath .chezmoi.homeDir ".aws/ca-bundle.pem") -}}
+[env]
+# git ignores SSL_CERT_FILE and NODE_EXTRA_CA_CERTS; it reads its CA bundle from here.
+GIT_SSL_CAINFO = "{{ .chezmoi.homeDir }}/.aws/ca-bundle.pem"
+{{- end }}
