@@ -108,6 +108,7 @@ if [[ -f "$transcript" ]]; then
             else .[(($prompts[-2]) // -1) + 1:$l] | calls end       # else the previous turn
           | map(usd) | add // 0) ]
     | @tsv' "$transcript" 2>/dev/null)
+  tools=$(jq -rs '[.[] | select(.type == "assistant" and (.isSidechain | not)) | .message.content[]? | select(.type == "tool_use") | .id] | unique | length' "$transcript" 2>/dev/null)
 fi
 
 # Prices use Anthropic's billing names: read = cache hit (warm), write = full re-cache (cold).
@@ -133,6 +134,7 @@ fi
 
 session_part=""
 [[ -n "$turns" ]] && session_part+=$'\033[1m↵\033[22m'" $turns "$'\033[1m⇵\033[22m'" $msgs"
+[[ -n "$tools" && "$tools" != 0 ]] && session_part+="${session_part:+ }"$'\033[1m⚒\033[22m'" $tools"
 [[ "$c_seen" == "true" && -n "$c_hit" ]] && session_part+="${session_part:+ }◉ ${c_hit}%"
 if [[ -n "$c_miss" ]] && (( c_miss > 0 )); then
   session_part+=$(printf ' \033[33m✗%s%s\033[0m' "$c_miss" "${c_cause:+ $c_cause}")
@@ -182,19 +184,13 @@ if [[ -n "$git_status_str" ]]; then
   out+=$(printf ' \033[33m%s\033[0m' "$git_status_str")
 fi
 
-# Lines Claude added / removed since this claude process started, main + subagents (hidden while both are 0).
-# Not .cost.total_lines_*: --continue/--resume restores those from the previous run.
-p=$$ claude_age=""
-while [[ -n "$p" && "$p" -gt 1 ]]; do
-  read -r ppid age comm < <(ps -o ppid=,etimes=,comm= -p "$p")
-  [[ "$comm" == claude ]] && { claude_age=$age; break; }
-  p=$ppid
-done
+# Lines Claude added / removed across the whole session, main + subagents (hidden while both are 0).
+# Read from the transcript, not .cost.total_lines_*.
 lines_add=0 lines_del=0
-if [[ -f "$transcript" && -n "$claude_age" ]]; then
+if [[ -f "$transcript" ]]; then
   sub_dir="${transcript%.jsonl}/subagents"
-  read -r lines_add lines_del < <(cat "$transcript" "$sub_dir"/*.jsonl 2>/dev/null | jq -rn --argjson since "$(( $(date +%s) - claude_age ))" '
-    [inputs | select((.toolUseResult | type) == "object" and (.timestamp // "" | .[0:19] + "Z" | fromdateiso8601? // 0) >= $since)
+  read -r lines_add lines_del < <(cat "$transcript" "$sub_dir"/*.jsonl 2>/dev/null | jq -rn '
+    [inputs | select((.toolUseResult | type) == "object")
       | .toolUseResult
       | if .type == "create" then {a: (.content | split("\n") | length), d: 0}
         else (.structuredPatch // [] | map(.lines[]) | {a: map(select(startswith("+"))) | length, d: map(select(startswith("-"))) | length}) end]
