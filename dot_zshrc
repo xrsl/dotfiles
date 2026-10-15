@@ -329,6 +329,8 @@ alias wtrm='wt remove -D'        # removes worktree AND force-deletes the branch
 alias wth='wt home'
 alias wtpr='wt pr'      # user alias -> ~/.local/bin/wt-pr-compose
 
+# azcli
+alias az='uvx --python 3.14 --from azure-cli==2.91.0 az'
 # mise & just
 alias j=just
 # -g is just's own global-justfile flag: it resolves ~/.justfile, runs recipes in
