@@ -1,0 +1,5 @@
+#compdef h
+# `h <Tab>` offers exactly the files `hl` lists (bare paths: hl drops the XY columns when piped).
+# Registered by `compdef` in .zshrc, like _cz.
+local -a files=("${(@f)$(hl 2>/dev/null)}")
+compadd -f -a files

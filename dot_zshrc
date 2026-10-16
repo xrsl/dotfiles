@@ -339,6 +339,8 @@ alias j=just
 # able to see the positional as a recipe.
 alias .j='just -g'
 compdef m=mise  # m is in functions/
+compdef _cz cz  # completions for functions/ live beside them (fpath is added after compinit)
+compdef _h h
 alias kp='killport --no-fail'
 
 # ── PLUGINS ───────────────────────────────────────────────────────────────────
