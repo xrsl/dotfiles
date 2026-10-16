@@ -1,0 +1,8 @@
+{
+  "env": {
+    "ANTHROPIC_MODEL": "arn:aws:bedrock:eu-west-1:438423213058:application-inference-profile/wv58qt9e27ff",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "arn:aws:bedrock:eu-west-1:438423213058:application-inference-profile/wv58qt9e27ff",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "arn:aws:bedrock:eu-west-1:438423213058:application-inference-profile/vto136h01rmd",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "arn:aws:bedrock:eu-west-1:438423213058:application-inference-profile/6pulmnz1kg52"
+  }
+}
