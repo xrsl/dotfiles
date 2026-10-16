@@ -1,12 +1,14 @@
 # cz [up|ls|diff|sync|<chezmoi args…>] — chezmoi shortcuts
+#   cz       chezmoi status (live vs source drift)
 #   cz up    chezmoi update: pull the dotfiles repo AND apply it (overwrites live edits)
-#   cz ls    managed files as ~/… paths, ready to copy
+#   cz ls    managed files (no dirs) as ~/… paths, ready to copy
 #   cz diff  source-vs-live diff in hunk (what `chezmoi apply` would change)
 #   cz sync  live → source: review live edits in hunk (+ = your live version), confirm, then re-add; autopush then commits and pushes
 #   cz …     anything else passes straight to chezmoi
 case $1 in
+  "")   chezmoi status ;;
   up)   chezmoi update ;;
-  ls)   chezmoi managed --path-style absolute | sed "s|^$HOME|~|" ;;
+  ls)   chezmoi managed --include=files --path-style absolute | sed "s|^$HOME|~|" ;;
   diff) shift; chezmoi diff "$@" | hunk patch ;;
   sync)
     chezmoi diff --reverse | hunk patch || return
