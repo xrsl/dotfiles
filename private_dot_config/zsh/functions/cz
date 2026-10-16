@@ -2,16 +2,20 @@
 #   cz       chezmoi status (live vs source drift)
 #   cz up    chezmoi update: pull the dotfiles repo AND apply it (overwrites live edits)
 #   cz ls    managed files (no dirs) as ~/… paths, ready to copy
-#   cz diff  source-vs-live diff in hunk (what `chezmoi apply` would change)
-#   cz sync  live → source: review live edits in hunk (+ = your live version), confirm, then re-add; autopush then commits and pushes
+#   cz diff  live → source in hunk: - = live file, + = what `chezmoi apply` would write (overwrites live)
+#   cz sync  source → live in hunk: - = repo copy, + = your live file; confirm, then re-add saves + to the repo (autopush commits and pushes)
 #   cz …     anything else passes straight to chezmoi
 case $1 in
   "")   chezmoi status ;;
   up)   chezmoi update ;;
   ls)   chezmoi managed --include=files --path-style absolute | sed "s|^$HOME|~|" ;;
-  diff) shift; chezmoi diff "$@" | hunk patch ;;
+  diff) shift; print -P '%F{yellow}cz diff:%f  %F{red}- live file%f  →  %F{green}+ repo copy%f  (apply would overwrite live with +)'
+        chezmoi diff "$@" | hunk patch ;;
   sync)
+    local k=$'%F{yellow}cz sync:%f  %F{red}- repo copy%f  →  %F{green}+ your live file%f'
+    print -P "$k"
     chezmoi diff --reverse | hunk patch || return
-    read -q "?re-add these live edits (and autopush)? [y/N] " && { echo; chezmoi re-add; } || echo ;;
+    print -P "$k"
+    read -q "?save the + side into the repo (and autopush)? [y/N] " && { echo; chezmoi re-add; } || echo ;;
   *)    chezmoi "$@" ;;
 esac
