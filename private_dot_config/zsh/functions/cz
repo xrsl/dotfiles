@@ -1,0 +1,11 @@
+# cz [up|ls|diff|<chezmoi args…>] — chezmoi shortcuts
+#   cz up    pull the dotfiles repo only (no apply: apply stays scoped, `cz apply <path>`)
+#   cz ls    list managed files
+#   cz diff  live-vs-source diff in hunk
+#   cz …     anything else passes straight to chezmoi
+case $1 in
+  up)   chezmoi update --apply=false ;;
+  ls)   chezmoi managed ;;
+  diff) shift; chezmoi diff "$@" | hunk patch ;;
+  *)    chezmoi "$@" ;;
+esac
