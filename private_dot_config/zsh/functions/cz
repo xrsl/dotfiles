@@ -1,7 +1,7 @@
 # cz [p|P|ls|diff|<chezmoi args…>] — chezmoi shortcuts (p/P mirror git pull/push)
 #   cz       chezmoi status (live vs source drift)
 #   cz p     PULL: remote → source → live files (overwrites live edits)
-#   cz P     PUSH: live files → source → remote; hunk review first (- = repo copy, + = your live file), then confirm
+#   cz P [path…]  PUSH: live files → source → remote; hunk review first (- = repo copy, + = your live file), then confirm; paths limit both the review and the push
 #   cz ls    managed files (no dirs) as ~/… paths, ready to copy
 #   cz diff  hunk: - = live file, + = repo copy (what `cz p` / apply would write over live)
 #   cz …     anything else passes straight to chezmoi
@@ -9,11 +9,12 @@ case $1 in
   "")   chezmoi status ;;
   p)    chezmoi update ;;
   P)
+    shift
     local k=$'%F{yellow}cz P:%f  %F{red}- repo copy%f  →  %F{green}+ your live file%f'
     print -P "$k"
-    chezmoi diff --reverse | hunk patch || return
+    chezmoi diff --reverse "$@" | hunk patch || return
     print -P "$k"
-    read -q "?push the + side live → source → remote? [y/N] " && { echo; chezmoi re-add && chezmoi git -- push; } || echo ;;
+    read -q "?push the + side live → source → remote? [y/N] " && { echo; chezmoi re-add "$@" && chezmoi git -- push; } || echo ;;
   ls)   chezmoi managed --include=files --path-style absolute | sed "s|^$HOME|~|" ;;
   diff) shift; print -P '%F{yellow}cz diff:%f  %F{red}- live file%f  →  %F{green}+ repo copy%f  (cz p would overwrite live with +)'
         chezmoi diff "$@" | hunk patch ;;
