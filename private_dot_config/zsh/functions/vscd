@@ -1,3 +1,11 @@
-# vscd [git-diff-args…] — review a git diff in VS Code, one file per diff tab
-# (e.g. vscd, vscd --staged, vscd main...HEAD); --wait keeps git's temp files alive until each tab closes
-git difftool -y -x 'code --wait --diff' "$@"
+# vscd — open the repo in VS Code with the Source Control list on the left and the first changed file's text diff on the right
+# Non-blocking (Ctrl-C safe). The ⌃⇧G keystroke needs Accessibility permission for your terminal; without it you press ⌃⇧G yourself.
+local root f tmp
+root=$(git rev-parse --show-toplevel) || return
+f=$(git -C "$root" diff --name-only HEAD | head -1)
+code -r "$root"
+if [[ -n $f ]]; then
+  tmp=$(mktemp -d) && git -C "$root" show "HEAD:$f" > "$tmp/${f:t}" 2>/dev/null
+  code -r --diff "$tmp/${f:t}" "$root/$f"
+fi
+osascript -e 'tell application "System Events" to keystroke "g" using {control down, shift down}' 2>/dev/null
