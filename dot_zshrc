@@ -222,7 +222,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 # One file per function, loaded on first call; each file starts with its usage notes.
 #   VMs & hosts   vmu vmd rh (alias: kill-ssh-in)
 #   git & review  h hl hpr eh
-#   editors       vsc
+#   editors       vsc vscd
 #   GitHub        pr
 #   worktrunk     wtn wtc wtcp
 #   mise & just   m mx ml mq

@@ -1,0 +1,3 @@
+# vscd [git-diff-args…] — review a git diff in VS Code, one file per diff tab
+# (e.g. vscd, vscd --staged, vscd main...HEAD); --wait keeps git's temp files alive until each tab closes
+git difftool -y -x 'code --wait --diff' "$@"
