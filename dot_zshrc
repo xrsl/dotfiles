@@ -251,6 +251,7 @@ alias tw="python3 ~/.config/tokscale/cline-cli-bridge.py >/dev/null 2>&1; toksca
 # Editors
 alias e='fresh --no-restore'  # just the named file(s): any flag skips orchestrator mode
 alias v="nvim"
+alias cz='chezmoi'
 
 # Git
 alias g="lazygit"
