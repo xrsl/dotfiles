@@ -75,7 +75,8 @@ if [[ -d "$HOME/.docker/completions" ]]; then
   fpath=("$HOME/.docker/completions" $fpath)
 fi
 fpath+=~/.zfunc
-fpath=(~/.zsh/completions $fpath)
+fpath=(~/.zsh/completions ~/.zsh/functions $fpath)
+autoload -Uz wts
 
 # Generated completions, regenerated only when the binary is newer than the file (like wt below).
 # A new file needs a full compinit (-C skips the new-file check), so drop the dump.
@@ -322,7 +323,6 @@ alias car="cursor-agent --yolo --resume"
 
 # Worktrunk: multi-step aliases (newtree/sc/scp/pr/land/up/home/wip/rev) live in
 # ~/.config/worktrunk/config.toml; switch/remove cd propagates via shell integration.
-alias wts='wt switch'
 alias wtl='wt list'              # fast (~0.6s): local status only
 alias wtlf='wt list --full'      # + CI status & LLM summaries (~11s cold, cached)
 alias wtlr='wt list --remotes'
