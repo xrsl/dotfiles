@@ -1,0 +1,11 @@
+{
+  "env": {
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "AWS_REGION": "{{ .bedrockRegion }}",
+    "AWS_PROFILE": "{{ .bedrockProfile }}",
+    "ANTHROPIC_MODEL": "arn:aws:bedrock:{{ .bedrockRegion }}:{{ .bedrockAccount }}:application-inference-profile/{{ .bedrockSonnet }}",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "arn:aws:bedrock:{{ .bedrockRegion }}:{{ .bedrockAccount }}:application-inference-profile/{{ .bedrockSonnet }}",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "arn:aws:bedrock:{{ .bedrockRegion }}:{{ .bedrockAccount }}:application-inference-profile/{{ .bedrockOpus }}",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "arn:aws:bedrock:{{ .bedrockRegion }}:{{ .bedrockAccount }}:application-inference-profile/{{ .bedrockHaiku }}"
+  }
+}
