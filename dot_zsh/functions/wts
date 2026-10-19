@@ -1,0 +1,4 @@
+# fetch only when the name isn't a local branch, so remote-only branches are found
+local b=${${argv:#-*}[1]}   # first non-flag arg
+[[ -n $b ]] && ! git show-ref -q --verify "refs/heads/$b" && git fetch -q
+wt switch "$@"
