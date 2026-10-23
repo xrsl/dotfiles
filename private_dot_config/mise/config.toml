@@ -92,7 +92,7 @@ yq = "latest"
 zoxide = "latest"
 jless = { version = "latest", os = ["macos", "linux/x64"] }
 cue = "latest"
-duckdb = "latest"
+duckdb = "1"  # aqua registry still expects pre-2.0 asset names (duckdb_cli-*.zip); back to latest once it catches up
 llmfit = { version = "latest", os = ["macos"] }
 "github:atanunq/viu" = { version = "latest", os = ["macos"] }
 "npm:@sentry/cli" = { version = "latest", os = ["macos"] }
