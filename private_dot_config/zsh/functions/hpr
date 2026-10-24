@@ -10,4 +10,6 @@ fi
 
 # Three-dot: diff against the merge-base, so commits that landed on the default
 # branch after we forked don't show up inverted. Matches `gh pr diff` / the GitHub UI.
-git diff "${base}...HEAD" --no-color | command hunk patch --mode unified -
+# --sidebar: keep the changed-files pane on the left, as `h` shows it. hunk drops it when the
+# patch comes in on stdin (`-`), so pass the diff as a path via process substitution.
+command hunk patch --mode unified --sidebar <(git diff "${base}...HEAD" --no-color)

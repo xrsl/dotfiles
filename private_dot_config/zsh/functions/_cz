@@ -2,13 +2,14 @@
 # cz completes only its own shortcut surface (fzf-tab renders the descriptions); `cz diff` takes a path.
 # Registered by `compdef` in .zshrc: this dir joins fpath after compinit, so #compdef is not read.
 local -a sub=(
+  's:chezmoi status (live vs source drift)'
   'p:pull remote → source → live (overwrites live)'
   'P:push live → source → remote (hunk review first)'
   'ls:list managed files as ~/ paths'
-  'diff:hunk diff, - live / + repo copy'
+  'd:hunk diff, - live / + repo copy'
 )
 if (( CURRENT == 2 )); then
   _describe -t commands 'cz shortcut' sub
-elif [[ $words[2] == diff ]]; then
+elif [[ $words[2] == (s|d) ]]; then
   _files
 fi
