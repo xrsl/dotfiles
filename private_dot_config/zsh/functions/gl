@@ -1,8 +1,12 @@
 # gl [file…] — open markdown in glow's pager (ov, line numbers on); no args: fzf-pick one with a glow preview first.
-# glow.yml sets `tui: true` so plain `glow FILE` opens the TUI, which has no in-document search; gl is the ov path with `/`.
+# glow.yml keeps glow's stock look and `tui: true`, so plain `glow FILE` opens the TUI, which has no in-document search;
+# gl is the customised ov path with `/`: own theme, near-full width, line numbers.
 # GLOW_TUI=false overrides that config (env beats config; glow refuses tui + pager together), then -p forces the pager.
+# -w: glow caps its auto width at 120; -6 leaves room for ov's line numbers, since glow pads every line to the full width.
 # fd -HI + glow's extensions = bare glow's list under glow.yml `all: true` (hidden and gitignored included).
 # PAGER="ov -n" here only: global LineNumMode would double bat's own numbers.
-(( $# )) && { GLOW_TUI=false PAGER="ov -n" glow -p "$@"; return }
+local theme=~/.config/glow/catppuccin-mocha-mauve.json
+(( $# )) && { GLOW_TUI=false PAGER="ov -n" command glow -p -s $theme -w $(( COLUMNS - 6 )) "$@"; return }
 local f
-f=$(fd -HI -e md -e mdown -e mkdn -e mkd -e markdown | fzf --preview 'GLOW_TUI=false glow -s dark -w $FZF_PREVIEW_COLUMNS {}') && GLOW_TUI=false PAGER="ov -n" glow -p "$f"
+f=$(fd -HI -e md -e mdown -e mkdn -e mkd -e markdown | fzf --preview "GLOW_TUI=false glow -s $theme -w \$FZF_PREVIEW_COLUMNS {}") \
+  && GLOW_TUI=false PAGER="ov -n" command glow -p -s $theme -w $(( COLUMNS - 6 )) "$f"

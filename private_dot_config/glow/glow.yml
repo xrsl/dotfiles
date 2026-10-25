@@ -1,0 +1,9 @@
+# style name or JSON path (default "auto"). Stock look for glow/TUI; gl brings catppuccin-mocha-mauve.json (catppuccin/glamour Mocha with h1 mauve #cba6f7, h2 blue #89b4fa, inline code bg #292c3c from Frappé).
+style: "auto"
+# mouse support (TUI-mode only)
+mouse: true
+# glow FILE opens the TUI (flowing paragraphs, live reload); gl is the pager path (ov, search). tui + pager together is an error.
+pager: false
+tui: true
+# show all files, including hidden and ignored.
+all: true
