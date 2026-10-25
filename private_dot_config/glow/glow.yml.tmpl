@@ -1,0 +1,9 @@
+# style name or JSON path (default "auto"). Absolute path: glow v3.0.0 checks a ~ path but then opens it unexpanded and fails.
+style: "{{ .chezmoi.homeDir }}/.config/glow/catppuccin-mocha.json"
+# mouse support (TUI-mode only)
+mouse: true
+# glow FILE opens the TUI (flowing paragraphs, live reload); gl is the pager path (ov, search). tui + pager together is an error.
+pager: false
+tui: true
+# show all files, including hidden and ignored.
+all: true

@@ -241,7 +241,7 @@ alias cls='clear'
 alias ls='eza --icons=auto'  # =auto: a bare --icons swallows the next arg (ls <dir> broke)
 alias lz='eza -TL 1 --icons -a'
 alias b='bat'
-glow() { command glow -w "$COLUMNS" "$@"; }  # full terminal width; glow caps its auto width at 120 (gl inherits this)
+glow() { command glow -w $(( COLUMNS - 6 )) "$@"; }  # ~full width (glow caps auto width at 120; gl inherits this); -6 leaves room for ov line numbers, since glow pads every line to the full width
 alias f="spf"
 alias y=yazi
 alias tb="terminal-browser open"
