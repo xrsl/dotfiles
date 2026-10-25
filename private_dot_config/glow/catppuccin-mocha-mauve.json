@@ -21,12 +21,12 @@
   "h1": {
     "prefix": "▓▓▓ ",
     "suffix": " ",
-    "color": "#f38ba8",
+    "color": "#cba6f7",
     "bold": true
   },
   "h2": {
     "prefix": "▓▓▓▓ ",
-    "color": "#fab387"
+    "color": "#89b4fa"
   },
   "h3": {
     "prefix": "▓▓▓▓▓ ",
@@ -88,7 +88,7 @@
     "prefix": " ",
     "suffix": " ",
     "color": "#eba0ac",
-    "background_color": "#181825"
+    "background_color": "#292c3c"
   },
   "code_block": {
     "color": "#181825",
