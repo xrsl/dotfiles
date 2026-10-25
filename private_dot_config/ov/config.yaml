@@ -1,0 +1,5 @@
+# Only overrides; ov keeps its defaults (key bindings included) for everything else. Full sample: ov --generate-config=default
+General:
+  Style:
+    LineNumber:
+      Foreground: "#6c7086" # Catppuccin Mocha overlay0, to match bat; ov's default is bold

@@ -230,7 +230,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 #   1Password     opil opig opic opis opid
 #   work API      org_id org_slug
 #   dotfiles      cz
-#   misc          nvimtheme
+#   misc          nvimtheme gl
 fpath=(~/.config/zsh/functions $fpath)
 autoload -Uz ~/.config/zsh/functions/*(.:t)
 
@@ -241,6 +241,7 @@ alias cls='clear'
 alias ls='eza --icons=auto'  # =auto: a bare --icons swallows the next arg (ls <dir> broke)
 alias lz='eza -TL 1 --icons -a'
 alias b='bat'
+glow() { command glow -w "$COLUMNS" "$@"; }  # full terminal width; glow caps its auto width at 120 (gl inherits this)
 alias f="spf"
 alias y=yazi
 alias tb="terminal-browser open"

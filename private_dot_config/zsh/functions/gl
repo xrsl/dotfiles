@@ -1,0 +1,5 @@
+# gl — fzf-pick a markdown file (fd: no hidden/gitignored) with a glow preview, then open it in glow's pager ($PAGER, ov).
+# Bare `glow` opens its TUI instead, which has no in-document search; this keeps ov's `/`.
+# GLOW_PAGER=false: the preview must print, not page (a --pager=false flag would still page).
+local f
+f=$(fd -e md | fzf --preview 'GLOW_PAGER=false glow -s dark -w $FZF_PREVIEW_COLUMNS {}') && glow "$f"
