@@ -118,6 +118,7 @@ dust = "latest"
 ollama = { version = "latest", os = ["macos"] }
 "npm:@qwen-code/qwen-code" = "latest"
 gitleaks = "latest"
+"aqua:noborus/ov" = "latest"
 
 [env]
 # A version request, not a path: mise resolves `tools.python.path` to the shim, but a venv's
