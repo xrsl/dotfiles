@@ -34,8 +34,6 @@ brew "portaudio"
 brew "tree"
 # Simple terminal image viewer written in Rust
 brew "viu"
-# Compact TeX distribution as alternative to the full TeX Live / MacTeX
-cask "basictex"
 # Free and open-source web browser
 cask "chromium"
 # Universal database tool and SQL client
