@@ -19,9 +19,7 @@ Host vm tart-*
     ProxyCommand /bin/sh -c 'exec /usr/bin/nc "$("$HOME/.local/share/mise/shims/tart" ip "${1#tart-}" --wait 60)" %p' -- %h
     ForwardAgent yes
     # The Mac's managed firewall blocks all incoming connections, so a VM can't reach
-    # ollama on the host; this outgoing session carries it instead: localhost:11434 in
-    # the VM is the Mac's ollama.
-    RemoteForward 11434 127.0.0.1:11434
+    # host services; this outgoing session carries them instead.
     RemoteForward 8081 127.0.0.1:8081   # llama-server (opencode/pi baseURL)
     # Later sessions reuse the first one's connection and forwards: no tart ip lookup.
     # A VM rebooted under an open master: `ssh -O exit vm`.
