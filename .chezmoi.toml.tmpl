@@ -2,12 +2,3 @@
     autoCommit = true
     autoPush = true
 
-[data]
-{{- if eq .chezmoi.os "darwin" }}
-    bedrockRegion = {{ promptStringOnce . "bedrockRegion" "Bedrock region" | quote }}
-    bedrockProfile = {{ promptStringOnce . "bedrockProfile" "AWS SSO profile for Bedrock" | quote }}
-    bedrockAccount = {{ promptStringOnce . "bedrockAccount" "Bedrock AWS account ID" | quote }}
-    bedrockSonnet = {{ promptStringOnce . "bedrockSonnet" "Bedrock Sonnet inference profile ID" | quote }}
-    bedrockOpus = {{ promptStringOnce . "bedrockOpus" "Bedrock Opus inference profile ID" | quote }}
-    bedrockHaiku = {{ promptStringOnce . "bedrockHaiku" "Bedrock Haiku inference profile ID" | quote }}
-{{- end }}

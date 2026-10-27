@@ -2,8 +2,6 @@ README.md
 bootstrap.sh
 .config/mise/mise.lock
 .ssh/config.local
-# Bedrock settings are rendered from chezmoi data, keep them out of the target everywhere
-.claude/settings.bedrock.json
 {{ if ne .chezmoi.os "darwin" }}
 Library
 # VMs are ssh targets, not clients
