@@ -2,5 +2,6 @@
 # no leftovers); everything else hits mise's own shell function so `m shell` still evals.
 case ${1:-} in
   add|rm|remove|unuse|clean|sync) just -g mise "$@" ;;
+  lsr) shift; mise ls-remote "$@" ;;
   *) mise "$@" ;;
 esac
