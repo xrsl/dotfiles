@@ -117,6 +117,7 @@ dust = "latest"
 "npm:@qwen-code/qwen-code" = "latest"
 gitleaks = "latest"
 "aqua:noborus/ov" = "latest"
+"github:tombi-toml/tombi" = "latest"
 
 [env]
 UV_SYSTEM_CERTS = "1"
