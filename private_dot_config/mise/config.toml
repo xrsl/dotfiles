@@ -3,7 +3,6 @@
 "npm:9router" = { version = "latest", os = ["macos"] }
 actionlint = "latest"
 agent-browser = { version = "latest", os = ["macos"] }
-agy = { version = "latest", os = ["macos"] }
 argocd = "latest"
 atuin = "latest"
 aws = "latest"
@@ -115,7 +114,6 @@ usage = "latest"
 "npm:mint" = { version = "latest", os = ["macos"] }
 cargo-deny = "latest"
 dust = "latest"
-ollama = { version = "latest", os = ["macos"] }
 "npm:@qwen-code/qwen-code" = "latest"
 gitleaks = "latest"
 "aqua:noborus/ov" = "latest"

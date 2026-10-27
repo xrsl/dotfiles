@@ -18,7 +18,6 @@ brew "gcc"
 # Git extension for versioning large files
 brew "git-lfs"
 # Graph visualization software from AT&T and Bell Labs
-brew "graphviz"
 # Tools and libraries to manipulate images in select formats
 brew "imagemagick"
 # C library of Git core methods that is re-entrant and linkable
@@ -50,5 +49,4 @@ cask "ghostty"
 # Open-source screen recorder built with web technology
 cask "kap"
 # Get up and running with large language models locally
-cask "ollama-app"
 
