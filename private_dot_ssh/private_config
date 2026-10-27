@@ -1,6 +1,11 @@
 Include config.local
 Include ~/.colima/ssh_config
 
+# This MacBook as a server, over Tailscale MagicDNS: `ssh omac` from the other Mac.
+Host omac
+    HostName omac
+    User resulal
+
 Host vm
     HostName ubuntu
     HostKeyAlias tart-ubuntu
