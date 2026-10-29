@@ -6,6 +6,13 @@ input=$(cat)
 
 # ── Model ────────────────────────────────────────────────────────────────────
 model=$(echo "$input" | jq -r '.model.display_name // ""')
+# Bedrock reports the inference profile ARN as id and name: map the team's profile ids (see justfile) back.
+model_id=$(jq -r '.model.id // ""' <<< "$input")
+case "$model_id" in
+  *wv58qt9e27ff) model_id=sonnet-5-5; model="Sonnet 5.5" ;;
+  *vto136h01rmd) model_id=opus-5-5;   model="Opus 5.5" ;;
+  *6pulmnz1kg52) model_id=haiku-5-5;  model="Haiku 5.5" ;;
+esac
 
 # ── Reasoning effort (capitalised: low→Low, high→High, xhigh→Xhigh) ───────────
 effort=$(echo "$input" | jq -r '.effort.level // empty')
@@ -51,7 +58,7 @@ fi
 # ── Prompt cache (line 2) ─────────────────────────────────────────────────────
 # List prices $/MTok: input output cache-read (platform.claude.com pricing, 2026-10-13).
 # Cache writes: 5m = 1.25x input, 1h = 2x input. Re-check prices when models change.
-case "$(jq -r '.model.id // ""' <<< "$input")" in
+case "$model_id" in
   *fable-5-1*)  p=(10 50 0.25) ;;
   *opus-5-5*)   p=(4 20 0.20) ;;
   *sonnet-5-5*) p=(2 10 0.10) ;;
