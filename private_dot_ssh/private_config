@@ -1,9 +1,9 @@
 Include config.local
 Include ~/.colima/ssh_config
 
-# This MacBook as a server, over Tailscale MagicDNS: `ssh omac` from the other Mac.
+# omac over local Wi-Fi via mDNS. For away-from-home, switch HostName to Tailscale MagicDNS name.
 Host omac
-    HostName omac
+    HostName omac.local
     User resulal
 
 Host vm

@@ -4,7 +4,7 @@ font-size = 15
 window-save-state = always
 font-family = JetBrainsMono Nerd Font Mono
 copy-on-select = true
-shell-integration-features = ssh-env,ssh-terminfo
+shell-integration-features = ssh-env
 split-preserve-zoom = navigation
 copy-on-select = true
 
