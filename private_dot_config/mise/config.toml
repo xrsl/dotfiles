@@ -120,6 +120,7 @@ gitleaks = "latest"
 "aqua:noborus/ov" = "latest"
 "github:tombi-toml/tombi" = "latest"
 "github:stablyai/orca" = "latest"
+"pipx:posting" = "latest"
 
 [env]
 UV_SYSTEM_CERTS = "1"
