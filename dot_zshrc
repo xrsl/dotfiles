@@ -305,7 +305,13 @@ alias cx='codex --yolo'
 alias cxc='codex --yolo resume'
 alias co='copilot --autopilot --allow-all-tools'
 alias coc='copilot --autopilot --allow-all-tools --resume'
-alias oc='OPENCODE_PERMISSION="{\"*\":\"allow\"}" opencode'
+oc() {
+  # Key lives age-encrypted in ~/ghub/llm/fnox.toml; load it only for this run, never in zshrc.
+  local key="$HETZNER_API_KEY"
+  [[ -z "$key" ]] && key="$(cd ~/ghub/llm && fnox get HETZNER_API_KEY 2>/dev/null)"
+  # --standalone: the background service keeps the env it was started with, so a key loaded here never reaches it.
+  HETZNER_API_KEY="$key" OPENCODE_PERMISSION='{"*":"allow"}' opencode --standalone "$@"
+}
 alias cr="crush --yolo"
 alias crc="crush --yolo --continue"
 alias kl="kilo --auto"
