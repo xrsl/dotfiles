@@ -100,7 +100,6 @@ lazydocker = "latest"
 xh = "latest"
 "github:rezigned/upmd" = { version = "latest", os = ["macos"] }
 shellcheck = "latest"
-"cargo:https://github.com/block/buzz" = { version = "latest", crate = "buzz-cli", os = ["macos"] }
 cliamp = { version = "latest", os = ["macos"] }
 ori = { version = "latest", os = ["macos"] }
 "github:findyourexit/excise" = "latest"
