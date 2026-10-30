@@ -5,6 +5,7 @@ Include ~/.colima/ssh_config
 Host omac
     HostName omac.local
     User resulal
+    ForwardAgent yes
 
 Host vm
     HostName ubuntu

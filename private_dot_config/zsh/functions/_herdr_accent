@@ -2,9 +2,11 @@
 # each target gets its own config file instead of a machine registered in this one.
 #   dev, vps        mauve
 #   vm, tart-*      green
+#   omac            peach (old Mac)
 #   anything else   red
 case "$1" in
   dev|vps)       print -r -- '#cba6f7' ;;
   vm|tart-*)     print -r -- '#a6e3a1' ;;
+  omac)          print -r -- '#fab387' ;;
   *)             print -r -- '#f38ba8' ;;
 esac
