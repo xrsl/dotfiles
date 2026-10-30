@@ -346,3 +346,5 @@ alias kp='killport --no-fail'
 # sheldon is installed by mise, so this is identical on macOS and Linux.
 # Config: ~/.config/sheldon/plugins.toml
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
+
+fpath+=~/.zfunc; autoload -Uz compinit; compinit
