@@ -104,7 +104,6 @@ xh = "latest"
 shellcheck = "latest"
 "cargo:https://github.com/block/buzz" = { version = "latest", crate = "buzz-cli", os = ["macos"] }
 "cargo:https://github.com/block/buzz.git" = { version = "latest", crate = "buzz-acp", os = ["macos"] }
-"npm:paperclipai" = { version = "latest", os = ["macos"] }
 cliamp = { version = "latest", os = ["macos"] }
 ori = { version = "latest", os = ["macos"] }
 "github:findyourexit/zonetimeline-tui" = { version = "latest", os = ["macos"] }
