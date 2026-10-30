@@ -16,7 +16,6 @@ circleci = { version = "latest", prerelease = "true", os = ["macos"] }
 "npm:@slidev/cli" = { version = "latest", trust_policy_excludes = ["cytoscape@3.34.1"], os = ["macos"] }
 "npm:cline" = { version = "latest", os = ["macos"] }
 "npm:@openai/codex-security" = "latest"
-"npm:@z_ai/coding-helper" = { version = "latest", os = ["macos"] }
 colima = { version = "latest", os = ["macos"] }
 "npm:@upstash/context7-mcp" = "latest"
 copilot = { version = "latest", os = ["macos"] }
