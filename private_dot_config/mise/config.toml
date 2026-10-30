@@ -103,7 +103,6 @@ cliamp = { version = "latest", os = ["macos"] }
 ori = { version = "latest", os = ["macos"] }
 "github:findyourexit/excise" = "latest"
 fnox = "latest"
-usage = "latest"
 "npm:mint" = { version = "latest", os = ["macos"] }
 cargo-deny = "latest"
 dust = "latest"
