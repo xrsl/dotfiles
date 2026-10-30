@@ -348,3 +348,11 @@ alias kp='killport --no-fail'
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
 
 fpath+=~/.zfunc; autoload -Uz compinit; compinit
+
+# ── SSH KEYCHAIN ──────────────────────────────────────────────────────────────
+# macOS login keychain stays locked in SSH sessions, so keychain-backed tokens
+# (gh, git credentials) read as invalid. Prompt once per SSH login to unlock it.
+if [[ -o interactive && -n $SSH_CONNECTION && $OSTYPE == darwin* ]] \
+   && ! security show-keychain-info ~/Library/Keychains/login.keychain-db &>/dev/null; then
+  security unlock-keychain ~/Library/Keychains/login.keychain-db
+fi
