@@ -55,7 +55,6 @@ lazyssh = { version = "latest", os = ["macos"] }
 lima = { version = "latest", os = ["macos"] }
 "llama.cpp" = { version = "latest", version_prefix = "b", os = ["macos"] }
 minikube = { version = "latest", os = ["macos"] }
-"cargo:navi" = "latest"
 neovim = "latest"
 node = "lts"
 opencode = "latest"
