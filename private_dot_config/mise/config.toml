@@ -54,7 +54,6 @@ lazygit = "latest"
 lazyssh = { version = "latest", os = ["macos"] }
 lima = { version = "latest", os = ["macos"] }
 "llama.cpp" = { version = "latest", version_prefix = "b", os = ["macos"] }
-"npm:@mermaid-js/mermaid-cli" = { version = "latest", os = ["macos"] }
 minikube = { version = "latest", os = ["macos"] }
 "cargo:navi" = "latest"
 neovim = "latest"
