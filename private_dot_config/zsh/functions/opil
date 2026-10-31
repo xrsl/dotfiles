@@ -1,26 +1,2 @@
-# 1Password CLI
-# opil [-p] [op item list flags] — list Employee (-p: Private) vault items, newest saved first
-local label=Employee loc=(--account blackwoodseven.1password.eu --vault Employee)  # work
-[[ "$1" == -p ]] && { label=Private loc=(--account my.1password.eu --vault Private); shift; }  # personal
-local json
-json=$(op item list "${loc[@]}" --format json "$@") || return
-print -r -- "$json" | python3 -c '
-import json, sys
-from datetime import datetime
-items = json.load(sys.stdin)
-items.sort(key=lambda i: i.get("updated_at", ""), reverse=True)
-if not items:
-  sys.exit(0)
-rows = []
-for n, i in enumerate(items, 1):
-  ts = datetime.fromisoformat(i["updated_at"]).astimezone().strftime("%Y-%m-%d %H:%M")
-  rows.append((str(n), i["title"], ts, i["id"]))
-head = ("#", "KEY", "UPDATED", "ID")
-w = [max(len(r[c]) for r in (head, *rows)) for c in range(4)]
-def line(r):
-  return f"{r[0]:>{w[0]}}  {r[1]:<{w[1]}}  {r[2]:<{w[2]}}  {r[3]}".rstrip()
-gray, reset = ("\033[90m", "\033[0m") if sys.stdout.isatty() else ("", "")
-print(gray + line(head) + reset)
-for r in rows:
-  print(line(r))
-'
+# opil — list items, newest first (Employee vault); see _opv
+_opv work list "$@"

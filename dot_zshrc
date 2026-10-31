@@ -222,7 +222,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 #   GitHub        pr
 #   worktrunk     wtn wtc wtcp
 #   mise & just   m mx ml mq
-#   1Password     opil opig opic opis opid
+#   1Password     opil opig opic opis opid (work) · oppl oppg oppc opps oppd (personal)
 #   work API      org_id org_slug
 #   dotfiles      cz
 #   misc          nvimtheme gl

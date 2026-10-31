@@ -1,6 +1,2 @@
-# opig [-p] <ITEM> — reveal an item's credential field, e.g. `opig MP_STG_API_KEY`
-# (Employee vault; -p for Private)
-local label=Employee loc=(--account blackwoodseven.1password.eu --vault Employee)  # work
-[[ "$1" == -p ]] && { label=Private loc=(--account my.1password.eu --vault Private); shift; }  # personal
-if [ -z "$1" ]; then echo "usage: opig [-p] <item>" >&2; return 1; fi
-op item get "$1" "${loc[@]}" --reveal --fields label=credential
+# opig — reveal an item's credential (Employee vault); see _opv
+_opv work get "$@"

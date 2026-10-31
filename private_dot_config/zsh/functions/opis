@@ -1,21 +1,2 @@
-# opis [-p] <ITEM> [VALUE] — save a key in the same shape as MP_STG_API_KEY
-# (Employee vault, or Private with -p; API Credential, username=<ITEM>, credential=<VALUE>, type=bearer).
-# Omit VALUE to be prompted without echoing it (keeps the secret out of history).
-# Updates the credential in place if the item already exists.
-local label=Employee loc=(--account blackwoodseven.1password.eu --vault Employee)  # work
-[[ "$1" == -p ]] && { label=Private loc=(--account my.1password.eu --vault Private); shift; }  # personal
-if [ -z "$1" ]; then echo "usage: opis [-p] <item> [value]" >&2; return 1; fi
-local item="$1" val="$2"
-if [ -z "$val" ]; then
-  read -rs "val?value for $item: "
-  echo
-fi
-if [ -z "$val" ]; then echo "opis: empty value" >&2; return 1; fi
-if op item get "$item" "${loc[@]}" >/dev/null 2>&1; then
-  op item edit "$item" "${loc[@]}" "credential=$val" >/dev/null || return
-  echo "opis: updated $item"
-else
-  op item create --category "API Credential" --title "$item" "${loc[@]}" \
-    "username=$item" "credential=$val" "type=bearer" >/dev/null || return
-  echo "opis: created $item"
-fi
+# opis — save/update a key: <ITEM> [VALUE] (Employee vault); see _opv
+_opv work save "$@"
