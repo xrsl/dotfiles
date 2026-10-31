@@ -111,6 +111,7 @@ gitleaks = "latest"
 "github:tombi-toml/tombi" = "latest"
 "github:stablyai/orca" = "latest"
 "npm:@opencode/cli" = "latest"
+"aqua:floci-io/floci-cli" = "latest"
 
 [env]
 UV_SYSTEM_CERTS = "1"
