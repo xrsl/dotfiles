@@ -1,0 +1,2 @@
+# opps — save/update a key: <ITEM> [VALUE] (Private vault); see _opv
+_opv personal save "$@"

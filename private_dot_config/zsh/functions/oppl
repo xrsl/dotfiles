@@ -1,0 +1,2 @@
+# oppl — list items, newest first (Private vault); see _opv
+_opv personal list "$@"

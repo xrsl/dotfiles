@@ -1,0 +1,2 @@
+# oppd — delete: <ITEM|ID> [-f] (Private vault); see _opv
+_opv personal delete "$@"

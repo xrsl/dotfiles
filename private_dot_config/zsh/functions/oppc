@@ -1,0 +1,2 @@
+# oppc — copy credential to clipboard (Private vault); see _opv
+_opv personal copy "$@"

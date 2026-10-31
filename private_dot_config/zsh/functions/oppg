@@ -1,0 +1,2 @@
+# oppg — reveal an item's credential (Private vault); see _opv
+_opv personal get "$@"

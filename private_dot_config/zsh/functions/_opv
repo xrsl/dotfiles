@@ -1,0 +1,67 @@
+# _opv <work|personal> <list|get|copy|save|delete> [args] — shared 1Password logic for opi*/opp*.
+# work -> Employee vault, personal -> Private vault. Keys are API Credentials (credential field).
+local label loc
+case "$1" in
+  work)     label=Employee loc=(--account blackwoodseven.1password.eu --vault Employee) ;;
+  personal) label=Private  loc=(--account my.1password.eu --vault Private) ;;
+  *) echo "_opv: bad vault: $1" >&2; return 1 ;;
+esac
+local cmd="$2"; shift 2
+case "$cmd" in
+  list)  # newest saved first
+    local json
+    json=$(op item list "${loc[@]}" --format json "$@") || return
+    print -r -- "$json" | python3 -c '
+import json, sys
+from datetime import datetime
+items = json.load(sys.stdin)
+items.sort(key=lambda i: i.get("updated_at", ""), reverse=True)
+if not items:
+  sys.exit(0)
+rows = []
+for n, i in enumerate(items, 1):
+  ts = datetime.fromisoformat(i["updated_at"]).astimezone().strftime("%Y-%m-%d %H:%M")
+  rows.append((str(n), i["title"], ts, i["id"]))
+head = ("#", "KEY", "UPDATED", "ID")
+w = [max(len(r[c]) for r in (head, *rows)) for c in range(4)]
+def line(r):
+  return f"{r[0]:>{w[0]}}  {r[1]:<{w[1]}}  {r[2]:<{w[2]}}  {r[3]}".rstrip()
+gray, reset = ("\033[90m", "\033[0m") if sys.stdout.isatty() else ("", "")
+print(gray + line(head) + reset)
+for r in rows:
+  print(line(r))
+'
+    ;;
+  get)   # reveal credential
+    [ -z "$1" ] && { echo "usage: get <item>" >&2; return 1; }
+    op item get "$1" "${loc[@]}" --reveal --fields label=credential ;;
+  copy)  # credential to clipboard, prints nothing
+    [ -z "$1" ] && { echo "usage: copy <item>" >&2; return 1; }
+    op item get "$1" "${loc[@]}" --reveal --fields label=credential | tr -d '\n' | pbcopy ;;
+  save)  # create or update in place; omit value to be prompted (keeps it out of history)
+    [ -z "$1" ] && { echo "usage: save <item> [value]" >&2; return 1; }
+    local item="$1" val="$2"
+    if [ -z "$val" ]; then read -rs "val?value for $item: "; echo; fi
+    [ -z "$val" ] && { echo "save: empty value" >&2; return 1; }
+    if op item get "$item" "${loc[@]}" >/dev/null 2>&1; then
+      op item edit "$item" "${loc[@]}" "credential=$val" >/dev/null || return
+      echo "updated $item"
+    else
+      op item create --category "API Credential" --title "$item" "${loc[@]}" \
+        "username=$item" "credential=$val" "type=bearer" >/dev/null || return
+      echo "created $item"
+    fi ;;
+  delete) # permanent; confirms unless -f
+    [ -z "$1" ] && { echo "usage: delete <item|id> [-f]" >&2; return 1; }
+    local item="$1" force="$2" title reply
+    title=$(op item get "$item" "${loc[@]}" --format json 2>/dev/null \
+      | python3 -c 'import json,sys; print(json.load(sys.stdin)["title"])' 2>/dev/null) || {
+      echo "no such item: $item" >&2; return 1; }
+    if [ "$force" != "-f" ]; then
+      read -r "reply?delete '$title' from $label? [y/N] "
+      case "$reply" in [yY]*) ;; *) echo "aborted" >&2; return 1 ;; esac
+    fi
+    op item delete "$item" "${loc[@]}" || return
+    echo "deleted $title" ;;
+  *) echo "_opv: bad command: $cmd" >&2; return 1 ;;
+esac
