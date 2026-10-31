@@ -4,7 +4,7 @@
 actionlint = "latest"
 agent-browser = { version = "latest", os = ["macos"] }
 argocd = "latest"
-atuin = "latest"
+"github:atuinsh/atuin" = "latest"  # aqua registry wrongly lists no darwin/amd64 build
 aws = "latest"
 bat = "latest"
 bottom = "latest"
@@ -21,7 +21,7 @@ copilot = { version = "latest", os = ["macos"] }
 crane = "latest"
 crush = { version = "latest", os = ["macos"] }
 "npm:ctx7" = "latest"
-delta = "latest"
+"cargo:git-delta" = "latest"  # no Intel Mac release asset since 0.19; build from source
 docker-cli = { version = "latest", os = ["macos"] }
 eza = "latest"
 fd = "latest"
@@ -71,7 +71,7 @@ rumdl = "latest"
 rust = "latest"
 saml2aws = { version = "latest", os = ["macos"] }
 "github:lusingander/serie" = "latest"
-sheldon = "latest"
+"cargo:sheldon" = "latest"  # no Intel Mac release asset since 0.8; build from source
 "npm:slop-scan" = "latest"
 starship = "latest"
 superfile = "latest"
