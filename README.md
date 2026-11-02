@@ -26,6 +26,11 @@ Linux ARM64 by `~/.config/mise/mise.lock`.
 The terminal font is `font-jetbrains-mono-nerd-font`; Ghostty uses
 `JetBrainsMono Nerd Font Mono`.
 
+Copy-on-select is enabled in Ghostty (`copy-on-select = true`) and in Rex. Rex
+has no config-file option for it, so `run_onchange_after_rex-copy-on-select.sh.tmpl`
+sets the macOS pref `Workspace.terminalCopyOnSelect` on `com.superlogical.rex`
+(restart Rex to apply).
+
 ## Ubuntu Tart VM
 
 Start and enter the VM from macOS:

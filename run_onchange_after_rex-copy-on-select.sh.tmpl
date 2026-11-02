@@ -1,0 +1,6 @@
+#!/bin/sh
+# Rex (macOS GUI): copy-on-select is a client pref, not in ~/.config/rex/init.lua.
+# Mirrors `copy-on-select = true` in ghostty. Restart Rex to apply.
+{{ if eq .chezmoi.os "darwin" -}}
+defaults write com.superlogical.rex Workspace.terminalCopyOnSelect -bool true
+{{ end -}}
