@@ -1,7 +1,8 @@
-# m — mise, except add/rm/clean/sync go through the ~/.justfile recipe (chezmoi sync,
+# m — mise, except `m ls [query…]` goes to ml (fuzzy row filter), and add/rm/clean/sync go through the ~/.justfile recipe (chezmoi sync,
 # no leftovers); everything else hits mise's own shell function so `m shell` still evals.
 case ${1:-} in
   add|rm|remove|unuse|clean|sync) just -g mise "$@" ;;
+  ls) shift; ml "$@" ;;
   lsr) shift; mise ls-remote "$@" ;;
   *) mise "$@" ;;
 esac
