@@ -273,6 +273,7 @@ alias cc='claude --dangerously-skip-permissions'
 alias ccc='claude -c --dangerously-skip-permissions'
 alias ccr='claude -r --dangerously-skip-permissions'
 alias ccb='cc --settings ~/.claude/settings.bedrock.json'  # Claude on Bedrock
+alias ccbr='ccr --settings ~/.claude/settings.bedrock.json'  # resume session on Bedrock
 # ccp: one-shot Claude call, like a raw API request. No tools, system prompt, settings,
 # skills or saved transcript; about 540 tokens of fixed overhead remain.
 #   ccp "question"    git diff | ccp "explain this"    ccp "question" -m opus
