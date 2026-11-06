@@ -220,7 +220,7 @@ precmd_functions+=(precmd_herdr_tab_branch)
 #   git & review  h hl hpr eh
 #   editors       vsc vscd
 #   GitHub        pr
-#   worktrunk     wtn wtc wtcp
+#   worktrunk     wtn wtc wtcp wtm wtcm
 #   mise & just   m mx ml mq
 #   1Password     opil opig opic opie opis opid (work) · oppl oppg oppc oppe opps oppd (personal)
 #   work API      org_id org_slug

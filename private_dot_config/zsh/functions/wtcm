@@ -1,0 +1,2 @@
+# wtcm [cx|oc|co|pi] [args] — wtc then wtm: commit, then merge (agents as in wtc). Args go to wtc only.
+wtc "$@" && wtm ${1:+${${(M)1:#(cx|oc|co|pi)}}}
