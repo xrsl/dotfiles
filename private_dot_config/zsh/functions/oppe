@@ -1,0 +1,2 @@
+# oppe — export KEY=credential into this shell: <KEY> [KEY...] (Private vault); see _opv
+_opv personal export "$@"

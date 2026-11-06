@@ -1,4 +1,4 @@
-# _opv <work|personal> <list|get|copy|save|delete> [args] — shared 1Password logic for opi*/opp*.
+# _opv <work|personal> <list|get|copy|export|save|delete> [args] — shared 1Password logic for opi*/opp*.
 # work -> Employee vault, personal -> Private vault. Keys are API Credentials (credential field).
 local label loc
 case "$1" in
@@ -38,6 +38,17 @@ for r in rows:
   copy)  # credential to clipboard, prints nothing
     [ -z "$1" ] && { echo "usage: copy <item>" >&2; return 1; }
     op item get "$1" "${loc[@]}" --reveal --fields label=credential | tr -d '\n' | pbcopy ;;
+  export) # KEY=credential into the calling shell; item title is the var name. Failed keys export nothing.
+    [ -z "$1" ] && { echo "usage: export <KEY> [KEY...]" >&2; return 1; }
+    local key val rc=0
+    for key; do
+      if val=$(op item get "$key" "${loc[@]}" --reveal --fields label=credential) && [ -n "$val" ]; then
+        export "$key=$val"; echo "exported $key"
+      else
+        echo "export: no credential for $key in $label" >&2; rc=1
+      fi
+    done
+    return $rc ;;
   save)  # create or update in place; omit value to be prompted (keeps it out of history)
     [ -z "$1" ] && { echo "usage: save <item> [value]" >&2; return 1; }
     local item="$1" val="$2"
