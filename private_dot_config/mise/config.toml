@@ -71,7 +71,8 @@ rumdl = "latest"
 rust = "latest"
 saml2aws = { version = "latest", os = ["macos"] }
 "github:lusingander/serie" = "latest"
-"cargo:sheldon" = "latest"  # no Intel Mac release asset since 0.8; build from source
+"cargo:sheldon" = { version = "latest", os = ["macos/x64"] }  # no Intel Mac release asset since 0.8; build from source
+"github:rossmacarthur/sheldon" = { version = "latest", os = ["macos/arm64", "linux"] }  # prebuilt; cargo build needs libssl-dev on Linux
 "npm:slop-scan" = "latest"
 starship = "latest"
 superfile = "latest"
