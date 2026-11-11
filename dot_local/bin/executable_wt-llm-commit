@@ -7,8 +7,12 @@ set -eu
 
 case "${WT_LLM:-claude}" in
     claude)
+        # The Anthropic login, never Bedrock: a shell exporting CLAUDE_CODE_USE_BEDROCK (ccb) would
+        # otherwise send this to an AWS profile the SAML role may not call.
         message=$(
-            CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p \
+            env -u CLAUDE_CODE_USE_BEDROCK -u ANTHROPIC_MODEL -u ANTHROPIC_DEFAULT_HAIKU_MODEL \
+                -u ANTHROPIC_DEFAULT_SONNET_MODEL -u ANTHROPIC_DEFAULT_OPUS_MODEL \
+                CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p \
                 --no-session-persistence \
                 --model=claude-haiku-5-5 \
                 --tools='' \

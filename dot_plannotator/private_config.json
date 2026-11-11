@@ -5,5 +5,10 @@
   },
   "diffOptions": {
     "diffStyle": "unified"
+  },
+  "starAsk": {
+    "answer": "already",
+    "answeredAt": "2026-11-09T12:02:35.099Z",
+    "surface": "annotate"
   }
 }

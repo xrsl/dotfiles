@@ -9,9 +9,9 @@ model=$(echo "$input" | jq -r '.model.display_name // ""')
 # Bedrock reports the inference profile ARN as id and name: map the team's profile ids (see justfile) back.
 model_id=$(jq -r '.model.id // ""' <<< "$input")
 case "$model_id" in
-  *wv58qt9e27ff) model_id=sonnet-5-5; model="Sonnet 5.5" ;;
-  *vto136h01rmd) model_id=opus-5-5;   model="Opus 5.5" ;;
-  *6pulmnz1kg52) model_id=haiku-5-5;  model="Haiku 5.5" ;;
+  *953orru0pqwi) model_id=sonnet-5-5; model="Sonnet 5.5" ;;
+  *0a7794wdwquw) model_id=opus-5-5;   model="Opus 5.5" ;;
+  *m7e3ehbhivjv) model_id=haiku-5-5;  model="Haiku 5.5" ;;
 esac
 
 # ── Reasoning effort (capitalised: low→Low, high→High, xhigh→Xhigh) ───────────
