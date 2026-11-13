@@ -1,8 +1,21 @@
-# m — mise, except `m ls [query…]` goes to ml (fuzzy row filter), and add/rm/clean/sync go through the ~/.justfile recipe (chezmoi sync,
-# no leftovers); everything else hits mise's own shell function so `m shell` still evals.
+# m — mise, except `m ls [query…]` goes to ml (fuzzy row filter), `m x` runs a tool once (below), and add/rm/clean/sync go through
+# the ~/.justfile recipe (chezmoi sync, no leftovers); everything else hits mise's own shell function so `m shell` still evals.
 case ${1:-} in
   add|rm|remove|unuse|clean|sync) just -g mise "$@" ;;
   ls) shift; ml "$@" ;;
   lsr) shift; mise ls-remote "$@" ;;
+  x) shift
+    # m x tool[@ver] args… → mise x tool@latest -- tool args… (uvx for mise: runs without touching config; m sync prunes it)
+    # binary = last segment of the tool name (github:jkfran/killport → killport), else the tool's only binary
+    # (npm:@mcpjam/cli → mcpjam); with several binaries and no match, use mise x directly
+    local t=${1:?usage: m x tool[@version] [args…]}; shift
+    local name=${t##*[:/]}
+    [[ $name == *@* ]] || t+=@latest
+    name=${name%@*}
+    local bins=(${(f)"$(mise bin-paths --bin-names $t 2>/dev/null)"})
+    # bin-paths is empty until installed; install only then (mise install checks remote latest, ~1.5s)
+    (( $#bins )) || { mise install -q $t && bins=(${(f)"$(mise bin-paths --bin-names $t)"}) } || return
+    (( ${bins[(Ie)$name]} || $#bins != 1 )) || name=$bins[1]
+    mise x $t -- $name "$@" ;;
   *) mise "$@" ;;
 esac

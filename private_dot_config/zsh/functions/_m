@@ -1,10 +1,11 @@
 #compdef m
-# m completes only its own shortcuts (the ones routed through ~/.justfile); other mise subcommands still work when typed.
+# m completes only its own shortcuts (justfile-routed ones plus x); other mise subcommands still work when typed.
 # Registered by `compdef` in .zshrc, like _cz.
 local -a sub=(
   'add:tool… [mac|linux|linux/x64] → global use'
   'rm:tool… → remove everywhere, no leftovers'
   'clean:prune + dedup + dead dirs'
   'sync:pull dotfiles, install, strip what config no longer wants, clean'
+  'x:tool[@ver] args… → run once without touching config'
 )
 (( CURRENT == 2 )) && _describe -t commands 'm shortcut' sub

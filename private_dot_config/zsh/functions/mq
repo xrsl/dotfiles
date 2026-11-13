@@ -2,7 +2,7 @@
 #   registry rows whose name, alias, binary, backend or description contains the query (mq rg → ripgrep),
 #   then GitHub repos with releases that the registry lacks (install as github:owner/repo).
 # mq [-i] owner/repo — also tries aqua:/github:/ubi: for that repo and shows the latest version each would install.
-# -i: pick a row with fzf; enter → m add, ctrl-x → mx (run once without installing).
+# -i: pick a row with fzf; enter → m add, ctrl-x → m x (run once without installing).
 local pick=0
 [[ $1 == -i ]] && { pick=1; shift }
 local q=${*:?usage: mq [-i] query|owner/repo}
@@ -64,10 +64,10 @@ tables=(${tables:#})  # sed adds no header to empty output, so empty = no rows
 
 if (( pick )); then
   local sel=("${(@f)$(print -l $tables | grep -vE '^(Tool|Repo|Backend)	' | column -t -s $'\t' |
-    fzf --ansi --expect=ctrl-x --header 'enter: m add · ctrl-x: mx (run once)')}")
+    fzf --ansi --expect=ctrl-x --header 'enter: m add · ctrl-x: m x (run once)')}")
   local id=${sel[2]%% *}
   [[ -n $id ]] || return 1
-  if [[ $sel[1] == ctrl-x ]]; then mx $id; else m add $id; fi
+  if [[ $sel[1] == ctrl-x ]]; then m x $id; else m add $id; fi
   return
 fi
 
