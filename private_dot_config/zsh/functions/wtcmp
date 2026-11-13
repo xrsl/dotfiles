@@ -1,0 +1,2 @@
+# wtcmp [cx|oc|co|pi] [args] — wtcm then push: commit, merge, push the target branch (agents as in wtc).
+wtcm "$@" && git push
