@@ -62,7 +62,9 @@ unset stale_path
 # Config: ~/.config/starship.toml — see https://starship.rs/presets/
 command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
-command -v fzf >/dev/null && source <(fzf --zsh)
+# fzf --zsh only sets up key bindings, and restoring its saved options fails with
+# "can't change option: zle" when there is no terminal (zsh -ic from scripts/agents).
+[[ -t 0 ]] && command -v fzf >/dev/null && source <(fzf --zsh)
 
 # ── COMPLETIONS ───────────────────────────────────────────────────────────────
 # All fpath additions must happen before the single compinit below.
