@@ -1,7 +1,8 @@
-if (( $# != 1 )); then
-  print -u2 "usage: vmu <name>"
+# vmu [name]: start a tart VM headless (default: ubuntu); then `vm` (ssh vm)
+if (( $# > 1 )); then
+  print -u2 "usage: vmu [name]"
   return 2
 fi
-local vm=$1
-print "Starting $1..."
+local vm=${1:-ubuntu}
+print "Starting $vm..."
 tart run "$vm" --no-graphics >"${TMPDIR:-/tmp}/tart-${vm}.log" 2>&1 &!

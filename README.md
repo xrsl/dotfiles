@@ -36,8 +36,8 @@ sets the macOS pref `Workspace.terminalCopyOnSelect` on `com.superlogical.rex`
 Start and enter the VM from macOS:
 
 ```bash
-vmu ubuntu
-ssh vm
+vmu   # name defaults to ubuntu
+vm    # alias for ssh vm
 ```
 
 Inside Ubuntu, bootstrap the chezmoi- and mise-managed development environment
@@ -54,7 +54,7 @@ chsh -s "$(command -v zsh)"
 exec zsh -l
 ```
 
-After the first setup, start and enter it with `vmu ubuntu && ssh vm`.
+After the first setup, start and enter it with `vmu && vm` (`vmd` stops it).
 
 ## Fedora Tart VM
 

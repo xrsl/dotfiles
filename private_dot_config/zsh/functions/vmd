@@ -1,5 +1,6 @@
-if (( $# != 1 )); then
-  print -u2 "usage: vmd <name>"
+# vmd [name]: stop a tart VM (default: ubuntu)
+if (( $# > 1 )); then
+  print -u2 "usage: vmd [name]"
   return 2
 fi
-tart stop "$1"
+tart stop "${1:-ubuntu}"
