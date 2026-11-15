@@ -1,6 +1,7 @@
 command_timeout = 2000
 
 format = """
+$hostname\
 $directory\
 $git_branch\
 $git_status\
@@ -8,6 +9,23 @@ $line_break\
 $character"""
 
 right_format = "$cmd_duration"
+
+# Machine tag, first thing on the prompt line; colors match _herdr_accent tabs.
+# This Mac shows nothing. Linux boxes always show theirs; other Macs only over ssh.
+{{- $h := .chezmoi.hostname }}
+[hostname]
+{{- if eq $h "ubuntu" }}
+ssh_only = false
+format = "[vm](bold #a6e3a1) "
+{{- else if hasPrefix "vps-" $h }}
+ssh_only = false
+format = "[vps](bold #cba6f7) "
+{{- else if eq .chezmoi.os "darwin" }}
+format = "[$hostname](bold #fab387) "
+{{- else }}
+ssh_only = false
+format = "[$hostname](bold #f38ba8) "
+{{- end }}
 
 [directory]
 truncation_length = 3
