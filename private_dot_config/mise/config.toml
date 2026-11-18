@@ -114,6 +114,7 @@ gitleaks = "latest"
 "npm:@opencode/cli" = "latest"
 "aqua:floci-io/floci-cli" = "latest"
 "cargo:https://github.com/itsjunetime/tdf" = "tag:v0.5.0"
+"github:usestrix/strix" = "latest"
 
 [env]
 UV_SYSTEM_CERTS = "1"
