@@ -45,8 +45,13 @@ ZSH_AUTOSUGGEST_USE_ASYNC=1
 # ── TOOLS ─────────────────────────────────────────────────────────────────────
 
 # mise owns developer runtimes and CLI tools.
-# Stub so mise's `$+functions[compdef]` guard skips its early compinit; the real compinit below redefines it.
-compdef() { :; }
+# mise's hook runs a full `compinit -i` unless compdef exists AND _comps is an
+# association; that early run (short fpath) rewrote ~/.zcompdump every start.
+# Satisfy both, and queue the compdef calls mise makes (fnox, git-wt) for replay
+# after the real compinit below, which redefines compdef.
+typeset -gA _comps
+typeset -ga _compdef_queue
+compdef() { _compdef_queue+=("${(j: :)${(@q)@}}"); }
 command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
 
 # Nested shells may inherit paths from installers that mise replaced.
@@ -100,6 +105,8 @@ else
   compinit -C
 fi
 unset _zcd
+for _cd in $_compdef_queue; do eval "compdef $_cd"; done
+unset _compdef_queue _cd
 
 zstyle ':completion:*' menu select
 
@@ -357,4 +364,3 @@ alias kp='killport --no-fail'
 # Config: ~/.config/sheldon/plugins.toml
 command -v sheldon >/dev/null 2>&1 && eval "$(sheldon --profile post source)"
 
-fpath+=~/.zfunc; autoload -Uz compinit; compinit
