@@ -106,7 +106,6 @@ fnox = "latest"
 "npm:mint" = { version = "latest", os = ["macos"] }
 cargo-deny = "latest"
 dust = "latest"
-"npm:@qwen-code/qwen-code" = "latest"
 gitleaks = "latest"
 "aqua:noborus/ov" = "latest"
 "github:tombi-toml/tombi" = "latest"
