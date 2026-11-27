@@ -12,6 +12,11 @@ mod? docker '~/ghub/docker/justfile'
 mod? llm '~/ghub/llm/justfile'
 mod? pi '~/ghub/llm/.just/pi.just'
 mod? oc '~/ghub/llm/.just/oc.just'
+mod? bedrock '~/ghub/bedrock/justfile'
+
+# the bedrock recipes from any directory; they run in ~/ghub/bedrock with its settings
+alias login := bedrock::login
+alias usage := bedrock::usage
 
 set shell := ["zsh", "-cu"]
 
@@ -19,11 +24,13 @@ _default:
     just --justfile {{ justfile() }} --list --unsorted
 
 
+[positional-arguments]
 uv *args:
-    uv {{ args }}
+    uv "$@"
 
+[positional-arguments]
 uvx *args:
-    uvx {{ args }}
+    uvx "$@"
 
 # add/rm re-add the config to chezmoi, whose autoPush ships it to every machine.
 [doc("add tool… [mac|linux|linux/x64] → global use (OS args → os=[…]) · rm tool… → remove everywhere, no leftovers · clean → prune + dedup + dead dirs · sync → pull dotfiles, install, then strip what config no longer wants (stale lock, os-gated installs) + clean · else passthrough")]
@@ -108,8 +115,9 @@ mise *args:
     mise reshim || true  # panics on some mise versions; harmless to skip
 	
 	
+[positional-arguments]
 buzz *args:
-    buzz {{ args }}	
+    buzz "$@"
 	
 # j gh-to-buzz owner/repo → private channel + unlisted repo + unlisted project
 gh-to-buzz slug:
