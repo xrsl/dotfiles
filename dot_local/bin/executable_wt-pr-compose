@@ -99,26 +99,35 @@ cleanup_log() { rm -f "$composer_log" "$composer_rc"; }
 # stdin is /dev/null: under `wt` it is an open pipe, and claude -p blocks
 # reading it forever before doing any work.
 # Piping to tee hides claude's exit status from `set -e`, so stash it in a file.
-{ claude -p "$prompt" \
-    --no-session-persistence \
-    --model=claude-haiku-5-5 \
-    --permission-mode=dontAsk \
-    --setting-sources=user,project \
-    --disallowedTools \
-    'Bash(gh pr checks *)' \
-    'Bash(gh run *)' \
-    'Bash(gh pr merge *)' \
-    --allowedTools \
-    'Bash(gh pr *)' \
-    'Bash(gh issue list *)' \
-    'Bash(gh label list *)' \
-    'Bash(gh issue view *)' \
-    'Bash(git branch *)' \
-    'Bash(git diff *)' \
-    'Bash(git log *)' \
-    'Bash(git status *)' \
-    Read \
-    'Edit(//tmp/**)' </dev/null 2>&1 || echo "$?" >"$composer_rc"; } | tee "$composer_log"
+compose() {
+    rm -f "$composer_rc"
+    { claude -p "$prompt" "$@" \
+        --no-session-persistence \
+        --permission-mode=dontAsk \
+        --setting-sources=user,project \
+        --disallowedTools \
+        'Bash(gh pr checks *)' \
+        'Bash(gh run *)' \
+        'Bash(gh pr merge *)' \
+        --allowedTools \
+        'Bash(gh pr *)' \
+        'Bash(gh issue list *)' \
+        'Bash(gh label list *)' \
+        'Bash(gh issue view *)' \
+        'Bash(git branch *)' \
+        'Bash(git diff *)' \
+        'Bash(git log *)' \
+        'Bash(git status *)' \
+        Read \
+        'Edit(//tmp/**)' </dev/null 2>&1 || echo "$?" >"$composer_rc"; } | tee "$composer_log"
+}
+
+# Anthropic login first; if it fails (e.g. out of usage), the same session on Bedrock (ccb).
+compose --model=claude-haiku-5-5
+if [ -f "$composer_rc" ]; then
+    echo "wt pr: composer session exited $(cat "$composer_rc"); retrying on Bedrock (ccb)" >&2
+    compose --settings="$HOME/.claude/settings.bedrock.json" --model=sonnet
+fi
 
 if [ -f "$composer_rc" ]; then
     echo "wt pr: composer session exited $(cat "$composer_rc")" >&2

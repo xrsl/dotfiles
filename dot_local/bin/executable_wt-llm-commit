@@ -2,44 +2,69 @@
 set -eu
 
 # worktrunk [commit.generation] command: prompt on stdin, message on stdout.
-# WT_LLM picks the backend (default claude); every backend gets the same
+# WT_LLM picks the backend (default claude, retried on Bedrock as ccb when the
+# Anthropic login fails, e.g. out of usage); every backend gets the same
 # Conventional Commit check, so a bad subject fails here, not at `wt pr`.
 
-case "${WT_LLM:-claude}" in
-    claude)
-        # The Anthropic login, never Bedrock: a shell exporting CLAUDE_CODE_USE_BEDROCK (ccb) would
-        # otherwise send this to an AWS profile the SAML role may not call.
-        message=$(
-            env -u CLAUDE_CODE_USE_BEDROCK -u ANTHROPIC_MODEL -u ANTHROPIC_DEFAULT_HAIKU_MODEL \
-                -u ANTHROPIC_DEFAULT_SONNET_MODEL -u ANTHROPIC_DEFAULT_OPUS_MODEL \
-                CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p \
-                --no-session-persistence \
-                --model=claude-haiku-5-5 \
-                --tools='' \
-                --disable-slash-commands \
-                --setting-sources='' \
-                --system-prompt=''
-        ) ;;
-    cx)
-        message=$(
-            codex exec -m gpt-5.1-codex-mini -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - |
-                jq -sr '[.[] | select(.item.type? == "agent_message")] | last.item.text // empty'
-        ) ;;
-    oc) message=$(opencode run -m anthropic/claude-haiku-4.5 --variant fast) ;;
-    co) message=$(copilot --output-format text -p "$(cat)") ;;
-    pi) message=$(pi --print --no-prompt-templates --model ollama/qwen3.5:4b --thinking off "$(cat)") ;;
+llm=${WT_LLM:-claude}
+case $llm in
+    claude|ccb|cx|oc|co|pi) ;;
     *)
-        echo "wt commit: unknown WT_LLM=$WT_LLM (claude|cx|oc|co|pi)" >&2
+        echo "wt commit: unknown WT_LLM=$llm (claude|ccb|cx|oc|co|pi)" >&2
         exit 2 ;;
 esac
+# Read once: the Bedrock retry needs the prompt again.
+prompt=$(cat)
 
-# co/pi may lead with blank lines; drop them so line 1 is the subject.
-message=$(printf '%s\n' "$message" | sed '/./,$!d')
+# One-shot claude: no tools, settings, skills, system prompt or transcript. The ccb shell's
+# Bedrock env is dropped, so claude is the Anthropic login, never an AWS profile the SAML
+# role may not call; ccb reaches Bedrock only through its own settings file.
+claude_p() {
+    printf '%s\n' "$prompt" |
+        env -u CLAUDE_CODE_USE_BEDROCK -u ANTHROPIC_MODEL -u ANTHROPIC_DEFAULT_HAIKU_MODEL \
+            -u ANTHROPIC_DEFAULT_SONNET_MODEL -u ANTHROPIC_DEFAULT_OPUS_MODEL \
+            CLAUDECODE= MAX_THINKING_TOKENS=0 claude -p "$@" \
+            --no-session-persistence \
+            --tools='' \
+            --disable-slash-commands \
+            --setting-sources='' \
+            --system-prompt=''
+}
 
-subject=$(printf '%s\n' "$message" | sed -n '1p')
-if [ -z "$subject" ] || [ "$subject" = null ] || ! printf '%s\n' "$subject" | grep -Eq '^[[:alpha:]]+(\([^)]*\))?!?: .+'; then
-    echo "wt commit: ${WT_LLM:-claude} returned an invalid Conventional Commit message: $subject" >&2
+generate() {
+    case $1 in
+        claude) claude_p --model=claude-haiku-5-5 ;;
+        ccb) claude_p --settings="$HOME/.claude/settings.bedrock.json" --model=sonnet ;;
+        cx)
+            printf '%s\n' "$prompt" |
+                codex exec -m gpt-5.1-codex-mini -c model_reasoning_effort='low' -c system_prompt='' --sandbox=read-only --json - |
+                jq -sr '[.[] | select(.item.type? == "agent_message")] | last.item.text // empty' ;;
+        oc) printf '%s\n' "$prompt" | opencode run -m anthropic/claude-haiku-4.5 --variant fast ;;
+        co) copilot --output-format text -p "$prompt" ;;
+        pi) pi --print --no-prompt-templates --model ollama/qwen3.5:4b --thinking off "$prompt" ;;
+    esac
+}
+
+# Sets message and subject; fails if the backend fails or the subject is not a Conventional Commit.
+subject=
+attempt() {
+    message=$(generate "$1") || return
+    # co/pi may lead with blank lines; drop them so line 1 is the subject.
+    message=$(printf '%s\n' "$message" | sed '/./,$!d')
+    subject=$(printf '%s\n' "$message" | sed -n '1p')
+    [ -n "$subject" ] && [ "$subject" != null ] && printf '%s\n' "$subject" | grep -Eq '^[[:alpha:]]+(\([^)]*\))?!?: .+'
+}
+
+invalid() {
+    echo "wt commit: $llm returned an invalid Conventional Commit message: $subject" >&2
     exit 1
+}
+
+if ! attempt "$llm"; then
+    [ "$llm" = claude ] || invalid
+    echo "wt commit: claude failed; retrying on Bedrock (ccb)" >&2
+    llm=ccb
+    attempt ccb || invalid
 fi
 
 printf '%s\n' "$message"
