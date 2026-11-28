@@ -1,0 +1,14 @@
+#!/bin/sh
+# Export a corporate TLS-inspection root CA from the macOS System keychain, for Colima's VM to trust (its provision
+# step in ~/.colima/_templates/default.yaml installs it). The certificate's name lives only in the local chezmoi
+# config, never here: [data] corporate_ca = "<certificate common name>". Unset, this does nothing.
+{{ if and (eq .chezmoi.os "darwin") (hasKey . "corporate_ca") -}}
+dst="$HOME/.config/corporate-ca.pem"
+tmp=$(mktemp)
+if ! security find-certificate -c {{ .corporate_ca | quote }} -p /Library/Keychains/System.keychain > "$tmp" 2>/dev/null; then
+    echo "corporate CA not found in the System keychain; skipped" >&2
+    rm -f "$tmp"
+    exit 0
+fi
+if cmp -s "$tmp" "$dst"; then rm -f "$tmp"; else mv "$tmp" "$dst" && chmod 644 "$dst" && echo "corporate CA exported to $dst"; fi
+{{ end -}}

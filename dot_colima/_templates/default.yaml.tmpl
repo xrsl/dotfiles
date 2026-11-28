@@ -1,0 +1,48 @@
+# Colima's defaults for a new instance (`colima template`). The provision step makes the VM trust a corporate
+# TLS-inspection root CA, when run_after_corporate-ca.sh has exported one; without it, it does nothing.
+cpu: 4
+disk: 100
+memory: 8
+arch: aarch64
+runtime: docker
+modelRunner: docker
+hostname: colima
+kubernetes:
+  enabled: false
+  version: v1.35.0+k3s1
+  k3sArgs:
+    - --disable=traefik
+  port: 0
+autoActivate: true
+network:
+  address: false
+  mode: shared
+  interface: en0
+  preferredRoute: false
+  dns: []
+  dnsHosts: {}
+  hostAddresses: false
+  gatewayAddress: 192.168.5.2
+forwardAgent: false
+docker: {}
+vmType: vz
+portForwarder: ssh
+rosetta: true
+binfmt: true
+nestedVirtualization: false
+mountType: virtiofs
+mountInotify: true
+cpuType: ""
+provision:
+  - mode: system
+    script: |
+      src={{ .chezmoi.homeDir }}/.config/corporate-ca.pem dst=/usr/local/share/ca-certificates/corporate-ca.crt
+      [ -s "$src" ] || exit 0
+      cmp -s "$src" "$dst" || { cp "$src" "$dst" && update-ca-certificates && systemctl restart docker; }
+sshConfig: true
+sshPort: 0
+mounts: []
+diskImage: ""
+forceDiskImage: false
+rootDisk: 20
+env: {}
