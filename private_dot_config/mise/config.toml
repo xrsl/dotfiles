@@ -79,6 +79,7 @@ saml2aws = { version = "latest", os = ["macos"] }
 starship = "latest"
 superfile = "latest"
 "aqua:cirruslabs/tart" = { version = "latest", os = ["macos"] }
+"github:cirruslabs/softnet" = { version = "latest", os = ["macos"] }  # tart --net-softnet
 tokei = "latest"
 "npm:tokscale" = "latest"
 trivy = "latest"
